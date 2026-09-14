@@ -14,17 +14,15 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Ana Sayfa</a>
+                    <a class="nav-link active" href="{{route('mainpage')}}">Ana Sayfa</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Kategoriler</a>
+                    <a class="nav-link" href="{{route('community')}}">Topluluk</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">En Çok Okunanlar</a>
+                    <a class="nav-link" href="#">Haftanın Kitabı</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Listelerim</a>
-                </li>
+
             </ul>
             <div class="d-flex gap-2">
                 <button

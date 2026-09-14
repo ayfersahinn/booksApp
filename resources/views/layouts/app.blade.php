@@ -47,6 +47,27 @@
         .rating-stars {
             color: #ffc107;
         }
+
+        .review-card {
+            transition: border-color 0.2s ease;
+        }
+
+        .review-card:hover {
+            border-color: #0d6efd !important;
+        }
+
+        .book-thumb {
+            width: 70px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+        }
     </style>
 </head>
 
