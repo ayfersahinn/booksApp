@@ -20,7 +20,7 @@
                     <a class="nav-link" href="{{route('community')}}">Topluluk</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Haftanın Kitabı</a>
+                    <a class="nav-link" href="{{route('weekly-book')}}">Haftanın Kitabı</a>
                 </li>
 
             </ul>

@@ -44,9 +44,7 @@
             letter-spacing: 0.5px;
         }
 
-        .rating-stars {
-            color: #ffc107;
-        }
+
 
         .review-card {
             transition: border-color 0.2s ease;
@@ -67,6 +65,46 @@
             width: 45px;
             height: 45px;
             object-fit: cover;
+        }
+
+        .rating-stars {
+            color: #ffc107;
+        }
+
+        .featured-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #fff;
+            border-radius: 16px;
+        }
+
+        .hero-book-cover {
+            max-width: 240px;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .book-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            height: 100%;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12) !important;
+        }
+
+        .book-cover {
+            height: 240px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .category-badge {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
     </style>
 </head>
