@@ -106,6 +106,28 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+
+        .rating-stars {
+            color: #ffc107;
+        }
+
+        .main-book-cover {
+            max-width: 100%;
+            height: 380px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .progress-bar-star {
+            height: 8px;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+        }
     </style>
 </head>
 

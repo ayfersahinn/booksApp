@@ -143,30 +143,23 @@
 
              <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                  <!-- Kitap Kartı 1 -->
+
                  <div class="col">
-                     <div class="card border-0 shadow-sm book-card">
-                         <div
-                             class="position-relative text-center p-3 bg-light">
-                             <img
-                                 src="https://via.placeholder.com/180x260"
-                                 class="book-cover shadow-sm"
-                                 alt="Kitap Kapak" />
-                             <button
-                                 class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm"
-                                 title="Listeme Kaydet">
-                                 <i
-                                     class="bi bi-bookmark-plus text-primary fs-6"></i>
+                     <div class="card border-0 shadow-sm book-card h-100">
+                         <div class="position-relative text-center p-3 bg-light">
+                             <img src="https://via.placeholder.com/180x260" class="book-cover shadow-sm" alt="Kitap Kapak" />
+
+                             <button class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm position-relative z-2" title="Listeme Kaydet">
+                                 <i class="bi bi-bookmark-plus text-primary fs-6"></i>
                              </button>
                          </div>
+
                          <div class="card-body d-flex flex-column">
-                             <span
-                                 class="badge bg-primary-subtle text-primary category-badge w-auto mb-2 align-self-start">Bilim Kurgu</span>
-                             <h5
-                                 class="card-title h6 fw-bold mb-1 text-truncate">
+                             <span class="badge bg-primary-subtle text-primary category-badge w-auto mb-2 align-self-start">Bilim Kurgu</span>
+                             <h5 class="card-title h6 fw-bold mb-1 text-truncate">
                                  Mirasın İzinde
                              </h5>
-                             <p
-                                 class="card-subtitle text-muted small mb-2">
+                             <p class="card-subtitle text-muted small mb-2">
                                  Yazar: Ahmet Yılmaz
                              </p>
 
@@ -182,155 +175,74 @@
                                  <small class="text-muted fw-bold">4.5 (128)</small>
                              </div>
 
-                             <p
-                                 class="card-text small text-secondary flex-grow-1">
-                                 Geleceğin dünyasında geçen, zaman
-                                 döngüleri ve insan bilinci üzerine
-                                 sürükleyici bir macera...
+                             <p class="card-text small text-secondary flex-grow-1">
+                                 Geleceğin dünyasında geçen, zaman döngüleri ve insan bilinci üzerine sürükleyici bir macera...
                              </p>
 
                              <div class="pt-2 border-top d-flex gap-2">
-                                 <button
-                                     class="btn btn-outline-primary btn-sm w-100"
-                                     data-bs-toggle="modal"
-                                     data-bs-target="#reviewModal">
-                                     <i
-                                         class="bi bi-chat-left-text me-1"></i>
+                                 <button class="btn btn-outline-primary btn-sm w-100 position-relative z-2" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                                     <i class="bi bi-chat-left-text me-1"></i>
                                      Yorum Yap
                                  </button>
-                                 <a
-                                     href="#"
-                                     class="btn btn-primary btn-sm w-100">İncele</a>
+
+
+                                 <a href="{{route('book-detail', 1)}}" class="btn btn-primary btn-sm w-100 stretched-link">
+                                     İncele
+                                 </a>
                              </div>
                          </div>
                      </div>
                  </div>
-
-                 <!-- Kitap Kartı 2 -->
                  <div class="col">
-                     <div class="card border-0 shadow-sm book-card">
-                         <div
-                             class="position-relative text-center p-3 bg-light">
-                             <img
-                                 src="https://via.placeholder.com/180x260"
-                                 class="book-cover shadow-sm"
-                                 alt="Kitap Kapak" />
-                             <button
-                                 class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm"
-                                 title="Listeme Kaydet">
-                                 <i
-                                     class="bi bi-bookmark-check-fill text-success fs-6"></i>
+                     <div class="card border-0 shadow-sm book-card h-100">
+                         <div class="position-relative text-center p-3 bg-light">
+                             <img src="https://via.placeholder.com/180x260" class="book-cover shadow-sm" alt="Kitap Kapak" />
+
+                             <button class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm position-relative z-2" title="Listeme Kaydet">
+                                 <i class="bi bi-bookmark-plus text-primary fs-6"></i>
                              </button>
                          </div>
+
                          <div class="card-body d-flex flex-column">
-                             <span
-                                 class="badge bg-success-subtle text-success category-badge w-auto mb-2 align-self-start">Klasik</span>
-                             <h5
-                                 class="card-title h6 fw-bold mb-1 text-truncate">
-                                 Zamanın Ötesinde
+                             <span class="badge bg-primary-subtle text-primary category-badge w-auto mb-2 align-self-start">Bilim Kurgu</span>
+                             <h5 class="card-title h6 fw-bold mb-1 text-truncate">
+                                 Mirasın İzinde
                              </h5>
-                             <p
-                                 class="card-subtitle text-muted small mb-2">
-                                 Yazar: Elif Şahin
+                             <p class="card-subtitle text-muted small mb-2">
+                                 Yazar: Ahmet Yılmaz
                              </p>
 
+                             <!-- Rating -->
                              <div class="d-flex align-items-center mb-2">
                                  <div class="rating-stars me-2">
                                      <i class="bi bi-star-fill"></i>
                                      <i class="bi bi-star-fill"></i>
                                      <i class="bi bi-star-fill"></i>
                                      <i class="bi bi-star-fill"></i>
-                                     <i class="bi bi-star-fill"></i>
+                                     <i class="bi bi-star-half"></i>
                                  </div>
-                                 <small class="text-muted fw-bold">4.9 (340)</small>
+                                 <small class="text-muted fw-bold">4.5 (128)</small>
                              </div>
 
-                             <p
-                                 class="card-text small text-secondary flex-grow-1">
-                                 İnsan doğasını ve toplumsal yapıları
-                                 derinlemesine ele alan, yüzyılın
-                                 başyapıtlarından biri...
+                             <p class="card-text small text-secondary flex-grow-1">
+                                 Geleceğin dünyasında geçen, zaman döngüleri ve insan bilinci üzerine sürükleyici bir macera...
                              </p>
 
                              <div class="pt-2 border-top d-flex gap-2">
-                                 <button
-                                     class="btn btn-outline-primary btn-sm w-100"
-                                     data-bs-toggle="modal"
-                                     data-bs-target="#reviewModal">
-                                     <i
-                                         class="bi bi-chat-left-text me-1"></i>
+                                 <button class="btn btn-outline-primary btn-sm w-100 position-relative z-2" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                                     <i class="bi bi-chat-left-text me-1"></i>
                                      Yorum Yap
                                  </button>
-                                 <a
-                                     href="#"
-                                     class="btn btn-primary btn-sm w-100">İncele</a>
+
+
+                                 <a href="{{route('book-detail', 1)}}" class="btn btn-primary btn-sm w-100 stretched-link">
+                                     İncele
+                                 </a>
                              </div>
                          </div>
                      </div>
                  </div>
 
-                 <!-- Kitap Kartı 3 -->
-                 <div class="col">
-                     <div class="card border-0 shadow-sm book-card">
-                         <div
-                             class="position-relative text-center p-3 bg-light">
-                             <img
-                                 src="https://via.placeholder.com/180x260"
-                                 class="book-cover shadow-sm"
-                                 alt="Kitap Kapak" />
-                             <button
-                                 class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm"
-                                 title="Listeme Kaydet">
-                                 <i
-                                     class="bi bi-bookmark-plus text-primary fs-6"></i>
-                             </button>
-                         </div>
-                         <div class="card-body d-flex flex-column">
-                             <span
-                                 class="badge bg-warning-subtle text-dark category-badge w-auto mb-2 align-self-start">Yazılım</span>
-                             <h5
-                                 class="card-title h6 fw-bold mb-1 text-truncate">
-                                 Modern Web Mimarisi
-                             </h5>
-                             <p
-                                 class="card-subtitle text-muted small mb-2">
-                                 Yazar: Mehmet Demir
-                             </p>
-
-                             <div class="d-flex align-items-center mb-2">
-                                 <div class="rating-stars me-2">
-                                     <i class="bi bi-star-fill"></i>
-                                     <i class="bi bi-star-fill"></i>
-                                     <i class="bi bi-star-fill"></i>
-                                     <i class="bi bi-star-fill"></i>
-                                     <i class="bi bi-star"></i>
-                                 </div>
-                                 <small class="text-muted fw-bold">4.1 (85)</small>
-                             </div>
-
-                             <p
-                                 class="card-text small text-secondary flex-grow-1">
-                                 Ölçeklenebilir web uygulamaları, API
-                                 tasarımı ve modern ön yüz mimarilerini
-                                 rehber edinen kaynak.
-                             </p>
-
-                             <div class="pt-2 border-top d-flex gap-2">
-                                 <button
-                                     class="btn btn-outline-primary btn-sm w-100"
-                                     data-bs-toggle="modal"
-                                     data-bs-target="#reviewModal">
-                                     <i
-                                         class="bi bi-chat-left-text me-1"></i>
-                                     Yorum Yap
-                                 </button>
-                                 <a
-                                     href="#"
-                                     class="btn btn-primary btn-sm w-100">İncele</a>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
              </div>
 
              <!-- Sayfalandırma (Pagination) -->
