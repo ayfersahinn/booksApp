@@ -25,14 +25,13 @@
 
             </ul>
             <div class="d-flex gap-2">
-                <button
-                    class="btn btn-outline-light btn-sm"
-                    type="button">
+                <a href=""
+                    class="btn btn-outline-light btn-sm">
                     Giriş Yap
-                </button>
-                <button class="btn btn-primary btn-sm" type="button">
+                </a>
+                <a href="{{route('register')}}" class="btn btn-primary btn-sm">
                     Kayıt Ol
-                </button>
+                </a>
             </div>
         </div>
     </div>

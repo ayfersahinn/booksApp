@@ -14,3 +14,6 @@ Route::get('/haftanin-kitabi', function () {
 Route::get('/kitap/{id}', function ($id) {
     return view('book-detail', ['id' => $id]);
 })->name('book-detail');
+Route::get('/kayit-ol', function () {
+    return view('auth.register');
+})->name('register');

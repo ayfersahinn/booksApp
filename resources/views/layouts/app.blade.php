@@ -128,6 +128,20 @@
             height: 45px;
             object-fit: cover;
         }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .register-card {
+            border: none;
+            border-radius: 1rem;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #0d6efd;
+        }
     </style>
 </head>
 
