@@ -78,7 +78,7 @@
                     <!-- Giriş Yap Yönlendirmesi -->
                     <div class="text-center small text-muted">
                         Zaten bir hesabınız var mı?
-                        <a href="" class="text-primary fw-bold text-decoration-none">Giriş Yap</a>
+                        <a href="{{route('login')}}" class="text-primary fw-bold text-decoration-none">Giriş Yap</a>
                     </div>
                 </form>
 

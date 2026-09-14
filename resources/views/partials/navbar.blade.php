@@ -25,7 +25,7 @@
 
             </ul>
             <div class="d-flex gap-2">
-                <a href=""
+                <a href="{{route('login')}}"
                     class="btn btn-outline-light btn-sm">
                     Giriş Yap
                 </a>

@@ -17,3 +17,7 @@ Route::get('/kitap/{id}', function ($id) {
 Route::get('/kayit-ol', function () {
     return view('auth.register');
 })->name('register');
+
+Route::get('/giris-yap', function () {
+    return view('auth.login');
+})->name('login');

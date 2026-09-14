@@ -142,6 +142,11 @@
             box-shadow: none;
             border-color: #0d6efd;
         }
+
+        .login-card {
+            border: none;
+            border-radius: 1rem;
+        }
     </style>
 </head>
 
