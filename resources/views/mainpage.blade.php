@@ -1,0 +1,472 @@
+ @extends('layouts.app')
+ @section('content')
+ <!-- Hero Section -->
+ <section class="hero-section text-center">
+     <div class="container">
+         <h1 class="display-4 fw-bold mb-3">
+             Binlerce Kitabı Keşfet, İncele ve Kaydet
+         </h1>
+         <p class="lead mb-4 text-white-50">
+             Okuduğun kitapları değerlendir, incelemelerini paylaş ve
+             kişisel kitaplığını oluştur.
+         </p>
+
+         <!-- Arama Barı -->
+         <div class="row justify-content-center">
+             <div class="col-md-8 col-lg-6">
+                 <div class="input-group input-group-lg shadow-sm">
+                     <input
+                         type="text"
+                         class="form-control border-0"
+                         placeholder="Kitap adı, yazar veya ISBN arayın..." />
+                     <button class="btn btn-warning px-4" type="button">
+                         <i class="bi bi-search"></i> Ara
+                     </button>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </section>
+
+ <!-- İstatistikler / Hızlı Bilgi -->
+ <div class="bg-white py-3 shadow-sm border-bottom">
+     <div class="container">
+         <div class="row text-center g-3">
+             <div class="col-4">
+                 <div class="fw-bold fs-5 text-primary">50.000+</div>
+                 <small class="text-muted">Kitap</small>
+             </div>
+             <div class="col-4">
+                 <div class="fw-bold fs-5 text-primary">120.000+</div>
+                 <small class="text-muted">Yorum & Değerlendirme</small>
+             </div>
+             <div class="col-4">
+                 <div class="fw-bold fs-5 text-primary">15.000+</div>
+                 <small class="text-muted">Aktif Okur</small>
+             </div>
+         </div>
+     </div>
+ </div>
+
+ <!-- Main Content -->
+ <main class="container my-5">
+     <div class="row g-4">
+         <!-- Sol Taraf: Kategoriler & Filtreler -->
+         <aside class="col-lg-3">
+             <div class="card border-0 shadow-sm mb-4">
+                 <div class="card-header bg-white fw-bold">
+                     <i class="bi bi-grid me-2"></i>Kategoriler
+                 </div>
+                 <div class="list-group list-group-flush">
+                     <a
+                         href="#"
+                         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active">
+                         Tüm Kategoriler
+                         <span
+                             class="badge bg-light text-dark rounded-pill">1.2k</span>
+                     </a>
+                     <a
+                         href="#"
+                         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                         Bilim Kurgu
+                         <span class="badge bg-secondary rounded-pill">240</span>
+                     </a>
+                     <a
+                         href="#"
+                         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                         Dünya Klasikleri
+                         <span class="badge bg-secondary rounded-pill">410</span>
+                     </a>
+                     <a
+                         href="#"
+                         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                         Psikoloji & Felsefe
+                         <span class="badge bg-secondary rounded-pill">180</span>
+                     </a>
+                     <a
+                         href="#"
+                         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                         Tarih
+                         <span class="badge bg-secondary rounded-pill">150</span>
+                     </a>
+                     <a
+                         href="#"
+                         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                         Yazılım & Teknoloji
+                         <span class="badge bg-secondary rounded-pill">95</span>
+                     </a>
+                 </div>
+             </div>
+
+             <!-- Filtreleme Kartı -->
+             <div class="card border-0 shadow-sm">
+                 <div class="card-header bg-white fw-bold">
+                     <i class="bi bi-sliders me-2"></i>Sıralama
+                 </div>
+                 <div class="card-body">
+                     <div class="form-check mb-2">
+                         <input
+                             class="form-check-input"
+                             type="radio"
+                             name="sortOptions"
+                             id="sort1"
+                             checked />
+                         <label class="form-check-label" for="sort1">En Popülerler</label>
+                     </div>
+                     <div class="form-check mb-2">
+                         <input
+                             class="form-check-input"
+                             type="radio"
+                             name="sortOptions"
+                             id="sort2" />
+                         <label class="form-check-label" for="sort2">En Yüksek Puanlılar</label>
+                     </div>
+                     <div class="form-check">
+                         <input
+                             class="form-check-input"
+                             type="radio"
+                             name="sortOptions"
+                             id="sort3" />
+                         <label class="form-check-label" for="sort3">Yeni Eklenenler</label>
+                     </div>
+                 </div>
+             </div>
+         </aside>
+
+         <!-- Sağ Taraf: Kitap Kartları Listesi -->
+         <section class="col-lg-9">
+             <div
+                 class="d-flex justify-content-between align-items-center mb-4">
+                 <h3 class="h4 mb-0 fw-bold">Öne Çıkan Kitaplar</h3>
+                 <a href="#" class="text-decoration-none">Tümünü Gör &rarr;</a>
+             </div>
+
+             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                 <!-- Kitap Kartı 1 -->
+                 <div class="col">
+                     <div class="card border-0 shadow-sm book-card">
+                         <div
+                             class="position-relative text-center p-3 bg-light">
+                             <img
+                                 src="https://via.placeholder.com/180x260"
+                                 class="book-cover shadow-sm"
+                                 alt="Kitap Kapak" />
+                             <button
+                                 class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm"
+                                 title="Listeme Kaydet">
+                                 <i
+                                     class="bi bi-bookmark-plus text-primary fs-6"></i>
+                             </button>
+                         </div>
+                         <div class="card-body d-flex flex-column">
+                             <span
+                                 class="badge bg-primary-subtle text-primary category-badge w-auto mb-2 align-self-start">Bilim Kurgu</span>
+                             <h5
+                                 class="card-title h6 fw-bold mb-1 text-truncate">
+                                 Mirasın İzinde
+                             </h5>
+                             <p
+                                 class="card-subtitle text-muted small mb-2">
+                                 Yazar: Ahmet Yılmaz
+                             </p>
+
+                             <!-- Rating -->
+                             <div class="d-flex align-items-center mb-2">
+                                 <div class="rating-stars me-2">
+                                     <i class="bi bi-star-fill"></i>
+                                     <i class="bi bi-star-fill"></i>
+                                     <i class="bi bi-star-fill"></i>
+                                     <i class="bi bi-star-fill"></i>
+                                     <i class="bi bi-star-half"></i>
+                                 </div>
+                                 <small class="text-muted fw-bold">4.5 (128)</small>
+                             </div>
+
+                             <p
+                                 class="card-text small text-secondary flex-grow-1">
+                                 Geleceğin dünyasında geçen, zaman
+                                 döngüleri ve insan bilinci üzerine
+                                 sürükleyici bir macera...
+                             </p>
+
+                             <div class="pt-2 border-top d-flex gap-2">
+                                 <button
+                                     class="btn btn-outline-primary btn-sm w-100"
+                                     data-bs-toggle="modal"
+                                     data-bs-target="#reviewModal">
+                                     <i
+                                         class="bi bi-chat-left-text me-1"></i>
+                                     Yorum Yap
+                                 </button>
+                                 <a
+                                     href="#"
+                                     class="btn btn-primary btn-sm w-100">İncele</a>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+
+                 <!-- Kitap Kartı 2 -->
+                 <div class="col">
+                     <div class="card border-0 shadow-sm book-card">
+                         <div
+                             class="position-relative text-center p-3 bg-light">
+                             <img
+                                 src="https://via.placeholder.com/180x260"
+                                 class="book-cover shadow-sm"
+                                 alt="Kitap Kapak" />
+                             <button
+                                 class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm"
+                                 title="Listeme Kaydet">
+                                 <i
+                                     class="bi bi-bookmark-check-fill text-success fs-6"></i>
+                             </button>
+                         </div>
+                         <div class="card-body d-flex flex-column">
+                             <span
+                                 class="badge bg-success-subtle text-success category-badge w-auto mb-2 align-self-start">Klasik</span>
+                             <h5
+                                 class="card-title h6 fw-bold mb-1 text-truncate">
+                                 Zamanın Ötesinde
+                             </h5>
+                             <p
+                                 class="card-subtitle text-muted small mb-2">
+                                 Yazar: Elif Şahin
+                             </p>
+
+                             <div class="d-flex align-items-center mb-2">
+                                 <div class="rating-stars me-2">
+                                     <i class="bi bi-star-fill"></i>
+                                     <i class="bi bi-star-fill"></i>
+                                     <i class="bi bi-star-fill"></i>
+                                     <i class="bi bi-star-fill"></i>
+                                     <i class="bi bi-star-fill"></i>
+                                 </div>
+                                 <small class="text-muted fw-bold">4.9 (340)</small>
+                             </div>
+
+                             <p
+                                 class="card-text small text-secondary flex-grow-1">
+                                 İnsan doğasını ve toplumsal yapıları
+                                 derinlemesine ele alan, yüzyılın
+                                 başyapıtlarından biri...
+                             </p>
+
+                             <div class="pt-2 border-top d-flex gap-2">
+                                 <button
+                                     class="btn btn-outline-primary btn-sm w-100"
+                                     data-bs-toggle="modal"
+                                     data-bs-target="#reviewModal">
+                                     <i
+                                         class="bi bi-chat-left-text me-1"></i>
+                                     Yorum Yap
+                                 </button>
+                                 <a
+                                     href="#"
+                                     class="btn btn-primary btn-sm w-100">İncele</a>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+
+                 <!-- Kitap Kartı 3 -->
+                 <div class="col">
+                     <div class="card border-0 shadow-sm book-card">
+                         <div
+                             class="position-relative text-center p-3 bg-light">
+                             <img
+                                 src="https://via.placeholder.com/180x260"
+                                 class="book-cover shadow-sm"
+                                 alt="Kitap Kapak" />
+                             <button
+                                 class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm"
+                                 title="Listeme Kaydet">
+                                 <i
+                                     class="bi bi-bookmark-plus text-primary fs-6"></i>
+                             </button>
+                         </div>
+                         <div class="card-body d-flex flex-column">
+                             <span
+                                 class="badge bg-warning-subtle text-dark category-badge w-auto mb-2 align-self-start">Yazılım</span>
+                             <h5
+                                 class="card-title h6 fw-bold mb-1 text-truncate">
+                                 Modern Web Mimarisi
+                             </h5>
+                             <p
+                                 class="card-subtitle text-muted small mb-2">
+                                 Yazar: Mehmet Demir
+                             </p>
+
+                             <div class="d-flex align-items-center mb-2">
+                                 <div class="rating-stars me-2">
+                                     <i class="bi bi-star-fill"></i>
+                                     <i class="bi bi-star-fill"></i>
+                                     <i class="bi bi-star-fill"></i>
+                                     <i class="bi bi-star-fill"></i>
+                                     <i class="bi bi-star"></i>
+                                 </div>
+                                 <small class="text-muted fw-bold">4.1 (85)</small>
+                             </div>
+
+                             <p
+                                 class="card-text small text-secondary flex-grow-1">
+                                 Ölçeklenebilir web uygulamaları, API
+                                 tasarımı ve modern ön yüz mimarilerini
+                                 rehber edinen kaynak.
+                             </p>
+
+                             <div class="pt-2 border-top d-flex gap-2">
+                                 <button
+                                     class="btn btn-outline-primary btn-sm w-100"
+                                     data-bs-toggle="modal"
+                                     data-bs-target="#reviewModal">
+                                     <i
+                                         class="bi bi-chat-left-text me-1"></i>
+                                     Yorum Yap
+                                 </button>
+                                 <a
+                                     href="#"
+                                     class="btn btn-primary btn-sm w-100">İncele</a>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+
+             <!-- Sayfalandırma (Pagination) -->
+             <nav class="mt-5">
+                 <ul class="pagination justify-content-center">
+                     <li class="page-item disabled">
+                         <a class="page-link" href="#">Önceki</a>
+                     </li>
+                     <li class="page-item active">
+                         <a class="page-link" href="#">1</a>
+                     </li>
+                     <li class="page-item">
+                         <a class="page-link" href="#">2</a>
+                     </li>
+                     <li class="page-item">
+                         <a class="page-link" href="#">3</a>
+                     </li>
+                     <li class="page-item">
+                         <a class="page-link" href="#">Sonraki</a>
+                     </li>
+                 </ul>
+             </nav>
+         </section>
+     </div>
+ </main>
+
+ <!-- Son Değerlendirmeler / Topluluk Bölümü -->
+ <section class="bg-white py-5 border-top">
+     <div class="container">
+         <h3 class="h4 fw-bold mb-4">Son Kullanıcı Yorumları</h3>
+         <div class="row g-4">
+             <div class="col-md-6">
+                 <div class="p-3 border rounded bg-light">
+                     <div
+                         class="d-flex justify-content-between align-items-center mb-2">
+                         <span class="fw-bold">@okur_can</span>
+                         <div class="rating-stars small">
+                             <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                         </div>
+                     </div>
+                     <p class="small text-muted mb-1">
+                         <strong>Mirasın İzinde</strong> kitabı için:
+                     </p>
+                     <p class="mb-0 text-secondary">
+                         "Kurgusu harikaydı, özellikle son bölümlerdeki
+                         ters köşeleri hiç beklemiyordum. Kesinlikle
+                         tavsiye ederim."
+                     </p>
+                 </div>
+             </div>
+             <div class="col-md-6">
+                 <div class="p-3 border rounded bg-light">
+                     <div
+                         class="d-flex justify-content-between align-items-center mb-2">
+                         <span class="fw-bold">@ayse_reads</span>
+                         <div class="rating-stars small">
+                             <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i>
+                         </div>
+                     </div>
+                     <p class="small text-muted mb-1">
+                         <strong>Modern Web Mimarisi</strong> kitabı
+                         için:
+                     </p>
+                     <p class="mb-0 text-secondary">
+                         "Teknik detaylar ve mimari örnekler çok temiz
+                         açıklanmış. Başlangıç ve orta seviye için çok
+                         faydalı."
+                     </p>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </section>
+
+ <!-- Değerlendirme / Yorum Yapma Modalı -->
+ <div
+     class="modal fade"
+     id="reviewModal"
+     tabindex="-1"
+     aria-hidden="true">
+     <div class="modal-dialog">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title">
+                     Kitabı Değerlendir ve Yorum Yap
+                 </h5>
+                 <button
+                     type="button"
+                     class="btn-close"
+                     data-bs-dismiss="modal"
+                     aria-label="Kapat"></button>
+             </div>
+             <div class="modal-body">
+                 <form>
+                     <div class="mb-3">
+                         <label class="form-label fw-bold">Puanınız</label>
+                         <select class="form-select">
+                             <option value="5">
+                                 ⭐⭐⭐⭐⭐ (5/5) - Mükemmel
+                             </option>
+                             <option value="4">
+                                 ⭐⭐⭐⭐ (4/5) - Çok İyi
+                             </option>
+                             <option value="3">
+                                 ⭐⭐⭐ (3/5) - Orta
+                             </option>
+                             <option value="2">
+                                 ⭐⭐ (2/5) - Zayıf
+                             </option>
+                             <option value="1">⭐ (1/5) - Kötü</option>
+                         </select>
+                     </div>
+                     <div class="mb-3">
+                         <label class="form-label fw-bold">Değerlendirme Notunuz</label>
+                         <textarea
+                             class="form-control"
+                             rows="4"
+                             placeholder="Kitap hakkında ne düşünüyorsunuz? Spoiler vermemeye özen gösteriniz..."></textarea>
+                     </div>
+                     <div class="form-check mb-3">
+                         <input
+                             class="form-check-input"
+                             type="checkbox"
+                             id="readStatus" />
+                         <label
+                             class="form-check-label small"
+                             for="readStatus">
+                             Bu kitabı "Okuduklarım" listeme ekle
+                         </label>
+                     </div>
+                     <button type="submit" class="btn btn-primary w-100">
+                         Değerlendirmeyi Gönder
+                     </button>
+                 </form>
+             </div>
+         </div>
+     </div>
+ </div>
+ @endsection
