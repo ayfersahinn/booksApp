@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Controllers\BookController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('mainpage');
-})->name('mainpage');
+Route::get('/', [BookController::class, 'index'])->name('mainpage');
+
 Route::get('/topluluk', function () {
     return view('community');
 })->name('community');

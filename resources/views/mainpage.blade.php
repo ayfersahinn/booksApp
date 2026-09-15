@@ -138,12 +138,11 @@
              <div
                  class="d-flex justify-content-between align-items-center mb-4">
                  <h3 class="h4 mb-0 fw-bold">Öne Çıkan Kitaplar</h3>
-                 <a href="#" class="text-decoration-none">Tümünü Gör &rarr;</a>
              </div>
 
              <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                  <!-- Kitap Kartı 1 -->
-
+                 @foreach($books as $book)
                  <div class="col">
                      <div class="card border-0 shadow-sm book-card h-100">
                          <div class="position-relative text-center p-3 bg-light">
@@ -155,12 +154,12 @@
                          </div>
 
                          <div class="card-body d-flex flex-column">
-                             <span class="badge bg-primary-subtle text-primary category-badge w-auto mb-2 align-self-start">Bilim Kurgu</span>
+                             <span class="badge bg-primary-subtle text-primary category-badge w-auto mb-2 align-self-start">{{$book->category->name}}</span>
                              <h5 class="card-title h6 fw-bold mb-1 text-truncate">
-                                 Mirasın İzinde
+                                 {{$book->title}}
                              </h5>
                              <p class="card-subtitle text-muted small mb-2">
-                                 Yazar: Ahmet Yılmaz
+                                 Yazar: {{$book->author}}
                              </p>
 
                              <!-- Rating -->
@@ -176,7 +175,7 @@
                              </div>
 
                              <p class="card-text small text-secondary flex-grow-1">
-                                 Geleceğin dünyasında geçen, zaman döngüleri ve insan bilinci üzerine sürükleyici bir macera...
+                                 {{$book->description}}
                              </p>
 
                              <div class="pt-2 border-top d-flex gap-2">
@@ -193,55 +192,7 @@
                          </div>
                      </div>
                  </div>
-                 <div class="col">
-                     <div class="card border-0 shadow-sm book-card h-100">
-                         <div class="position-relative text-center p-3 bg-light">
-                             <img src="https://via.placeholder.com/180x260" class="book-cover shadow-sm" alt="Kitap Kapak" />
-
-                             <button class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm position-relative z-2" title="Listeme Kaydet">
-                                 <i class="bi bi-bookmark-plus text-primary fs-6"></i>
-                             </button>
-                         </div>
-
-                         <div class="card-body d-flex flex-column">
-                             <span class="badge bg-primary-subtle text-primary category-badge w-auto mb-2 align-self-start">Bilim Kurgu</span>
-                             <h5 class="card-title h6 fw-bold mb-1 text-truncate">
-                                 Mirasın İzinde
-                             </h5>
-                             <p class="card-subtitle text-muted small mb-2">
-                                 Yazar: Ahmet Yılmaz
-                             </p>
-
-                             <!-- Rating -->
-                             <div class="d-flex align-items-center mb-2">
-                                 <div class="rating-stars me-2">
-                                     <i class="bi bi-star-fill"></i>
-                                     <i class="bi bi-star-fill"></i>
-                                     <i class="bi bi-star-fill"></i>
-                                     <i class="bi bi-star-fill"></i>
-                                     <i class="bi bi-star-half"></i>
-                                 </div>
-                                 <small class="text-muted fw-bold">4.5 (128)</small>
-                             </div>
-
-                             <p class="card-text small text-secondary flex-grow-1">
-                                 Geleceğin dünyasında geçen, zaman döngüleri ve insan bilinci üzerine sürükleyici bir macera...
-                             </p>
-
-                             <div class="pt-2 border-top d-flex gap-2">
-                                 <button class="btn btn-outline-primary btn-sm w-100 position-relative z-2" data-bs-toggle="modal" data-bs-target="#reviewModal">
-                                     <i class="bi bi-chat-left-text me-1"></i>
-                                     Yorum Yap
-                                 </button>
-
-
-                                 <a href="{{route('book-detail', 1)}}" class="btn btn-primary btn-sm w-100 stretched-link">
-                                     İncele
-                                 </a>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
+                 @endforeach
 
              </div>
 
