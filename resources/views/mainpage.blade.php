@@ -15,13 +15,16 @@
          <div class="row justify-content-center">
              <div class="col-md-8 col-lg-6">
                  <div class="input-group input-group-lg shadow-sm">
-                     <input
-                         type="text"
-                         class="form-control border-0"
-                         placeholder="Kitap adı, yazar veya ISBN arayın..." />
-                     <button class="btn btn-warning px-4" type="button">
-                         <i class="bi bi-search"></i> Ara
-                     </button>
+                     <form action="{{route('books.search')}}" method="get" class="d-flex w-100 gap-2">
+                         <input
+                             type="text"
+                             name="q"
+                             class="form-control border-0"
+                             placeholder="Kitap adı, yazar veya ISBN arayın..." />
+                         <button class="btn btn-warning px-4 btn-sm" type="submit">
+                             <i class="bi bi-search"></i> Ara
+                         </button>
+                     </form>
                  </div>
              </div>
          </div>
