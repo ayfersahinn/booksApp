@@ -70,7 +70,7 @@
                      </a>
                      @foreach($categories as $category)
                      <a
-                         href="#"
+                         href="{{route('mainpage', ['category'=>$category->slug])}}"
                          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                          {{$category->name}}
                          <span class="badge bg-secondary rounded-pill">{{$category->books_count}}</span>

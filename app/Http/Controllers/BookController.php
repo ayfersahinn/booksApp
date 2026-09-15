@@ -8,10 +8,17 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-    public function index()
+    public function index(Request $req)
     {
-        $books = Book::with(['category', 'publisher'])->get();
         $categories = Category::withCount('books')->get();
+        $query = $req->input('category');
+        if ($query) {
+            $books = Book::with(['category', 'publisher'])->whereHas('category', function ($slugQuery) use ($query) {
+                $slugQuery->where('slug', $query);
+            })->get();
+        } else {
+            $books = Book::with(['category', 'publisher'])->get();
+        }
         return view('mainpage', compact(['books', 'categories']));
     }
     public function search(Request $req)
