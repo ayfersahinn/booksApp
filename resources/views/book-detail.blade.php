@@ -6,8 +6,8 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 small">
                 <li class="breadcrumb-item"><a href="{{ route('mainpage') }}" class="text-decoration-none">Ana Sayfa</a></li>
-                <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Bilim Kurgu</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Mirasın İzinde</li>
+                <li class="breadcrumb-item"><a href="#" class="text-decoration-none">{{$book->category->name}}</a></li>
+                <li class="breadcrumb-item active" aria-current="page"> {{$book->title}} </li>
             </ol>
         </nav>
     </div>
@@ -52,12 +52,12 @@
             <!-- Sağ: Kitap Detayları -->
             <div class="col-md-8 col-lg-9">
                 <div class="d-flex align-items-center gap-2 mb-2">
-                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Bilim Kurgu</span>
-                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">Ciltli</span>
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle"> {{$book->category->name}} </span>
+
                 </div>
 
-                <h1 class="fw-bold mb-1">Mirasın İzinde</h1>
-                <p class="fs-5 text-muted mb-3">Yazar: <a href="#" class="text-decoration-none fw-bold">Ahmet Yılmaz</a></p>
+                <h1 class="fw-bold mb-1"> {{$book->title}}</h1>
+                <p class="fs-5 text-muted mb-3">Yazar: <a href="#" class="text-decoration-none fw-bold"> {{$book->author}} </a></p>
 
                 <!-- Derecelendirme Özeti -->
                 <div class="d-flex align-items-center gap-3 mb-4">
@@ -81,26 +81,26 @@
                 <div class="row g-3 bg-light p-3 rounded mb-4 text-center text-sm-start">
                     <div class="col-6 col-sm-3">
                         <small class="text-muted d-block">Yayınevi</small>
-                        <span class="fw-bold small">Diyar Yayınları</span>
+                        <span class="fw-bold small"> {{$book->publisher->name}} </span>
                     </div>
                     <div class="col-6 col-sm-3">
                         <small class="text-muted d-block">Yayın Tarihi</small>
-                        <span class="fw-bold small">2025</span>
+                        <span class="fw-bold small"> {{$book->published_year}} </span>
                     </div>
                     <div class="col-6 col-sm-3">
                         <small class="text-muted d-block">Sayfa Sayısı</small>
-                        <span class="fw-bold small">384</span>
+                        <span class="fw-bold small">{{$book->pages}}</span>
                     </div>
                     <div class="col-6 col-sm-3">
                         <small class="text-muted d-block">ISBN</small>
-                        <span class="fw-bold small">978-605-0000-00</span>
+                        <span class="fw-bold small">{{$book->isbn}}</span>
                     </div>
                 </div>
 
                 <!-- Kitap Özeti -->
                 <h5 class="fw-bold mb-2">Kitap Hakkında</h5>
                 <p class="text-secondary leading-relaxed mb-4">
-                    Geleceğin dünyasında geçen bu sürükleyici yapıt; insan bilinci, zaman döngüleri ve kaybolmuş uygarlıkların izini süren bir mühendisin maceralarını konu alıyor. Ahmet Yılmaz'ın kaleminden çıkan eser, teknoloji ve insan felsefesini büyüleyici bir kurgu ile harmanlıyor.
+                    {{$book->description}}
                 </p>
             </div>
         </div>

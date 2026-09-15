@@ -188,7 +188,7 @@
                                  </button>
 
 
-                                 <a href="{{route('book-detail', 1)}}" class="btn btn-primary btn-sm w-100 stretched-link">
+                                 <a href="{{route('book-detail', $book->id)}}" class="btn btn-primary btn-sm w-100 stretched-link">
                                      İncele
                                  </a>
                              </div>

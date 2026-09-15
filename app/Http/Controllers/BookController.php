@@ -32,4 +32,9 @@ class BookController extends Controller
         }
         return view('mainpage', compact('query', 'books'));
     }
+    public function show($id)
+    {
+        $book = Book::findOrFail($id);
+        return view('book-detail', compact('book'));
+    }
 }
