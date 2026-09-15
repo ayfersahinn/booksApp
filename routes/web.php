@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [BookController::class, 'index'])->name('mainpage');
@@ -17,6 +18,7 @@ Route::get('/haftanin-kitabi', function () {
 Route::get('/kayit-ol', function () {
     return view('auth.register');
 })->name('register');
+Route::post('/kayit-ol', [AuthController::class, 'register']);
 
 Route::get('/giris-yap', function () {
     return view('auth.login');

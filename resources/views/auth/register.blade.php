@@ -15,9 +15,17 @@
                 </div>
 
                 <!-- Kayıt Formu -->
-                <form action="" method="POST">
+                <form action="{{route('register')}}" method="POST">
                     @csrf
-
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
                     <!-- Ad Soyad -->
                     <div class="mb-3">
                         <label for="name" class="form-label small fw-bold">Ad Soyad</label>
@@ -47,7 +55,7 @@
                             <span class="input-group-text bg-light text-muted border-end-0">
                                 <i class="bi bi-lock"></i>
                             </span>
-                            <input type="password" class="form-control bg-light border-start-0 ps-0" id="password" name="password" placeholder="••••••••" required>
+                            <input type="password" class="form-control bg-light border-start-0 ps-0" id="password" name="password" required>
                         </div>
                     </div>
 
@@ -58,7 +66,7 @@
                             <span class="input-group-text bg-light text-muted border-end-0">
                                 <i class="bi bi-shield-lock"></i>
                             </span>
-                            <input type="password" class="form-control bg-light border-start-0 ps-0" id="password_confirmation" name="password_confirmation" placeholder="••••••••" required>
+                            <input type="password" class="form-control bg-light border-start-0 ps-0" id="password_confirmation" name="password_confirmation" required>
                         </div>
                     </div>
 
