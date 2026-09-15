@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -10,7 +11,8 @@ class BookController extends Controller
     public function index()
     {
         $books = Book::with(['category', 'publisher'])->get();
-        return view('mainpage', compact('books'));
+        $categories = Category::withCount('books')->get();
+        return view('mainpage', compact(['books', 'categories']));
     }
     public function search(Request $req)
     {

@@ -62,42 +62,20 @@
                  </div>
                  <div class="list-group list-group-flush">
                      <a
-                         href="#"
+                         href="{{route('mainpage')}}"
                          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active">
                          Tüm Kategoriler
                          <span
-                             class="badge bg-light text-dark rounded-pill">1.2k</span>
+                             class="badge bg-light text-dark rounded-pill">{{$categories->count()}}</span>
                      </a>
+                     @foreach($categories as $category)
                      <a
                          href="#"
                          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                         Bilim Kurgu
-                         <span class="badge bg-secondary rounded-pill">240</span>
+                         {{$category->name}}
+                         <span class="badge bg-secondary rounded-pill">{{$category->books_count}}</span>
                      </a>
-                     <a
-                         href="#"
-                         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                         Dünya Klasikleri
-                         <span class="badge bg-secondary rounded-pill">410</span>
-                     </a>
-                     <a
-                         href="#"
-                         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                         Psikoloji & Felsefe
-                         <span class="badge bg-secondary rounded-pill">180</span>
-                     </a>
-                     <a
-                         href="#"
-                         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                         Tarih
-                         <span class="badge bg-secondary rounded-pill">150</span>
-                     </a>
-                     <a
-                         href="#"
-                         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                         Yazılım & Teknoloji
-                         <span class="badge bg-secondary rounded-pill">95</span>
-                     </a>
+                     @endforeach
                  </div>
              </div>
 
