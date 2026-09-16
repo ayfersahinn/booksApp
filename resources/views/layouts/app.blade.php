@@ -147,6 +147,34 @@
             border: none;
             border-radius: 1rem;
         }
+
+        .profile-card,
+        .content-card {
+            border: none;
+            border-radius: 1rem;
+        }
+
+        .avatar-wrapper {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+        }
+
+        .nav-pills .nav-link {
+            color: #495057;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #0d6efd;
+        }
     </style>
 </head>
 

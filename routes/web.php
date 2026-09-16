@@ -24,3 +24,9 @@ Route::get('/giris-yap', function () {
     return view('auth.login');
 })->name('login');
 Route::post('giris-yap', [AuthController::class, 'login']);
+
+Route::get('/profil', function () {
+    return view('profile');
+})->name('profile');
+Route::post('/profil', [AuthController::class, 'changePassword']);
+Route::post('/cikis-yap', [AuthController::class, 'logout'])->name('cikis');

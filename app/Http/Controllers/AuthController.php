@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Testing\Fluent\Concerns\Has;
 
 class AuthController extends Controller
 {
@@ -35,5 +34,28 @@ class AuthController extends Controller
         return back()->withErrors([
             'email' => 'Email veya şifre hatalı.'
         ])->withInput();
+    }
+    public function changePassword(Request $req)
+    {
+        $user = User::findOrFail(Auth::id());
+        $validatePassword = $req->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:6'
+        ]);
+
+        if (Hash::check($validatePassword['current_password'], $user->password)) {
+            $user->password = Hash::make($validatePassword['new_password']);
+            $user->save();
+            return back()->with('success', 'Şifreniz başarıyla değiştirildi.');
+        } else {
+            return back()->withErrors([
+                'password' => 'Mevcut şifreniz hatalı.'
+            ])->withInput();
+        }
+    }
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('mainpage');
     }
 }

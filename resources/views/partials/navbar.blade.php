@@ -25,6 +25,13 @@
 
             </ul>
             <div class="d-flex gap-2">
+                @if(Auth::check())
+                <a href="{{route('profile')}}"
+                    class="btn btn-outline-light btn-sm">
+                    Profilim
+                </a>
+
+                @else
                 <a href="{{route('login')}}"
                     class="btn btn-outline-light btn-sm">
                     Giriş Yap
@@ -32,6 +39,7 @@
                 <a href="{{route('register')}}" class="btn btn-primary btn-sm">
                     Kayıt Ol
                 </a>
+                @endif
             </div>
         </div>
     </div>
