@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Testing\Fluent\Concerns\Has;
 
@@ -22,5 +23,17 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password'])
         ]);
         return redirect()->route('login');
+    }
+    public function login(Request $req)
+    {
+        $credentials = $req->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+        if (Auth::attempt($credentials))
+            return redirect()->route('mainpage');
+        return back()->withErrors([
+            'email' => 'Email veya şifre hatalı.'
+        ])->withInput();
     }
 }

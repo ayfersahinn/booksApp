@@ -23,3 +23,4 @@ Route::post('/kayit-ol', [AuthController::class, 'register']);
 Route::get('/giris-yap', function () {
     return view('auth.login');
 })->name('login');
+Route::post('giris-yap', [AuthController::class, 'login']);
