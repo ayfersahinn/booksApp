@@ -15,7 +15,7 @@
          <div class="row justify-content-center">
              <div class="col-md-8 col-lg-6">
                  <div class="input-group input-group-lg shadow-sm">
-                     <form action="{{route('books.search')}}" method="get" class="d-flex w-100 gap-2">
+                     <form action="{{route('books-search')}}" method="get" class="d-flex w-100 gap-2">
                          <input
                              type="text"
                              name="q"
@@ -128,10 +128,16 @@
                      <div class="card border-0 shadow-sm book-card h-100">
                          <div class="position-relative text-center p-3 bg-light">
                              <img src="https://via.placeholder.com/180x260" class="book-cover shadow-sm" alt="Kitap Kapak" />
-
-                             <button class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm position-relative z-2" title="Listeme Kaydet">
-                                 <i class="bi bi-bookmark-plus text-primary fs-6"></i>
-                             </button>
+                             <form action="{{route('book.favorite', $book->id)}}" method="post">
+                                 @csrf
+                                 <button type="submit" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm position-relative z-2" title="Listeme Kaydet">
+                                     @if ($book->users->first()?->pivot->is_favorite)
+                                     <i class="bi bi-heart-fill text-danger fs-6"></i>
+                                     @else
+                                     <i class="bi bi-heart text-primary fs-6"></i>
+                                     @endif
+                                 </button>
+                             </form>
                          </div>
 
                          <div class="card-body d-flex flex-column">

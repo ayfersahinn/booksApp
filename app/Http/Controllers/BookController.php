@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\User;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookController extends Controller
 {
@@ -12,13 +15,19 @@ class BookController extends Controller
     {
         $categories = Category::withCount('books')->get();
         $query = $req->input('category');
+        $booksQuery = Book::with([
+            'category',
+            'publisher',
+            'users' => function ($query) {
+                $query->where('users.id', Auth::id());
+            }
+        ]);
         if ($query) {
-            $books = Book::with(['category', 'publisher'])->whereHas('category', function ($slugQuery) use ($query) {
+            $booksQuery->whereHas('category', function ($slugQuery) use ($query) {
                 $slugQuery->where('slug', $query);
-            })->get();
-        } else {
-            $books = Book::with(['category', 'publisher'])->get();
+            });
         }
+        $books = $booksQuery->get();
         return view('mainpage', compact(['books', 'categories']));
     }
     public function search(Request $req)
@@ -45,5 +54,29 @@ class BookController extends Controller
     {
         $book = Book::findOrFail($id);
         return view('book-detail', compact('book'));
+    }
+    public function toggleFavorite($id)
+    {
+        $user = Auth::user();
+        $book = Book::findOrFail($id);
+        $userBook = $user->books()->where('books.id', $book->id)->first();
+
+
+        if (!$userBook) {
+            $user->books()->attach($book->id, [
+                'status' => 'want_to_read',
+                'is_favorite' => true
+            ]);
+        } else {
+            if ($userBook->pivot->is_favorite == true) {
+                $user->books()->updateExistingPivot(
+                    $book->id,
+                    ['is_favorite' => false]
+                );
+            } else {
+                $user->books()->updateExistingPivot($book->id, ['is_favorite' => true]);
+            }
+        }
+        return back();
     }
 }
