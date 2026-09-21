@@ -8,7 +8,7 @@ Route::get('/', [BookController::class, 'index'])->name('mainpage');
 Route::get('/arama', [BookController::class, 'search'])->name('books-search');
 Route::get('/kitaplar/{id}', [BookController::class, 'show'])->name('book-detail');
 
-Route::post('/kitap/{id}/favori', [BookController::class, 'toggleFavorite'])->name('book.favorite');
+Route::post('/kitap/{id}/favori', [BookController::class, 'toggleFavorite'])->middleware('auth')->name('book.favorite');
 
 Route::get('/topluluk', function () {
     return view('community');
@@ -31,4 +31,5 @@ Route::post('/cikis-yap', [AuthController::class, 'logout'])->name('cikis');
 Route::get('/profil', function () {
     return view('profile');
 })->name('profile');
-Route::post('/profil', [AuthController::class, 'changePassword']);
+Route::post('/sifre-degistir', [AuthController::class, 'changePassword'])->name('change-password');
+Route::post('/profil-guncelle', [AuthController::class, 'updateProfile'])->name('update-profile');

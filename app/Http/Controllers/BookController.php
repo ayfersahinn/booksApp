@@ -48,7 +48,8 @@ class BookController extends Controller
                 })
                 ->get();
         }
-        return view('mainpage', compact('query', 'books'));
+        $categories = Category::all();
+        return view('mainpage', compact('query', 'books', 'categories'));
     }
     public function show($id)
     {
@@ -64,7 +65,7 @@ class BookController extends Controller
 
         if (!$userBook) {
             $user->books()->attach($book->id, [
-                'status' => 'want_to_read',
+                'status' => 'null',
                 'is_favorite' => true
             ]);
         } else {

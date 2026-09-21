@@ -47,7 +47,7 @@
                     <div class="card shadow-sm content-card p-4 bg-white">
                         <h4 class="fw-bold mb-4">Profil Bilgilerini Güncelle</h4>
 
-                        <form action="{{route('profile')}}" method="POST">
+                        <form action="{{route('update-profile')}}" method="POST">
                             @csrf
 
                             <div class="mb-3">
@@ -65,8 +65,15 @@
                                     <input type="email" class="form-control bg-light border-start-0 ps-0" id="email" name="email" value="{{Auth::user()->email}}" required>
                                 </div>
                             </div>
-
-                            <hr class="my-4">
+                            <div class="text-end mt-4">
+                                <button type="submit" class="btn btn-primary px-4 fw-bold shadow-sm">
+                                    Değişiklikleri Kaydet
+                                </button>
+                            </div>
+                        </form>
+                        <hr class="my-4">
+                        <form action="{{route('change-password')}}" method="post">
+                            @csrf
                             <h6 class="fw-bold mb-3">Şifre Değiştir </h6>
 
                             <div class="mb-3">

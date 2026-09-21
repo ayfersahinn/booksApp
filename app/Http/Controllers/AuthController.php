@@ -53,6 +53,19 @@ class AuthController extends Controller
             ])->withInput();
         }
     }
+    public function updateProfile(Request $req)
+    {
+        $user = User::findOrFail(Auth::id());
+        $validateProfile = $req->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email'
+        ]);
+
+        $user->name = $validateProfile['name'];
+        $user->email = $validateProfile['email'];
+        $user->save();
+        return back()->with('success', 'Profil bilgileriniz başarıyla güncellendi.');
+    }
     public function logout()
     {
         Auth::logout();
