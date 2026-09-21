@@ -128,7 +128,7 @@
                      <div class="card border-0 shadow-sm book-card h-100">
                          <div class="position-relative text-center p-3 bg-light">
                              <img src="https://via.placeholder.com/180x260" class="book-cover shadow-sm" alt="Kitap Kapak" />
-                             <form action="{{route('book.favorite', $book->id)}}" method="post">
+                             <form action="{{route('book-favorite', $book->id)}}" method="post">
                                  @csrf
                                  <button type="submit" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm position-relative z-2" title="Listeme Kaydet">
                                      @if ($book->users->first()?->pivot->is_favorite)

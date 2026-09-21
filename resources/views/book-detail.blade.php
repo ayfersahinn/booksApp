@@ -43,9 +43,18 @@
                             <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-x-circle me-2"></i>Listeden Çıkar</a></li>
                         </ul>
                     </div>
-                    <button class="btn btn-outline-danger btn-sm">
-                        <i class="bi bi-heart me-1"></i> Favorilere Ekle
-                    </button>
+                    <form action="{{route('book-favorite', $book->id)}}" method="post">
+                        @csrf
+                        @if($isFavorite)
+                        <button type="submit" class="btn btn-danger btn-sm w-100">
+                            <i class="bi bi-heart-fill me-1"></i> Favorilerden Çıkar
+                        </button>
+                        @else
+                        <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                            <i class="bi bi-heart me-1"></i> Favorilere Ekle
+                        </button>
+                        @endif
+                    </form>
                 </div>
             </div>
 

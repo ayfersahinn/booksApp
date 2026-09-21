@@ -54,7 +54,8 @@ class BookController extends Controller
     public function show($id)
     {
         $book = Book::findOrFail($id);
-        return view('book-detail', compact('book'));
+        $isFavorite = Auth::user()->books()->where('books.id', $book->id)->wherePivot('is_favorite', true)->exists();
+        return view('book-detail', compact('book', 'isFavorite'));
     }
     public function toggleFavorite($id)
     {
@@ -65,7 +66,7 @@ class BookController extends Controller
 
         if (!$userBook) {
             $user->books()->attach($book->id, [
-                'status' => 'null',
+                'status' => null,
                 'is_favorite' => true
             ]);
         } else {
