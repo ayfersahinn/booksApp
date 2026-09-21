@@ -76,7 +76,13 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-x-circle me-2"></i>Listeden Çıkar</a></li>
+                            <li>
+                                <form action="{{route('removeFromList',$book->id)}}" method="post">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-danger"><i class="bi bi-x-circle me-2"></i>Listeden Çıkar</button>
+
+                                </form>
+                            </li>
                         </ul>
                     </div>
                     <form action="{{route('book-favorite', $book->id)}}" method="post">

@@ -106,4 +106,11 @@ class BookController extends Controller
 
         return back();
     }
+    public function removeFromList($id)
+    {
+        $user = Auth::user();
+        $book = Book::findOrFail($id);
+        $user->books()->detach($book->id);
+        return back();
+    }
 }

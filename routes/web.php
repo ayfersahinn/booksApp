@@ -11,6 +11,7 @@ Route::get('/kitaplar/{id}', [BookController::class, 'show'])->name('book-detail
 
 Route::post('/kitap/{id}/favori', [BookController::class, 'toggleFavorite'])->middleware('auth')->name('book-favorite');
 Route::post('/kitap/{id}/status', [BookController::class, 'bookStatus'])->middleware('auth')->name('book-status');
+Route::post('/kitap/{id}/listeden-cikar', [BookController::class, 'removeFromList'])->middleware('auth')->name('removeFromList');
 
 Route::get('/topluluk', function () {
     return view('community');
