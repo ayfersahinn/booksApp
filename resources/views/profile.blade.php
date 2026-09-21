@@ -145,20 +145,22 @@
                     <div class="card shadow-sm content-card p-4 bg-white">
                         <h4 class="fw-bold mb-4">Okuma Listem</h4>
                         <ul class="list-group list-group-flush">
+                            @foreach($listItems as $listItem)
                             <li class="list-group-item d-flex justify-content-between align-items-center py-3">
                                 <div>
-                                    <h6 class="mb-0 fw-bold">Suç ve Ceza</h6>
-                                    <small class="text-muted">Fyodor Dostoyevski</small>
+                                    <h6 class="mb-0 fw-bold">{{$listItem->title}}</h6>
+                                    <small class="text-muted">{{$listItem->author}}</small>
                                 </div>
-                                <span class="badge bg-warning text-dark rounded-pill">Okunuyor</span>
+                                @if($listItem->pivot->status=='read')
+                                <span class="badge bg-success  rounded-pill">Okudum</span>
+                                @elseif($listItem->pivot->status=='reading')
+                                <span class="badge bg-warning text-dark rounded-pill">Okuyorum</span>
+                                @elseif($listItem->pivot->status=='want-to-read')
+                                <span class="badge bg-primary  rounded-pill">Okuyacağım</span>
+                                @endif
+
                             </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                                <div>
-                                    <h6 class="mb-0 fw-bold">Dönüşüm</h6>
-                                    <small class="text-muted">Franz Kafka</small>
-                                </div>
-                                <span class="badge bg-success rounded-pill">Tamamlandı</span>
-                            </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>

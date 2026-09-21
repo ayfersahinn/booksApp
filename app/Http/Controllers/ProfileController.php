@@ -15,7 +15,8 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $favoriteBooks = $user->books()->wherePivot('is_favorite', true)->get();
-        return view('/profile', compact('favoriteBooks'));
+        $listItems = $user->books()->whereNotNull('status')->get();
+        return view('/profile', compact('favoriteBooks', 'listItems'));
     }
     public function changePassword(Request $req)
     {
