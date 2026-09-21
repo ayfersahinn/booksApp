@@ -28,15 +28,51 @@
                 <div class="d-grid gap-2">
                     <div class="btn-group">
                         <button class="btn btn-primary fw-bold" type="button">
+                            @if($status === 'read')
+                            <i class="bi bi-check-circle me-1"></i> Okudum
+                            @elseif($status === 'reading')
+                            <i class="bi bi-clock me-1"></i> Okuyorum
+                            @elseif($status === 'want-to-read')
                             <i class="bi bi-bookmark-plus me-1"></i> Okuyacağım
+                            @else
+                            <i class="bi bi-bookmark-plus me-1"></i> Listeye Ekle
+                            @endif
                         </button>
                         <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="visually-hidden">Listeyi Değiştir</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end w-100">
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-check-circle text-success me-2"></i>Okudum</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-clock text-warning me-2"></i>Okuyorum</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-bookmark text-primary me-2"></i>Okuyacağım</a></li>
+                            <li>
+                                <form action="{{route('book-status', $book->id)}}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="status" value="read">
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="bi bi-check-circle text-success me-2"></i>Okudum
+                                    </button>
+                                </form>
+                            </li>
+                            <li>
+                                <form action="{{route('book-status', $book->id)}}" method="post">
+                                    @csrf
+
+                                    <input type="hidden" name="status" value="reading">
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="bi bi-clock text-warning me-2"></i>Okuyorum
+                                    </button>
+                                </form>
+
+                            </li>
+                            <li>
+                                <form action="{{route('book-status', $book->id)}}" method="post">
+                                    @csrf
+
+                                    <input type="hidden" name="status" value="want-to-read">
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="bi bi-bookmark text-primary me-2"></i>Okuyacağım
+                                    </button>
+                                </form>
+
+                            </li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>

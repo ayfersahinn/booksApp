@@ -55,7 +55,13 @@ class BookController extends Controller
     {
         $book = Book::findOrFail($id);
         $isFavorite = Auth::user()->books()->where('books.id', $book->id)->wherePivot('is_favorite', true)->exists();
-        return view('book-detail', compact('book', 'isFavorite'));
+        $userBook = Auth::user()
+            ->books()
+            ->where('books.id', $book->id)
+            ->first();
+
+        $status = $userBook?->pivot->status;
+        return view('book-detail', compact('book', 'isFavorite', 'status'));
     }
     public function toggleFavorite($id)
     {
@@ -79,6 +85,25 @@ class BookController extends Controller
                 $user->books()->updateExistingPivot($book->id, ['is_favorite' => true]);
             }
         }
+        return back();
+    }
+    public function bookStatus(Request $req, $id)
+    {
+        $user = Auth::user();
+        $book = Book::findOrFail($id);
+        $userBook = $user->books()->where('books.id', $book->id)->first();
+        if (!$userBook) {
+            $user->books()->attach(
+                $book->id,
+                ['status' => $req->input('status'), 'is_favorite' => false]
+            );
+        } else {
+            $user->books()->updateExistingPivot(
+                $book->id,
+                ['status' => $req->input('status')]
+            );
+        }
+
         return back();
     }
 }
