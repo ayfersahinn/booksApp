@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [BookController::class, 'index'])->name('mainpage');
@@ -28,8 +29,6 @@ Route::get('/giris-yap', function () {
 Route::post('giris-yap', [AuthController::class, 'login']);
 Route::post('/cikis-yap', [AuthController::class, 'logout'])->name('cikis');
 
-Route::get('/profil', function () {
-    return view('profile');
-})->name('profile');
-Route::post('/sifre-degistir', [AuthController::class, 'changePassword'])->name('change-password');
-Route::post('/profil-guncelle', [AuthController::class, 'updateProfile'])->name('update-profile');
+Route::get('/profil', [ProfileController::class, 'index'])->middleware('auth')->name('profile');
+Route::post('/sifre-degistir', [ProfileController::class, 'changePassword'])->middleware('auth')->name('change-password');
+Route::post('/profil-guncelle', [ProfileController::class, 'updateProfile'])->middleware('auth')->name('update-profile');

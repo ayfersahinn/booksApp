@@ -121,29 +121,20 @@
                         <h4 class="fw-bold mb-4">Favori Kitaplarım</h4>
 
                         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                            <!-- Örnek Kitap Kartı 1 -->
+                            @foreach($favoriteBooks as $favoriteBook)
                             <div class="col">
                                 <div class="card h-100 border shadow-sm">
                                     <img src="https://via.placeholder.com/150x200" class="card-img-top" alt="Kitap Kapak" style="height: 160px; object-fit: cover;">
                                     <div class="card-body p-3">
-                                        <h6 class="card-title fw-bold mb-1 text-truncate">Simyacı</h6>
-                                        <p class="card-text small text-muted mb-2">Paulo Coelho</p>
-                                        <a href="" class="btn btn-sm btn-outline-primary w-100">İncele</a>
+                                        <h6 class="card-title fw-bold mb-1 text-truncate">{{$favoriteBook->title}}</h6>
+                                        <p class="card-text small text-muted mb-2">{{$favoriteBook->author}}</p>
+                                        <a href="{{route('book-detail',$favoriteBook->id)}}" class="btn btn-sm btn-outline-primary w-100">İncele</a>
                                     </div>
                                 </div>
                             </div>
+                            @endforeach
 
-                            <!-- Örnek Kitap Kartı 2 -->
-                            <div class="col">
-                                <div class="card h-100 border shadow-sm">
-                                    <img src="https://via.placeholder.com/150x200" class="card-img-top" alt="Kitap Kapak" style="height: 160px; object-fit: cover;">
-                                    <div class="card-body p-3">
-                                        <h6 class="card-title fw-bold mb-1 text-truncate">1984</h6>
-                                        <p class="card-text small text-muted mb-2">George Orwell</p>
-                                        <a href="" class="btn btn-sm btn-outline-primary w-100">İncele</a>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
 
                     </div>
