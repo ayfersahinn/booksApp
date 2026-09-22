@@ -166,15 +166,87 @@
                              </p>
 
                              <div class="pt-2 border-top d-flex gap-2">
-                                 <button class="btn btn-outline-primary btn-sm w-100 position-relative z-2" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                                 @if($book->users->isEmpty() || ($book->users->first()->pivot->rating===null && $book->users->first()->pivot->review===null))
+
+                                 <button class="btn btn-outline-primary btn-sm w-100 position-relative z-2" type="button"
+                                     data-bs-toggle="modal"
+                                     data-bs-target="#reviewModal{{ $book->id }}">
                                      <i class="bi bi-chat-left-text me-1"></i>
                                      Yorum Yap
                                  </button>
-
+                                 @endif
 
                                  <a href="{{route('book-detail', $book->id)}}" class="btn btn-primary btn-sm w-100 stretched-link">
                                      İncele
                                  </a>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!-- Değerlendirme / Yorum Yapma Modalı -->
+                 <div
+                     class="modal fade"
+                     id="reviewModal{{ $book->id }}"
+                     tabindex="-1"
+                     aria-hidden="true">
+                     <div class="modal-dialog">
+                         <div class="modal-content">
+                             <div class="modal-header">
+                                 <h5 class="modal-title">
+                                     Kitabı Değerlendir ve Yorum Yap
+                                 </h5>
+                                 <button
+                                     type="button"
+                                     class="btn-close"
+                                     data-bs-dismiss="modal"
+                                     aria-label="Kapat"></button>
+                             </div>
+                             <div class="modal-body">
+                                 <form action="{{route('add-review', $book->id)}}" method="POST">
+                                     @csrf
+                                     <div class="mb-3">
+                                         <label class="form-label fw-bold">Puanınız</label>
+                                         <select class="form-select" name="rating">
+                                             <option value="5">
+                                                 ⭐⭐⭐⭐⭐ (5/5) - Mükemmel
+                                             </option>
+                                             <option value="4">
+                                                 ⭐⭐⭐⭐ (4/5) - Çok İyi
+                                             </option>
+                                             <option value="3">
+                                                 ⭐⭐⭐ (3/5) - Orta
+                                             </option>
+                                             <option value="2">
+                                                 ⭐⭐ (2/5) - Zayıf
+                                             </option>
+                                             <option value="1">⭐ (1/5) - Kötü</option>
+                                         </select>
+                                     </div>
+                                     <div class="mb-3">
+                                         <label class="form-label fw-bold">Değerlendirme Notunuz</label>
+                                         <textarea
+                                             class="form-control"
+                                             rows="4"
+                                             name="review"
+                                             placeholder="Kitap hakkında ne düşünüyorsunuz? Spoiler vermemeye özen gösteriniz..."></textarea>
+                                     </div>
+                                     <div class="form-check mb-3">
+                                         <input
+                                             class="form-check-input"
+                                             type="checkbox"
+                                             name="has_spoiler"
+                                             id="has_spoiler" />
+                                         <label
+                                             class="form-check-label small"
+                                             for="has_spoiler">
+                                             Yorumum spoiler içeriyor.
+                                         </label>
+                                     </div>
+                                     <button type="submit" class="btn btn-primary w-100">
+                                         Değerlendirmeyi Gönder
+                                     </button>
+                                 </form>
+
                              </div>
                          </div>
                      </div>
@@ -255,68 +327,5 @@
      </div>
  </section>
 
- <!-- Değerlendirme / Yorum Yapma Modalı -->
- <div
-     class="modal fade"
-     id="reviewModal"
-     tabindex="-1"
-     aria-hidden="true">
-     <div class="modal-dialog">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <h5 class="modal-title">
-                     Kitabı Değerlendir ve Yorum Yap
-                 </h5>
-                 <button
-                     type="button"
-                     class="btn-close"
-                     data-bs-dismiss="modal"
-                     aria-label="Kapat"></button>
-             </div>
-             <div class="modal-body">
-                 <form>
-                     <div class="mb-3">
-                         <label class="form-label fw-bold">Puanınız</label>
-                         <select class="form-select">
-                             <option value="5">
-                                 ⭐⭐⭐⭐⭐ (5/5) - Mükemmel
-                             </option>
-                             <option value="4">
-                                 ⭐⭐⭐⭐ (4/5) - Çok İyi
-                             </option>
-                             <option value="3">
-                                 ⭐⭐⭐ (3/5) - Orta
-                             </option>
-                             <option value="2">
-                                 ⭐⭐ (2/5) - Zayıf
-                             </option>
-                             <option value="1">⭐ (1/5) - Kötü</option>
-                         </select>
-                     </div>
-                     <div class="mb-3">
-                         <label class="form-label fw-bold">Değerlendirme Notunuz</label>
-                         <textarea
-                             class="form-control"
-                             rows="4"
-                             placeholder="Kitap hakkında ne düşünüyorsunuz? Spoiler vermemeye özen gösteriniz..."></textarea>
-                     </div>
-                     <div class="form-check mb-3">
-                         <input
-                             class="form-check-input"
-                             type="checkbox"
-                             id="readStatus" />
-                         <label
-                             class="form-check-label small"
-                             for="readStatus">
-                             Bu kitabı "Okuduklarım" listeme ekle
-                         </label>
-                     </div>
-                     <button type="submit" class="btn btn-primary w-100">
-                         Değerlendirmeyi Gönder
-                     </button>
-                 </form>
-             </div>
-         </div>
-     </div>
- </div>
+
  @endsection
