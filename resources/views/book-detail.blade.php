@@ -164,13 +164,15 @@
         <div class="col-lg-8">
 
             <!-- Yorum Ekleme Formu -->
+            @if(!$userBook)
             <div class="card border-0 shadow-sm p-4 mb-4">
                 <h5 class="fw-bold mb-3"><i class="bi bi-pencil-square text-primary me-2"></i>Bu Kitabı Değerlendir</h5>
-                <form action="#" method="POST">
+                <form action="{{route('add-review', $book->id)}}" method="POST">
+                    @csrf
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label class="form-label small fw-bold">Puanınız</label>
-                            <select class="form-select">
+                            <select class="form-select" name="rating">
                                 <option value="5">⭐⭐⭐⭐⭐ (5/5) - Mükemmel</option>
                                 <option value="4">⭐⭐⭐⭐ (4/5) - Çok İyi</option>
                                 <option value="3">⭐⭐⭐ (3/5) - Orta</option>
@@ -180,67 +182,154 @@
                         </div>
                         <div class="col-md-6 d-flex align-items-end">
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="hasSpoiler">
-                                <label class="form-check-label small text-muted" for="hasSpoiler">
-                                    Yorumum spoiler (sürpriz bozan) içeriyor.
+                                <input class="form-check-input" type="checkbox" id="has_spoiler" name="has_spoiler">
+                                <label class="form-check-label small text-muted" for="has_spoiler">
+                                    Yorumum spoiler içeriyor.
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <textarea class="form-control" rows="3" placeholder="Kitap hakkındaki düşüncelerinizi paylaşın..."></textarea>
+                        <textarea name="review" class="form-control" rows="3" placeholder="Kitap hakkındaki düşüncelerinizi paylaşın..."></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary fw-bold px-4">Yorumu Gönder</button>
                 </form>
             </div>
-
+            @else
+            <div class="alert alert-warning mb-4">
+                <i class="bi bi-exclamation-circle me-2"></i>
+                Bu kitabı zaten değerlendirdiniz. Mevcut yorumunuzu yorum kartından düzenleyebilirsiniz.
+            </div>
+            @endif
             <!-- Yorumlar Akışı -->
-            <h5 class="fw-bold mb-3">Okur Yorumları (128)</h5>
+            <h5 class="fw-bold mb-3">Okur Yorumları {{$userReview->count()}}</h5>
             <div class="d-flex flex-column gap-3">
 
-                <!-- Yorum 1 -->
+                @foreach($userReview as $review)
                 <div class="card border-0 shadow-sm p-3">
                     <div class="d-flex gap-3">
-                        <img src="https://via.placeholder.com/45" class="rounded-circle avatar" alt="User">
-                        <div class="w-100">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <h6 class="fw-bold mb-0">Ayşe Yılmaz</h6>
-                                <div class="rating-stars small">
-                                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                                </div>
-                            </div>
-                            <small class="text-muted d-block mb-2">2 gün önce inceledi</small>
-                            <p class="text-secondary small mb-2">
-                                Kurgusu harikaydı, özellikle son bölümlerdeki ters köşeleri hiç beklemiyordum. Bilim kurgu severlerin kesinlikle kaçırmaması gereken bir kitap.
-                            </p>
-                            <button class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.75rem;">
-                                <i class="bi bi-hand-thumbs-up me-1"></i> Faydalı (12)
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                        <img src="https://via.placeholder.com/45"
+                            class="rounded-circle avatar"
+                            alt="User">
 
-                <!-- Yorum 2 -->
-                <div class="card border-0 shadow-sm p-3">
-                    <div class="d-flex gap-3">
-                        <img src="https://via.placeholder.com/45" class="rounded-circle avatar" alt="User">
                         <div class="w-100">
+
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <h6 class="fw-bold mb-0">Caner Şahin</h6>
-                                <div class="rating-stars small">
-                                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i>
+                                <h6 class="fw-bold mb-0">
+                                    {{ $review->name }}
+                                </h6>
+
+                                <div class="d-flex align-items-center gap-2">
+
+                                    <div class="rating-stars small">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            @if($i <=$review->pivot->rating)
+                                            <i class="bi bi-star-fill"></i>
+                                            @else
+                                            <i class="bi bi-star"></i>
+                                            @endif
+                                            @endfor
+                                    </div>
+
+
+
                                 </div>
                             </div>
-                            <small class="text-muted d-block mb-2">1 hafta önce inceledi</small>
+
+                            <small class="text-muted d-block mb-2">
+                                {{ $review->pivot->created_at->diffForHumans() }} inceledi
+                            </small>
+
                             <p class="text-secondary small mb-2">
-                                Başlangıcı biraz yavaş olsa da ikinci yarıdan itibaren temposu çok yükseldi. Yazarın dünyası gayet tutarlı kurgulanmış.
+                                {{ $review->pivot->review }}
                             </p>
-                            <button class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.75rem;">
-                                <i class="bi bi-hand-thumbs-up me-1"></i> Faydalı (5)
-                            </button>
+                            <div class="d-flex justify-content-between align-items-center">
+                                @if($review->pivot->has_spoiler)
+                                <span class="badge bg-warning text-dark mb-2">
+                                    <i class="bi bi-exclamation-triangle me-1"></i>
+                                    Spoiler içerir
+                                </span>
+                                @endif
+
+                                {{-- Sadece kendi yorumunda göster --}}
+                                @if(Auth::id() === $review->id)
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-secondary"
+                                    onclick="document.getElementById('edit-review-{{ $review->id }}').classList.toggle('d-none')"
+                                    title="Yorumu Düzenle">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                @endif
+                            </div>
+                            {{-- DÜZENLEME FORMU --}}
+                            @if(Auth::id() === $review->id)
+                            <div id="edit-review-{{ $review->id }}" class="d-none mt-3 border-top pt-3">
+
+                                <form action="{{ route('update-review', $book->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+
+
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-bold">
+                                            Puanınız
+                                        </label>
+
+                                        <select name="rating" class="form-select">
+                                            @for($i = 5; $i >= 1; $i--)
+                                            <option value="{{ $i }}"
+                                                {{ $review->pivot->rating == $i ? 'selected' : '' }}>
+                                                {{ str_repeat('⭐', $i) }} ({{ $i }}/5)
+                                            </option>
+                                            @endfor
+                                        </select>
+                                    </div>
+
+
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-bold">
+                                            Yorumunuz
+                                        </label>
+
+                                        <textarea
+                                            name="review"
+                                            class="form-control"
+                                            rows="4">{{ $review->pivot->review }}</textarea>
+                                    </div>
+
+
+                                    <div class="form-check mb-3">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="has_spoiler"
+                                            value="1"
+                                            id="edit-spoiler-{{ $review->id }}"
+                                            {{ $review->pivot->has_spoiler ? 'checked' : '' }}>
+
+                                        <label
+                                            class="form-check-label small"
+                                            for="edit-spoiler-{{ $review->id }}">
+                                            Yorumum spoiler içeriyor.
+                                        </label>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-check-lg me-1"></i>
+                                        Değişiklikleri Kaydet
+                                    </button>
+
+                                </form>
+
+                            </div>
+                            @endif
+
                         </div>
                     </div>
                 </div>
+                @endforeach
+
 
             </div>
         </div>

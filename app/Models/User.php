@@ -55,7 +55,8 @@ class User extends Authenticatable
             'status',
             'is_favorite',
             'rating',
-            'review'
+            'review',
+            'has_spoiler'
         ])->withTimestamps();
     }
 }

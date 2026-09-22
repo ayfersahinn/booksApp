@@ -61,7 +61,10 @@ class BookController extends Controller
             ->first();
 
         $status = $userBook?->pivot->status;
-        return view('book-detail', compact('book', 'isFavorite', 'status'));
+
+        $userReview = $book->users()->wherePivotNotNull('review')->get();
+
+        return view('book-detail', compact('book', 'userBook', 'isFavorite', 'status', 'userReview'));
     }
     public function toggleFavorite($id)
     {
@@ -112,5 +115,66 @@ class BookController extends Controller
         $book = Book::findOrFail($id);
         $user->books()->detach($book->id);
         return back();
+    }
+    public function addReview(Request $req, $id)
+    {
+        $user = Auth::user();
+        $book = Book::findOrFail($id);
+        $userBook = $user->books()->where('books.id', $book->id)->first();
+        if ($req->boolean('has_spoiler') && !$req->filled('review')) {
+            return back()->withErrors([
+                'review' => 'Spoiler işaretlemek için yorum yazmalısınız.'
+            ]);
+        }
+        if (!$userBook) {
+            $user->books()->attach(
+                $book->id,
+                [
+                    'review' => $req->input('review'),
+                    'rating' => $req->input('rating'),
+                    'has_spoiler' => $req->boolean('has_spoiler')
+                ]
+            );
+        } else {
+            $data = [
+                'rating' => $req->input('rating'),
+                'has_spoiler' => $req->boolean('has_spoiler')
+            ];
+
+            if ($req->filled('review')) {
+                $data['review'] = $req->input('review');
+            }
+
+            $user->books()->updateExistingPivot(
+                $book->id,
+                $data
+            );
+        }
+        return back();
+    }
+    public function updateReview(Request $req, $id)
+    {
+        $user = Auth::user();
+        $book = Book::findOrFail($id);
+        $validated = $req->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'review' => 'nullable|string',
+        ]);
+
+        if ($req->boolean('has_spoiler') && !$req->filled('review')) {
+            return back()->withErrors([
+                'review' => 'Spoiler işaretlemek için yorum yazmalısınız.'
+            ]);
+        }
+        $user->books()->updateExistingPivot(
+            $book->id,
+            [
+                'rating' => $validated['rating'],
+                'review' => $validated['review'],
+                'has_spoiler' => $req->boolean('has_spoiler'),
+            ]
+        );
+
+        return back()->with('success', 'Yorumunuz güncellendi.');
     }
 }

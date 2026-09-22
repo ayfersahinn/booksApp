@@ -23,7 +23,8 @@ class Book extends Model
             'status',
             'is_favorite',
             'rating',
-            'review'
+            'review',
+            'has_spoiler'
         ])->withTimestamps();
     }
 }
