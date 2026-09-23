@@ -27,6 +27,15 @@
                     <button class="nav-link text-start d-flex align-items-center mb-1" id="tab-reading-link" data-bs-toggle="pill" data-bs-target="#tab-reading" type="button" role="tab">
                         <i class="bi bi-bookmark-check me-2 fs-5"></i> Okuma Listem
                     </button>
+                    <button class="nav-link text-start d-flex align-items-center mb-1"
+                        id="tab-reviews-link"
+                        data-bs-toggle="pill"
+                        data-bs-target="#tab-reviews"
+                        type="button"
+                        role="tab">
+                        <i class="bi bi-chat-left-text me-2 fs-5"></i>
+                        Kitap Yorumlarım
+                    </button>
                     <hr class="my-2">
                     <form action="{{route('cikis')}}" method="POST">
                         @csrf
@@ -162,6 +171,68 @@
                             </li>
                             @endforeach
                         </ul>
+                    </div>
+                </div>
+                <!-- 4. SEKME: Yorumlar -->
+                <div class="tab-pane fade" id="tab-reviews" role="tabpanel">
+                    <div class="card shadow-sm content-card p-4 bg-white">
+                        <h4 class="fw-bold mb-4">Kitap Yorumlarım</h4>
+
+                        @foreach($reviews as $review)
+                        <div class="card border-0 shadow-sm p-3 m-3">
+                            <div class="d-flex gap-3">
+                                <img src="https://via.placeholder.com/45"
+                                    class="rounded-circle "
+                                    alt="book">
+
+                                <div class="w-100">
+
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <h6 class="fw-bold mb-0">
+                                            {{ $review->name }}
+                                        </h6>
+
+                                        <div class="d-flex align-items-center gap-2">
+
+                                            <div class="rating-stars small">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    @if($i <=$review->pivot->rating)
+                                                    <i class="bi bi-star-fill"></i>
+                                                    @else
+                                                    <i class="bi bi-star"></i>
+                                                    @endif
+                                                    @endfor
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+
+                                    <small class="text-muted d-block mb-2">
+                                        {{ $review->pivot->created_at->diffForHumans() }} inceledi
+                                    </small>
+
+                                    <p class="text-secondary small mb-2">
+                                        {{ $review->pivot->review }}
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        @if($review->pivot->has_spoiler)
+                                        <span class="badge bg-warning text-dark mb-2">
+                                            <i class="bi bi-exclamation-triangle me-1"></i>
+                                            Spoiler içerir
+                                        </span>
+                                        @endif
+                                        <a href="{{route('book-detail',$review->id)}}" class="btn btn-sm btn-primary ms-auto">Kitaba git</a>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+
                     </div>
                 </div>
 

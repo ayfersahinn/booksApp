@@ -14,9 +14,16 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
+
         $favoriteBooks = $user->books()->wherePivot('is_favorite', true)->get();
         $listItems = $user->books()->whereNotNull('status')->get();
-        return view('/profile', compact('favoriteBooks', 'listItems'));
+        $reviews = $user->books()
+            ->where(function ($query) {
+                $query->whereNotNull('rating')
+                    ->orWhereNotNull('review');
+            })
+            ->get();
+        return view('/profile', compact('favoriteBooks', 'listItems', 'reviews'));
     }
     public function changePassword(Request $req)
     {
