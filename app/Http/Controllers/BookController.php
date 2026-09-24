@@ -28,6 +28,7 @@ class BookController extends Controller
             });
         }
         $books = $booksQuery->get();
+
         return view('mainpage', compact(['books', 'categories']));
     }
     public function search(Request $req)
@@ -53,7 +54,7 @@ class BookController extends Controller
     }
     public function show($id)
     {
-        $book = Book::findOrFail($id);
+        $book = Book::with(['category', 'publisher', 'users'])->findOrFail($id);
         $isFavorite = Auth::user()->books()->where('books.id', $book->id)->wherePivot('is_favorite', true)->exists();
         $userBook = Auth::user()
             ->books()
@@ -64,7 +65,24 @@ class BookController extends Controller
 
         $userReview = $book->users()->wherePivotNotNull('review')->get();
 
-        return view('book-detail', compact('book', 'userBook', 'isFavorite', 'status', 'userReview'));
+        $ratingCounts = $book->users
+            ->whereNotNull('pivot.rating')
+            ->groupBy('pivot.rating')
+            ->map->count();
+
+        $totalRatings = $ratingCounts->sum();
+        $ratings = $book->users->pluck('pivot.rating')->filter();
+        $avgRatings = $ratings->avg();
+        $ratingPercentages = [];
+
+        for ($i = 5; $i >= 1; $i--) {
+            $count = $ratingCounts->get($i, 0);
+
+            $ratingPercentages[$i] = $totalRatings > 0
+                ? round(($count / $totalRatings) * 100)
+                : 0;
+        }
+        return view('book-detail', compact('book', 'userBook', 'isFavorite', 'status', 'userReview', 'ratingPercentages', 'avgRatings'));
     }
     public function toggleFavorite($id)
     {

@@ -113,14 +113,25 @@
                 <!-- Derecelendirme Özeti -->
                 <div class="d-flex align-items-center gap-3 mb-4">
                     <div class="d-flex align-items-center">
+                        @php
+                        $fullStars = floor($avgRatings);
+                        $hasHalfStar = ($avgRatings - $fullStars) >= 0.5;
+                        @endphp
+
                         <div class="rating-stars me-2 fs-5">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
+                            @for ($i = 1; $i <= $fullStars; $i++)
+                                <i class="bi bi-star-fill"></i>
+                                @endfor
+
+                                @if ($hasHalfStar)
+                                <i class="bi bi-star-half"></i>
+                                @endif
                         </div>
-                        <span class="fw-bold fs-5">4.6</span>
+
+                        <span class="fw-bold fs-5">
+                            {{ number_format($avgRatings ?? 0, 1) }}
+                        </span>
+
                     </div>
                     <span class="text-muted">|</span>
                     <span class="text-muted"><i class="bi bi-chat-text me-1"></i> 128 Değerlendirme</span>
@@ -255,7 +266,7 @@
                                 @if(Auth::id() === $review->id)
                                 <button
                                     type="button"
-                                    class="btn btn-sm btn-outline-secondary"
+                                    class="btn btn-sm btn-outline-secondary ms-auto"
                                     onclick="document.getElementById('edit-review-{{ $review->id }}').classList.toggle('d-none')"
                                     title="Yorumu Düzenle">
                                     <i class="bi bi-pencil"></i>
@@ -339,45 +350,27 @@
             <div class="card border-0 shadow-sm p-4">
                 <h6 class="fw-bold mb-3">Puan Dağılımı</h6>
 
+                @for ($rating = 5; $rating >= 1; $rating--)
                 <div class="d-flex align-items-center gap-2 mb-2">
-                    <small class="text-muted" style="width: 25px;">5★</small>
-                    <div class="progress flex-grow-1 progress-bar-star">
-                        <div class="progress-bar bg-warning" style="width: 75%"></div>
-                    </div>
-                    <small class="text-muted" style="width: 35px;">%75</small>
-                </div>
 
-                <div class="d-flex align-items-center gap-2 mb-2">
-                    <small class="text-muted" style="width: 25px;">4★</small>
-                    <div class="progress flex-grow-1 progress-bar-star">
-                        <div class="progress-bar bg-warning" style="width: 15%"></div>
-                    </div>
-                    <small class="text-muted" style="width: 35px;">%15</small>
-                </div>
+                    <small class="text-muted" style="width: 25px;">
+                        {{ $rating }}★
+                    </small>
 
-                <div class="d-flex align-items-center gap-2 mb-2">
-                    <small class="text-muted" style="width: 25px;">3★</small>
                     <div class="progress flex-grow-1 progress-bar-star">
-                        <div class="progress-bar bg-warning" style="width: 6%"></div>
+                        <div
+                            class="progress-bar bg-warning"
+                            style="width: {{ $ratingPercentages[$rating] }}%">
+                        </div>
                     </div>
-                    <small class="text-muted" style="width: 35px;">%6</small>
-                </div>
 
-                <div class="d-flex align-items-center gap-2 mb-2">
-                    <small class="text-muted" style="width: 25px;">2★</small>
-                    <div class="progress flex-grow-1 progress-bar-star">
-                        <div class="progress-bar bg-warning" style="width: 3%"></div>
-                    </div>
-                    <small class="text-muted" style="width: 35px;">%3</small>
-                </div>
+                    <small class="text-muted" style="width: 35px;">
+                        %{{ $ratingPercentages[$rating] }}
+                    </small>
 
-                <div class="d-flex align-items-center gap-2 mb-2">
-                    <small class="text-muted" style="width: 25px;">1★</small>
-                    <div class="progress flex-grow-1 progress-bar-star">
-                        <div class="progress-bar bg-warning" style="width: 1%"></div>
-                    </div>
-                    <small class="text-muted" style="width: 35px;">%1</small>
                 </div>
+                @endfor
+
             </div>
         </aside>
 

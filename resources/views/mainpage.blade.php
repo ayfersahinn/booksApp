@@ -151,14 +151,28 @@
 
                              <!-- Rating -->
                              <div class="d-flex align-items-center mb-2">
-                                 <div class="rating-stars me-2">
-                                     <i class="bi bi-star-fill"></i>
-                                     <i class="bi bi-star-fill"></i>
-                                     <i class="bi bi-star-fill"></i>
-                                     <i class="bi bi-star-fill"></i>
-                                     <i class="bi bi-star-half"></i>
+                                 @php
+                                 $ratings = $book->users
+                                 ->pluck('pivot.rating')
+                                 ->filter();
+
+                                 $averageRating = $ratings->avg() ?? 0;
+                                 $fullStars = floor($averageRating);
+                                 $hasHalfStar = ($averageRating - $fullStars) >= 0.5;
+                                 @endphp
+                                 <div class="rating-stars me-2 fs-5">
+                                     @for ($i = 1; $i <= $fullStars; $i++)
+                                         <i class="bi bi-star-fill"></i>
+                                         @endfor
+
+                                         @if ($hasHalfStar)
+                                         <i class="bi bi-star-half"></i>
+                                         @endif
                                  </div>
-                                 <small class="text-muted fw-bold">4.5 (128)</small>
+
+                                 <span class="fw-bold fs-5">
+                                     {{ number_format($averageRating ?? 0, 1) }}
+                                 </span>
                              </div>
 
                              <p class="card-text small text-secondary flex-grow-1">
