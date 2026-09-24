@@ -175,7 +175,7 @@
         <div class="col-lg-8">
 
             <!-- Yorum Ekleme Formu -->
-            @if(!$userBook)
+            @if(!$userBook || ($userBook->pivot->rating === null && $userBook->pivot->review === null))
             <div class="card border-0 shadow-sm p-4 mb-4">
                 <h5 class="fw-bold mb-3"><i class="bi bi-pencil-square text-primary me-2"></i>Bu Kitabı Değerlendir</h5>
                 <form action="{{route('add-review', $book->id)}}" method="POST">
