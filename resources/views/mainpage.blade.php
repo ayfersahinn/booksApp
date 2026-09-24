@@ -80,38 +80,48 @@
              </div>
 
              <!-- Filtreleme Kartı -->
-             <div class="card border-0 shadow-sm">
-                 <div class="card-header bg-white fw-bold">
-                     <i class="bi bi-sliders me-2"></i>Sıralama
+             <form action="{{ route('mainpage') }}" method="get">
+                 <div class="card border-0 shadow-sm">
+                     <div class="card-header bg-white fw-bold">
+                         <i class="bi bi-sliders me-2"></i>Sıralama
+                     </div>
+                     <div class="card-body">
+                         <div class="form-check mb-2">
+                             <input
+                                 class="form-check-input"
+                                 type="radio"
+                                 name="sort"
+                                 value="popular"
+                                 id="sort1"
+                                 onchange="this.form.submit()"
+                                 {{ request('sort') === 'popular' ? 'checked' : '' }} />
+                             <label class="form-check-label" for="sort1">En Popülerler</label>
+                         </div>
+                         <div class="form-check mb-2">
+                             <input
+                                 class="form-check-input"
+                                 type="radio"
+                                 name="sort"
+                                 value="rating"
+                                 onchange="this.form.submit()"
+                                 {{ request('sort') === 'rating' ? 'checked' : '' }}
+                                 id="sort2" />
+                             <label class="form-check-label" for="sort2">En Yüksek Puanlılar</label>
+                         </div>
+                         <div class="form-check">
+                             <input
+                                 class="form-check-input"
+                                 type="radio"
+                                 value="last"
+                                 onchange="this.form.submit()"
+                                 name="sort"
+                                 {{ request('sort') === 'last' ? 'checked' : '' }}
+                                 id="sort3" />
+                             <label class="form-check-label" for="sort3">Yeni Eklenenler</label>
+                         </div>
+                     </div>
                  </div>
-                 <div class="card-body">
-                     <div class="form-check mb-2">
-                         <input
-                             class="form-check-input"
-                             type="radio"
-                             name="sortOptions"
-                             id="sort1"
-                             checked />
-                         <label class="form-check-label" for="sort1">En Popülerler</label>
-                     </div>
-                     <div class="form-check mb-2">
-                         <input
-                             class="form-check-input"
-                             type="radio"
-                             name="sortOptions"
-                             id="sort2" />
-                         <label class="form-check-label" for="sort2">En Yüksek Puanlılar</label>
-                     </div>
-                     <div class="form-check">
-                         <input
-                             class="form-check-input"
-                             type="radio"
-                             name="sortOptions"
-                             id="sort3" />
-                         <label class="form-check-label" for="sort3">Yeni Eklenenler</label>
-                     </div>
-                 </div>
-             </div>
+             </form>
          </aside>
 
          <!-- Sağ Taraf: Kitap Kartları Listesi -->
@@ -131,7 +141,7 @@
                              <form action="{{route('book-favorite', $book->id)}}" method="post">
                                  @csrf
                                  <button type="submit" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm position-relative z-2" title="Listeme Kaydet">
-                                     @if ($book->users->first()?->pivot->is_favorite)
+                                     @if ($book->users->where('id', Auth::id())->first()?->pivot->is_favorite)
                                      <i class="bi bi-heart-fill text-danger fs-6"></i>
                                      @else
                                      <i class="bi bi-heart text-primary fs-6"></i>

@@ -15,12 +15,11 @@ class BookController extends Controller
     {
         $categories = Category::withCount('books')->get();
         $query = $req->input('category');
+        $sort = $req->input('sort');
         $booksQuery = Book::with([
             'category',
             'publisher',
-            'users' => function ($query) {
-                $query->where('users.id', Auth::id());
-            }
+            'users'
         ]);
         if ($query) {
             $booksQuery->whereHas('category', function ($slugQuery) use ($query) {
@@ -28,7 +27,14 @@ class BookController extends Controller
             });
         }
         $books = $booksQuery->get();
-
+        $filters = $this->filters($books);
+        if ($sort === 'popular') {
+            $books = $filters['popularBooks'];
+        } elseif ($sort === 'rating') {
+            $books = $filters['highPointBooks'];
+        } elseif ($sort === 'last') {
+            $books = $books->sortByDesc('created_at');
+        }
         return view('mainpage', compact(['books', 'categories']));
     }
     public function search(Request $req)
@@ -51,6 +57,21 @@ class BookController extends Controller
         }
         $categories = Category::all();
         return view('mainpage', compact('query', 'books', 'categories'));
+    }
+    public function filters($books)
+    {
+        foreach ($books as $book) {
+            $reviewCount = $book->users->whereNotNull('pivot.review')->count();
+            $ratingCount = $book->users->whereNotNull('pivot.rating')->count();
+            $book->popularity = $reviewCount + $ratingCount;
+            $ratings = $book->users->whereNotNull('pivot.rating')->pluck('pivot.rating');
+            $book->average_rating = $ratings->avg() ?? 0;
+        }
+
+        return [
+            'popularBooks' => $books->sortByDesc('popularity'),
+            'highPointBooks' => $books->sortByDesc('average_rating')
+        ];
     }
     public function show($id)
     {
