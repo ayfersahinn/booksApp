@@ -173,7 +173,7 @@
 
         <!-- Sol: Yorum Formu ve Yorum Listesi -->
         <div class="col-lg-8">
-
+            @auth
             <!-- Yorum Ekleme Formu -->
             @if(!$userBook || ($userBook->pivot->rating === null && $userBook->pivot->review === null))
             <div class="card border-0 shadow-sm p-4 mb-4">
@@ -212,6 +212,8 @@
                 Bu kitabı zaten değerlendirdiniz. Mevcut yorumunuzu yorum kartından düzenleyebilirsiniz.
             </div>
             @endif
+            @endauth
+
             <!-- Yorumlar Akışı -->
             <h5 class="fw-bold mb-3">Okur Yorumları {{$userReview->count()}}</h5>
             <div class="d-flex flex-column gap-3">

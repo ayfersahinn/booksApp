@@ -76,11 +76,17 @@ class BookController extends Controller
     public function show($id)
     {
         $book = Book::with(['category', 'publisher', 'users'])->findOrFail($id);
-        $isFavorite = Auth::user()->books()->where('books.id', $book->id)->wherePivot('is_favorite', true)->exists();
-        $userBook = Auth::user()
-            ->books()
-            ->where('books.id', $book->id)
-            ->first();
+        $user = Auth::user();
+
+        $userBook = null;
+        $isFavorite = false;
+
+        if ($user) {
+            $userBook = $user->books()
+                ->where('books.id', $book->id)
+                ->first();
+            $isFavorite = $user->books()->where('books.id', $book->id)->wherePivot('is_favorite', true)->exists();
+        }
 
         $status = $userBook?->pivot->status;
 
