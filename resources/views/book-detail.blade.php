@@ -268,11 +268,68 @@
                                 @if(Auth::id() === $review->id)
                                 <button
                                     type="button"
-                                    class="btn btn-sm btn-outline-secondary ms-auto"
+                                    class="btn btn-sm btn-outline-secondary ms-auto me-2"
                                     onclick="document.getElementById('edit-review-{{ $review->id }}').classList.toggle('d-none')"
                                     title="Yorumu Düzenle">
                                     <i class="bi bi-pencil"></i>
                                 </button>
+                                <form action="{{ route('delete-review', $book->id) }}"
+                                    method="POST"
+                                    class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-outline-danger"
+                                        title="Yorumu Sil"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#delete-review-{{ $review->id }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                    <div class="modal fade" id="delete-review-{{ $review->id }}" tabindex="-1">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Yorumu Sil</h5>
+
+                                                    <button
+                                                        type="button"
+                                                        class="btn-close"
+                                                        data-bs-dismiss="modal">
+                                                    </button>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    Bu yorumu silmek istediğinize emin misiniz?
+                                                </div>
+
+                                                <div class="modal-footer">
+
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">
+                                                        İptal
+                                                    </button>
+
+                                                    <form action="{{ route('delete-review', $book->id) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+
+                                                        <button type="submit" class="btn btn-danger">
+                                                            Yorumu Sil
+                                                        </button>
+                                                    </form>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                                 @endif
                             </div>
                             {{-- DÜZENLEME FORMU --}}

@@ -14,6 +14,7 @@ Route::post('/kitap/{id}/status', [BookController::class, 'bookStatus'])->middle
 Route::post('/kitap/{id}/listeden-cikar', [BookController::class, 'removeFromList'])->middleware('auth')->name('removeFromList');
 Route::post('/kitap/{id}/yorum-ekle', [BookController::class, 'addReview'])->middleware('auth')->name('add-review');
 Route::put('/kitap/{id}/yorum', [BookController::class, 'updateReview'])->middleware('auth')->name('update-review');
+Route::delete('/kitap/{id}/yorum-sil', [BookController::class, 'deleteReview'])->middleware('auth')->name('delete-review');
 
 Route::get('/topluluk', function () {
     return view('community');

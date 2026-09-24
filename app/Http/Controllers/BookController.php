@@ -222,4 +222,14 @@ class BookController extends Controller
 
         return back()->with('success', 'Yorumunuz güncellendi.');
     }
+    public function deleteReview($id)
+    {
+        $user = Auth::user();
+        $user->books()->updateExistingPivot($id, [
+            'rating' => null,
+            'review' => null,
+            'has_spoiler' => false
+        ]);
+        return back();
+    }
 }
