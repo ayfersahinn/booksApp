@@ -200,7 +200,7 @@
                                  </button>
                                  @endif
 
-                                 <a href="{{route('book-detail', $book->id)}}" class="btn btn-primary btn-sm w-100 stretched-link">
+                                 <a href="{{route('book-detail', $book->slug)}}" class="btn btn-primary btn-sm w-100 stretched-link">
                                      İncele
                                  </a>
                              </div>

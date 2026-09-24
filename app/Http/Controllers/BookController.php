@@ -73,9 +73,9 @@ class BookController extends Controller
             'highPointBooks' => $books->sortByDesc('average_rating')
         ];
     }
-    public function show($id)
+    public function show($slug)
     {
-        $book = Book::with(['category', 'publisher', 'users'])->findOrFail($id);
+        $book = Book::with(['category', 'publisher', 'users'])->where('slug', $slug)->firstOrFail();
         $user = Auth::user();
 
         $userBook = null;
