@@ -329,25 +329,9 @@
              </div>
 
              <!-- Sayfalandırma (Pagination) -->
-             <nav class="mt-5">
-                 <ul class="pagination justify-content-center">
-                     <li class="page-item disabled">
-                         <a class="page-link" href="#">Önceki</a>
-                     </li>
-                     <li class="page-item active">
-                         <a class="page-link" href="#">1</a>
-                     </li>
-                     <li class="page-item">
-                         <a class="page-link" href="#">2</a>
-                     </li>
-                     <li class="page-item">
-                         <a class="page-link" href="#">3</a>
-                     </li>
-                     <li class="page-item">
-                         <a class="page-link" href="#">Sonraki</a>
-                     </li>
-                 </ul>
-             </nav>
+             <div class="mt-5 d-flex justify-content-center">
+                 {{ $books->links() }}
+             </div>
          </section>
      </div>
  </main>

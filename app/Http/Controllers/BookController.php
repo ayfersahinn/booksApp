@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Publisher;
 use App\Models\User;
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,7 +24,15 @@ class BookController extends Controller
             'category',
             'publisher',
             'users'
-        ]);
+        ])->withCount([
+            'users as review_count' => function ($q) {
+                $q->whereNotNull('user_books.review');
+            },
+            'users as rating_count' => function ($q) {
+                $q->whereNotNull('user_books.rating');
+            }
+        ])
+            ->withAvg('users', 'user_books.rating');
         if ($query) {
             $booksQuery->whereHas('category', function ($slugQuery) use ($query) {
                 $slugQuery->where('slug', $query);
@@ -34,15 +43,17 @@ class BookController extends Controller
                 $slugQuery->whereIn('slug', $publisherQueries);
             });
         }
-        $books = $booksQuery->get();
-        $filters = $this->filters($books);
         if ($sort === 'popular') {
-            $books = $filters['popularBooks'];
+            $booksQuery->orderByRaw('(review_count + rating_count) DESC');
         } elseif ($sort === 'rating') {
-            $books = $filters['highPointBooks'];
+            $booksQuery->orderByDesc('users_avg_user_books_rating');
         } elseif ($sort === 'last') {
-            $books = $books->sortByDesc('created_at');
+            $booksQuery->latest();
         }
+
+        $books = $booksQuery
+            ->paginate(9)
+            ->withQueryString();
         return view('mainpage', compact(['books', 'categories', 'publishers']));
     }
     public function search(Request $req)
