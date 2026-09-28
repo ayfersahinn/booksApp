@@ -114,6 +114,21 @@
              </div>
              <!-- Filtreleme Kartı -->
              <form action="{{ route('mainpage') }}" method="get">
+                 {{-- Seçili kategori --}}
+                 @if(request('category'))
+                 <input
+                     type="hidden"
+                     name="category"
+                     value="{{ request('category') }}">
+                 @endif
+
+                 {{-- Seçili yayınevleri --}}
+                 @foreach(request('publishers', []) as $publisher)
+                 <input
+                     type="hidden"
+                     name="publishers[]"
+                     value="{{ $publisher }}">
+                 @endforeach
                  <div class="card border-0 shadow-sm">
                      <div class="card-header bg-white fw-bold">
                          <i class="bi bi-sliders me-2"></i>Sıralama
