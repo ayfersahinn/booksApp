@@ -78,7 +78,40 @@
                      @endforeach
                  </div>
              </div>
+             <div class="card border-0 shadow-sm mb-4">
+                 <div class="card-header bg-white fw-bold">
+                     <i class="bi bi-grid me-2"></i>Yayınevi
+                 </div>
+                 <form method="GET" action="{{ route('mainpage') }}">
+                     <div class="list-group list-group-flush">
 
+                         @foreach($publishers as $publisher)
+                         <label class="list-group-item d-flex justify-content-between align-items-center">
+
+                             <div>
+                                 <input
+                                     type="checkbox"
+                                     name="publishers[]"
+                                     value="{{ $publisher->slug }}"
+                                     class="form-check-input me-2">
+
+                                 {{ $publisher->name }}
+                             </div>
+
+                             <span class="badge bg-secondary rounded-pill">
+                                 {{ $publisher->books_count }}
+                             </span>
+
+                         </label>
+                         @endforeach
+                     </div>
+                     <div class="p-3">
+                         <button type="submit" class="btn btn-primary w-100">
+                             Filtrele
+                         </button>
+                     </div>
+                 </form>
+             </div>
              <!-- Filtreleme Kartı -->
              <form action="{{ route('mainpage') }}" method="get">
                  <div class="card border-0 shadow-sm">
@@ -122,6 +155,7 @@
                      </div>
                  </div>
              </form>
+
          </aside>
 
          <!-- Sağ Taraf: Kitap Kartları Listesi -->

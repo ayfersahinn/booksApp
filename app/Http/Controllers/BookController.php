@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\Publisher;
 use App\Models\User;
 
 use Illuminate\Http\Request;
@@ -14,7 +15,9 @@ class BookController extends Controller
     public function index(Request $req)
     {
         $categories = Category::withCount('books')->get();
+        $publishers = Publisher::withCount('books')->get();
         $query = $req->input('category');
+        $publisherQueries = $req->input('publishers', []);
         $sort = $req->input('sort');
         $booksQuery = Book::with([
             'category',
@@ -26,6 +29,11 @@ class BookController extends Controller
                 $slugQuery->where('slug', $query);
             });
         }
+        if ($publisherQueries) {
+            $booksQuery->whereHas('publisher', function ($slugQuery) use ($publisherQueries) {
+                $slugQuery->whereIn('slug', $publisherQueries);
+            });
+        }
         $books = $booksQuery->get();
         $filters = $this->filters($books);
         if ($sort === 'popular') {
@@ -35,7 +43,7 @@ class BookController extends Controller
         } elseif ($sort === 'last') {
             $books = $books->sortByDesc('created_at');
         }
-        return view('mainpage', compact(['books', 'categories']));
+        return view('mainpage', compact(['books', 'categories', 'publishers']));
     }
     public function search(Request $req)
     {
