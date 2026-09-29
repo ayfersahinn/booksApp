@@ -175,6 +175,13 @@
             box-shadow: none;
             border-color: #0d6efd;
         }
+
+        .review-preview {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
     </style>
 </head>
 

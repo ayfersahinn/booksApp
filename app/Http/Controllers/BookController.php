@@ -10,6 +10,7 @@ use App\Models\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
@@ -17,6 +18,20 @@ class BookController extends Controller
     {
         $categories = Category::withCount('books')->get();
         $publishers = Publisher::withCount('books')->get();
+        $lastReviews = DB::table('user_books')
+            ->join('users', 'users.id', '=', 'user_books.user_id')
+            ->join('books', 'books.id', '=', 'user_books.book_id')
+            ->whereNotNull('user_books.review')
+            ->latest('user_books.created_at')
+            ->limit(2)
+            ->get([
+                'users.name',
+                'books.title',
+                'books.slug',
+                'user_books.review',
+                'user_books.rating',
+                'user_books.created_at',
+            ]);
         $query = $req->input('category');
         $publisherQueries = $req->input('publishers', []);
         $sort = $req->input('sort');
@@ -54,7 +69,7 @@ class BookController extends Controller
         $books = $booksQuery
             ->paginate(9)
             ->withQueryString();
-        return view('mainpage', compact(['books', 'categories', 'publishers']));
+        return view('mainpage', compact(['books', 'categories', 'publishers', 'lastReviews']));
     }
     public function search(Request $req)
     {

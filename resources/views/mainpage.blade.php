@@ -341,45 +341,31 @@
      <div class="container">
          <h3 class="h4 fw-bold mb-4">Son Kullanıcı Yorumları</h3>
          <div class="row g-4">
+             @foreach($lastReviews as $review)
              <div class="col-md-6">
                  <div class="p-3 border rounded bg-light">
                      <div
                          class="d-flex justify-content-between align-items-center mb-2">
-                         <span class="fw-bold">@okur_can</span>
+                         <div>
+                             <span class="fw-bold">{{ $review->name }}</span>
+
+                             <small class="text-muted d-block mb-2">
+                                 {{ \Carbon\Carbon::parse($review->created_at)->diffForHumans() }}
+                             </small>
+                         </div>
                          <div class="rating-stars small">
-                             <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                             @for($i = 1; $i <= 5; $i++)
+                                 <i class="bi {{ $i <= $review->rating ? 'bi-star-fill' : 'bi-star' }}"></i>
+                                 @endfor
                          </div>
                      </div>
-                     <p class="small text-muted mb-1">
-                         <strong>Mirasın İzinde</strong> kitabı için:
-                     </p>
-                     <p class="mb-0 text-secondary">
-                         "Kurgusu harikaydı, özellikle son bölümlerdeki
-                         ters köşeleri hiç beklemiyordum. Kesinlikle
-                         tavsiye ederim."
+                     <p class="small text-muted mb-1"> <a href="{{ route('book-detail', $review->slug) }}" class="text-decoration-none"> <strong>{{ $review->title }}</strong> </a> kitabı için: </p>
+                     <p class="mb-0 text-secondary review-preview">
+                         {{$review->review}}
                      </p>
                  </div>
              </div>
-             <div class="col-md-6">
-                 <div class="p-3 border rounded bg-light">
-                     <div
-                         class="d-flex justify-content-between align-items-center mb-2">
-                         <span class="fw-bold">@ayse_reads</span>
-                         <div class="rating-stars small">
-                             <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i>
-                         </div>
-                     </div>
-                     <p class="small text-muted mb-1">
-                         <strong>Modern Web Mimarisi</strong> kitabı
-                         için:
-                     </p>
-                     <p class="mb-0 text-secondary">
-                         "Teknik detaylar ve mimari örnekler çok temiz
-                         açıklanmış. Başlangıç ve orta seviye için çok
-                         faydalı."
-                     </p>
-                 </div>
-             </div>
+             @endforeach
          </div>
      </div>
  </section>
