@@ -74,11 +74,25 @@
 
                             <div class="d-flex align-items-center justify-content-between pt-2 border-top">
                                 <div class="d-flex gap-2">
-                                    <button class="btn btn-sm btn-outline-secondary">
-                                        <i class="bi bi-hand-thumbs-up me-1"></i> Faydalı (8)
-                                    </button>
+                                    @if($review->user_id != Auth::id())
+
+                                    @php
+                                    $isHelpful = $review->helpfuls->contains('user_id', Auth::id());
+                                    @endphp
+
+                                    <form action="{{ route('toggleHelpful', $review->id) }}" method="post">
+                                        @csrf
+
+                                        <button type="submit"
+                                            class="btn btn-sm {{ $isHelpful ? 'btn-success' : 'btn-outline-secondary' }}">
+                                            <i class="bi bi-hand-thumbs-up me-1"></i>
+                                            Faydalı {{ $review->helpfuls->count() }}
+                                        </button>
+                                    </form>
+
+                                    @endif
                                     <button type="submit" class="btn btn-sm btn-outline-secondary reply-toggle">
-                                        <i class="bi bi-chat me-1"></i> Yanıtla (1)
+                                        <i class="bi bi-chat me-1"></i> Yanıtla {{$review->comments->count()}}
                                     </button>
                                 </div>
                                 <button class="btn btn-sm text-muted p-0" title="Bildir">

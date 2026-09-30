@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ReviewComment;
+use App\Models\ReviewHelpful;
 use App\Models\UserBook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,8 @@ class CommunityController extends Controller
         $reviews = UserBook::with([
             'user',
             'book.category',
-            'comments.user'
+            'comments.user',
+            'helpfuls'
         ])
             ->whereNotNull('review')
             ->latest()
@@ -42,6 +44,25 @@ class CommunityController extends Controller
     {
         $comment = ReviewComment::findOrFail($id);
         $comment->delete();
+        return back();
+    }
+    public function toggleHelpful($user_book_id)
+    {
+        $user = Auth::id();
+        $query = ReviewHelpful::where('user_book_id', $user_book_id)->where('user_id', $user)->first();
+        $userBook = UserBook::findOrFail($user_book_id);
+        if ($userBook->user_id === $user) {
+            return back();
+        }
+
+        if ($query) {
+            $query->delete();
+        } else {
+            ReviewHelpful::create([
+                'user_book_id' => $user_book_id,
+                'user_id' => $user
+            ]);
+        }
         return back();
     }
 }

@@ -21,6 +21,7 @@ Route::delete('/kitap/{id}/yorum-sil', [BookController::class, 'deleteReview'])-
 
 Route::get('/topluluk', [CommunityController::class, 'index'])->name('community');
 Route::post('topluluk/{user_book_id}/yorum-ekle', [CommunityController::class, 'replyToReview'])->middleware('auth')->name('replyToReview');
+Route::post('topluluk/{user_book_id}/faydali', [CommunityController::class, 'toggleHelpful'])->middleware('auth')->name('toggleHelpful');
 Route::delete('/topluluk/yorum/{id}', [CommunityController::class, 'deleteComment'])
     ->middleware('auth')
     ->name('delete-comment');
