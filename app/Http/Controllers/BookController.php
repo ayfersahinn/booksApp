@@ -16,6 +16,13 @@ class BookController extends Controller
 {
     public function index(Request $req)
     {
+        $bookCount = Book::count();
+
+        $reviewCount = DB::table('user_books')
+            ->whereNotNull('review')
+            ->count();
+
+        $userCount = User::count();
         $categories = Category::withCount('books')->get();
         $publishers = Publisher::withCount('books')->get();
         $lastReviews = DB::table('user_books')
@@ -69,7 +76,7 @@ class BookController extends Controller
         $books = $booksQuery
             ->paginate(9)
             ->withQueryString();
-        return view('mainpage', compact(['books', 'categories', 'publishers', 'lastReviews']));
+        return view('mainpage', compact(['books', 'categories', 'publishers', 'lastReviews', 'bookCount', 'userCount', 'reviewCount']));
     }
     public function search(Request $req)
     {

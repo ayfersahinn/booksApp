@@ -36,15 +36,15 @@
      <div class="container">
          <div class="row text-center g-3">
              <div class="col-4">
-                 <div class="fw-bold fs-5 text-primary">50.000+</div>
+                 <div class="fw-bold fs-5 text-primary">{{$bookCount}}</div>
                  <small class="text-muted">Kitap</small>
              </div>
              <div class="col-4">
-                 <div class="fw-bold fs-5 text-primary">120.000+</div>
+                 <div class="fw-bold fs-5 text-primary">{{$reviewCount}}</div>
                  <small class="text-muted">Yorum & Değerlendirme</small>
              </div>
              <div class="col-4">
-                 <div class="fw-bold fs-5 text-primary">15.000+</div>
+                 <div class="fw-bold fs-5 text-primary">{{$userCount}}</div>
                  <small class="text-muted">Aktif Okur</small>
              </div>
          </div>

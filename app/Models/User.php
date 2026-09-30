@@ -59,4 +59,8 @@ class User extends Authenticatable
             'has_spoiler'
         ])->withTimestamps();
     }
+    public function comments()
+    {
+        return $this->hasMany(ReviewComment::class);
+    }
 }
