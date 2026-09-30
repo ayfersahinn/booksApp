@@ -31,7 +31,6 @@
         <section class="col-lg-8">
             <div class="d-flex flex-column gap-3">
 
-
                 @foreach($reviews as $review)
                 <!-- Yorum Kartı  -->
                 <div class="card border-0 shadow-sm review-card p-3">
@@ -69,7 +68,7 @@
                             </div>
                             @endif
 
-                            <p class="card-text text-secondary mb-3">
+                            <p class="card-text  mb-3">
                                 {{$review->review}}
                             </p>
 
@@ -78,7 +77,7 @@
                                     <button class="btn btn-sm btn-outline-secondary">
                                         <i class="bi bi-hand-thumbs-up me-1"></i> Faydalı (8)
                                     </button>
-                                    <button class="btn btn-sm btn-outline-secondary">
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary reply-toggle">
                                         <i class="bi bi-chat me-1"></i> Yanıtla (1)
                                     </button>
                                 </div>
@@ -86,12 +85,70 @@
                                     <i class="bi bi-flag"></i>
                                 </button>
                             </div>
+                            {{-- Yanıt Alanı --}}
+                            <div class="reply-form mt-3 pt-3 border-top d-none">
+                                @if($review->comments->count() > 0)
+
+                                <div class="comments-list d-none mt-3">
+
+                                    @foreach($review->comments as $comment)
+
+                                    <div class="border-top pt-2 mb-2">
+                                        <strong>{{ $comment->user->name }}</strong>
+                                        <div class="d-flex justify-content-between">
+                                            <p class="mb-0 text-secondary">
+                                                {{ $comment->content }}
+                                            </p>
+                                            @if($comment->user_id==Auth::id())
+                                            <form action="{{route('delete-comment', $comment->id)}}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    Sil
+                                                </button>
+                                            </form>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    @endforeach
+
+                                </div>
+
+                                @endif
+                                <form action="{{ route('replyToReview', $review->id) }}" method="POST">
+                                    @csrf
+                                    <div class="mb-2">
+                                        <textarea name="content" class="form-control" rows="3" placeholder="Yanıtınızı yazın..." required></textarea>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-primary btn-sm "> <i class="bi bi-send me-1"></i> Yanıtla </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
+
                 @endforeach
             </div>
+            <script>
+                document.querySelectorAll('.reply-toggle').forEach(button => {
+                    button.addEventListener('click', function() {
 
+                        const container = this.closest('.w-100');
+
+                        const replyForm = container.querySelector('.reply-form');
+                        const commentsList = container.querySelector('.comments-list');
+
+                        replyForm.classList.toggle('d-none');
+
+                        if (commentsList) {
+                            commentsList.classList.toggle('d-none');
+                        }
+                    });
+                });
+            </script>
             <!-- Sayfalandırma (Pagination) -->
             <nav class="mt-4">
                 <ul class="pagination justify-content-center">
