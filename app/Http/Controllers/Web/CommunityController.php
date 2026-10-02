@@ -10,18 +10,28 @@ use Illuminate\Support\Facades\Auth;
 
 class CommunityController extends Controller
 {
-    public function index()
+    public function index(Request $req)
     {
 
-        $reviews = UserBook::with([
+        $sort = $req->input('sort');
+        $reviewQuery = UserBook::with([
             'user',
             'book.category',
             'comments.user',
             'helpfuls'
         ])
-            ->whereNotNull('review')
-            ->latest()
-            ->get();
+            ->withCount('helpfuls')->whereNotNull('review');
+        if ($sort === 'highest') {
+            $reviewQuery->orderByDesc('rating');
+        } elseif ($sort === 'lowest') {
+            $reviewQuery->orderBy('rating');
+        } elseif ($sort === 'popular') {
+            $reviewQuery->orderByDesc('helpfuls_count');
+        } else {
+            $reviewQuery->latest();
+        }
+        $reviews = $reviewQuery->paginate(3)
+            ->withQueryString();
         return view('web.community', compact('reviews'));
     }
     public function replyToReview(Request $req, $user_book_id)

@@ -12,12 +12,25 @@
             </div>
             <!-- Arama ve Sıralama -->
             <div class="d-flex gap-2">
-                <select class="form-select form-select-sm" style="width: 180px;">
-                    <option value="latest" selected>En Yeniler</option>
-                    <option value="highest">En Yüksek Puanlılar</option>
-                    <option value="lowest">En Düşük Puanlılar</option>
-                    <option value="popular">En Çok Beğenilenler</option>
-                </select>
+                <form action="{{ route('community') }}">
+                    <select name="sort" class="form-select form-select-sm" style="width: 180px;" onchange="this.form.submit()">
+                        <option value="latest" {{ request('sort') === 'latest' ? 'selected' : '' }}>
+                            En Yeniler
+                        </option>
+
+                        <option value="highest" {{ request('sort') === 'highest' ? 'selected' : '' }}>
+                            En Yüksek Puanlılar
+                        </option>
+
+                        <option value="lowest" {{ request('sort') === 'lowest' ? 'selected' : '' }}>
+                            En Düşük Puanlılar
+                        </option>
+
+                        <option value="popular" {{ request('sort') === 'popular' ? 'selected' : '' }}>
+                            En Çok Beğenilenler
+                        </option>
+                    </select>
+                </form>
             </div>
         </div>
     </div>
@@ -145,6 +158,7 @@
                 </div>
 
                 @endforeach
+
             </div>
             <script>
                 document.querySelectorAll('.reply-toggle').forEach(button => {
@@ -165,13 +179,9 @@
             </script>
             <!-- Sayfalandırma (Pagination) -->
             <nav class="mt-4">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item disabled"><a class="page-link" href="#">Önceki</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Sonraki</a></li>
-                </ul>
+                <div class="mt-4">
+                    {{ $reviews->links() }}
+                </div>
             </nav>
         </section>
 
