@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
 use App\Models\ReviewComment;
 use App\Models\ReviewHelpful;
@@ -22,7 +22,7 @@ class CommunityController extends Controller
             ->whereNotNull('review')
             ->latest()
             ->get();
-        return view('community', compact('reviews'));
+        return view('web.community', compact('reviews'));
     }
     public function replyToReview(Request $req, $user_book_id)
     {

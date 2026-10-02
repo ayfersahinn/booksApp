@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +23,7 @@ class ProfileController extends Controller
                     ->orWhereNotNull('review');
             })
             ->get();
-        return view('/profile', compact('favoriteBooks', 'listItems', 'reviews'));
+        return view('web.profile', compact('favoriteBooks', 'listItems', 'reviews'));
     }
     public function changePassword(Request $req)
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
 use App\Models\Book;
 use App\Models\Category;
@@ -39,6 +39,7 @@ class BookController extends Controller
                 'user_books.created_at',
             ]);
         $query = $req->input('category');
+        $search = $req->input('q');
         $publisherQueries = $req->input('publishers', []);
         $sort = $req->input('sort');
         $booksQuery = Book::with([
@@ -53,7 +54,19 @@ class BookController extends Controller
                 $q->whereNotNull('user_books.rating');
             }
         ])
-            ->withAvg('users', 'user_books.rating');
+            ->withAvg('users as average_rating', 'user_books.rating');
+        if ($search) {
+            $booksQuery->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('author', 'like', '%' . $search . '%')
+                    ->orWhereHas('category', function ($cat) use ($search) {
+                        $cat->where('name', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('publisher', function ($pub) use ($search) {
+                        $pub->where('name', 'like', '%' . $search . '%');
+                    });
+            });
+        }
         if ($query) {
             $booksQuery->whereHas('category', function ($slugQuery) use ($query) {
                 $slugQuery->where('slug', $query);
@@ -67,7 +80,7 @@ class BookController extends Controller
         if ($sort === 'popular') {
             $booksQuery->orderByRaw('(review_count + rating_count) DESC');
         } elseif ($sort === 'rating') {
-            $booksQuery->orderByDesc('users_avg_user_books_rating');
+            $booksQuery->orderByDesc('average_rating');
         } elseif ($sort === 'last') {
             $booksQuery->latest();
         }
@@ -75,7 +88,7 @@ class BookController extends Controller
         $books = $booksQuery
             ->paginate(9)
             ->withQueryString();
-        return view('mainpage', compact(['books', 'categories', 'publishers', 'lastReviews', 'bookCount', 'userCount', 'reviewCount']));
+        return view('web.mainpage', compact(['books', 'categories', 'search', 'publishers', 'lastReviews', 'bookCount', 'userCount', 'reviewCount']));
     }
     public function search(Request $req)
     {
@@ -96,7 +109,7 @@ class BookController extends Controller
                 ->get();
         }
         $categories = Category::all();
-        return view('mainpage', compact('query', 'books', 'categories'));
+        return view('web.mainpage', compact('query', 'books', 'categories'));
     }
     public function filters($books)
     {
@@ -149,7 +162,7 @@ class BookController extends Controller
                 ? round(($count / $totalRatings) * 100)
                 : 0;
         }
-        return view('book-detail', compact('book', 'userBook', 'isFavorite', 'status', 'userReview', 'ratingPercentages', 'avgRatings'));
+        return view('web.book-detail', compact('book', 'userBook', 'isFavorite', 'status', 'userReview', 'ratingPercentages', 'avgRatings'));
     }
     public function toggleFavorite($id)
     {

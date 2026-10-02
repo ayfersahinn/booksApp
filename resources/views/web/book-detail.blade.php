@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('web.layouts.app')
 @section('content')
 <!-- Breadcrumb -->
 <div class="bg-white border-bottom py-2">

@@ -1,22 +1,24 @@
 <?php
 
-use App\Http\Controllers\BookController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CommunityController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Web\BookController;
+use App\Http\Controllers\Web\AuthController;
+use App\Http\Controllers\Web\CommunityController;
+use App\Http\Controllers\Web\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [BookController::class, 'index'])->name('mainpage');
-Route::get('/arama', [BookController::class, 'search'])->name('books-search');
 Route::get('/kitaplar/{slug}', [BookController::class, 'show'])->name('book-detail');
 
-Route::post('/kitap/{id}/favori', [BookController::class, 'toggleFavorite'])->middleware('auth')->name('book-favorite');
-Route::post('/kitap/{id}/status', [BookController::class, 'bookStatus'])->middleware('auth')->name('book-status');
-Route::post('/kitap/{id}/listeden-cikar', [BookController::class, 'removeFromList'])->middleware('auth')->name('removeFromList');
+Route::group(['middleware' => 'auth'], function () {
+    Route::post('/kitap/{id}/favori', [BookController::class, 'toggleFavorite'])->name('book-favorite');
+    Route::post('/kitap/{id}/status', [BookController::class, 'bookStatus'])->name('book-status');
+    Route::post('/kitap/{id}/listeden-cikar', [BookController::class, 'removeFromList'])->name('removeFromList');
 
-Route::post('/kitap/{id}/yorum-ekle', [BookController::class, 'addReview'])->middleware('auth')->name('add-review');
-Route::put('/kitap/{id}/yorum', [BookController::class, 'updateReview'])->middleware('auth')->name('update-review');
-Route::delete('/kitap/{id}/yorum-sil', [BookController::class, 'deleteReview'])->middleware('auth')->name('delete-review');
+    Route::post('/kitap/{id}/yorum-ekle', [BookController::class, 'addReview'])->name('add-review');
+    Route::put('/kitap/{id}/yorum', [BookController::class, 'updateReview'])->name('update-review');
+    Route::delete('/kitap/{id}/yorum-sil', [BookController::class, 'deleteReview'])->name('delete-review');
+});
+
 
 
 Route::get('/topluluk', [CommunityController::class, 'index'])->name('community');
@@ -27,16 +29,16 @@ Route::delete('/topluluk/yorum/{id}', [CommunityController::class, 'deleteCommen
     ->name('delete-comment');
 
 Route::get('/haftanin-kitabi', function () {
-    return view('weekly-book');
+    return view('web.weekly-book');
 })->name('weekly-book');
 
 Route::get('/kayit-ol', function () {
-    return view('auth.register');
+    return view('web.auth.register');
 })->name('register');
 Route::post('/kayit-ol', [AuthController::class, 'register']);
 
 Route::get('/giris-yap', function () {
-    return view('auth.login');
+    return view('web.auth.login');
 })->name('login');
 Route::post('giris-yap', [AuthController::class, 'login']);
 Route::post('/cikis-yap', [AuthController::class, 'logout'])->name('cikis');

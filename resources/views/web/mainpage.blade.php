@@ -1,4 +1,4 @@
- @extends('layouts.app')
+ @extends('web.layouts.app')
  @section('content')
  <!-- Hero Section -->
  <section class="hero-section text-center">
@@ -15,7 +15,7 @@
          <div class="row justify-content-center">
              <div class="col-md-8 col-lg-6">
                  <div class="input-group input-group-lg shadow-sm">
-                     <form action="{{route('books-search')}}" method="get" class="d-flex w-100 gap-2">
+                     <form action="{{route('mainpage')}}" method="get" class="d-flex w-100 gap-2">
                          <input
                              type="text"
                              name="q"

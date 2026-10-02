@@ -187,11 +187,11 @@
 
 <body class="bg-light">
     <!-- Navbar -->
-    @include('partials.navbar')
+    @include('web.partials.navbar')
 
     @yield('content')
     <!-- Footer -->
-    @include('partials.footer')
+    @include('web.partials.footer')
 
 
     <!-- Bootstrap 5 JS Bundle -->
