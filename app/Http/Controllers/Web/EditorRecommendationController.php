@@ -27,6 +27,15 @@ class EditorRecommendationController
 
             $status = $userBook?->pivot->status;
         }
-        return view('web.weekly-book', compact('recommendedBook', 'reviewCount', 'averageRating', 'status'));
+        $userReview = null;
+
+        if (Auth::check()) {
+            $userReview = Auth::user()
+                ->books()
+                ->where('books.id', $recommendedBook->book_id)
+                ->wherePivotNotNull('review')
+                ->first();
+        }
+        return view('web.weekly-book', compact('recommendedBook', 'reviewCount', 'averageRating', 'status', 'userReview'));
     }
 }

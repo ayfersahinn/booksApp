@@ -64,9 +64,21 @@
 
                 <!-- Etkileşim Butonları -->
                 <div class="d-flex flex-wrap gap-3">
-                    <button class="btn btn-warning btn-lg  px-4" data-bs-toggle="modal" data-bs-target="#reviewModal">
-                        <i class="bi bi-star me-2"></i>Değerlendir & Yorum Yap
+                    @if($userReview)
+                    <button class="btn btn-warning btn-lg  px-4" type="button" disabled>
+                        <i class="bi bi-check-circle me-1"></i>
+                        Yorum Yapıldı
                     </button>
+                    @else
+                    <button class="btn btn-warning btn-lg  px-4"
+                        type="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#reviewModal{{ $book->id }}">
+                        <i class="bi bi-chat-left-text me-1"></i>
+                        Yorum Yap
+                    </button>
+                    @endif
+
                     @if($status)
                     <form action="{{ route('removeFromList', $recommendedBook->book->id) }}" method="post">
                         @csrf
@@ -264,10 +276,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form action="{{route('add-review', $recommendedBook->book->id)}}" method="POST">
+                    @csrf
                     <div class="mb-3">
                         <label class="form-label fw-bold">Puanınız</label>
-                        <select class="form-select">
+                        <select class="form-select" name="rating">
                             <option value="5">⭐⭐⭐⭐⭐ (5/5) - Mükemmel</option>
                             <option value="4">⭐⭐⭐⭐ (4/5) - Çok İyi</option>
                             <option value="3">⭐⭐⭐ (3/5) - Orta</option>
@@ -277,7 +290,19 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-bold">Yorumunuz</label>
-                        <textarea class="form-control" rows="4" placeholder="Kitap hakkındaki düşüncelerinizi yazın..."></textarea>
+                        <textarea name="review" class="form-control" rows="4" placeholder="Kitap hakkındaki düşüncelerinizi yazın..."></textarea>
+                        <div class="form-check mb-3">
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                name="has_spoiler"
+                                id="has_spoiler" />
+                            <label
+                                class="form-check-label small"
+                                for="has_spoiler">
+                                Yorumum spoiler içeriyor.
+                            </label>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-warning fw-bold w-100">Gönder</button>
                 </form>
