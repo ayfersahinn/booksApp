@@ -237,10 +237,13 @@
                              <p class="card-text small text-secondary flex-grow-1">
                                  {{$book->description}}
                              </p>
-
+                             @php
+                             $userBook = Auth::check()
+                             ? $book->users->firstWhere('id', Auth::id())
+                             : null;
+                             @endphp
                              <div class="pt-2 border-top d-flex gap-2">
-                                 @if($book->users->isEmpty() || ($book->users->first()->pivot->rating===null && $book->users->first()->pivot->review===null))
-
+                                 @if(!$userBook || ($userBook->pivot->rating === null && $userBook->pivot->review === null))
                                  <button class="btn btn-outline-primary btn-sm w-100 position-relative z-2" type="button"
                                      data-bs-toggle="modal"
                                      data-bs-target="#reviewModal{{ $book->id }}">
