@@ -12,7 +12,9 @@
             </span>
             <h1 class="h2 fw-bold mb-0">Haftanın Öne Çıkan Kitabı</h1>
         </div>
-        <span class="text-muted small d-none d-md-inline">14 - 20 Eylül 2026 Haftası</span>
+        <span class="text-muted small d-none d-md-inline"> {{ $recommendedBook->start_date->format('d-m-Y') }}
+            /
+            {{ $recommendedBook->end_date->format('d-m-Y') }} Haftası</span>
     </div>
 
     <!-- Haftanın Kitabı Öne Çıkan Kartı (Hero Section) -->
@@ -27,41 +29,65 @@
             <!-- Kitap Detayları & Açıklama -->
             <div class="col-md-8">
                 <div class="d-flex align-items-center gap-2 mb-2">
-                    <span class="badge bg-primary">Bilim Kurgu / Felsefe</span>
+                    <span class="badge bg-primary">{{$recommendedBook->book->category->name}}</span>
                     <span class="badge bg-success-subtle text-success border border-success-subtle">Haftanın En Çok Okunanı</span>
                 </div>
 
-                <h2 class="display-6 fw-bold mb-2">Mirasın İzinde</h2>
-                <h3 class="h5 text-white-50 mb-3">Yazar: <strong>Ahmet Yılmaz</strong> | Yayınevi: <strong>Diyar Yayınları</strong></h3>
+                <h2 class="display-6 fw-bold mb-2"><a href="{{route('book-detail',$recommendedBook->book->slug)}}" class="text-decoration-none text-white">{{$recommendedBook->book->title}}</a></h2>
+                <h3 class="h5 text-white-50 mb-3">Yazar: <strong>{{$recommendedBook->book->author}}</strong> | Yayınevi: <strong>{{$recommendedBook->book->publisher->name}}</strong></h3>
 
                 <!-- Derecelendirme & İstatistikler -->
                 <div class="d-flex align-items-center gap-3 mb-3">
                     <div class="d-flex align-items-center">
                         <div class="rating-stars me-2 fs-5">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
+                            @for($i = 1; $i <= 5; $i++)
+                                @if($averageRating>= $i)
+                                <i class="bi bi-star-fill"></i>
+                                @elseif($averageRating >= $i - 0.5)
+                                <i class="bi bi-star-half"></i>
+                                @else
+                                <i class="bi bi-star"></i>
+                                @endif
+                                @endfor
                         </div>
-                        <span class="fw-bold fs-5">4.8</span>
-                        <span class="text-white-50 ms-1">(342 Değerlendirme)</span>
+                        <span class="fw-bold fs-5">
+                            {{ number_format($averageRating, 1) }}
+                        </span>
+                        <span class="text-white-50 ms-1"> ({{ $reviewCount }} Değerlendirme)</span>
                     </div>
                 </div>
 
                 <!-- Kitap Özeti -->
                 <p class="lead text-light mb-4" style="font-size: 1rem; line-height: 1.7;">
-                    Geleceğin dünyasında geçen bu sürükleyici yapıt; insan bilinci, zaman döngüleri ve kaybolmuş uygarlıkların izini süren bir mühendisin maceralarını konu alıyor. Bu hafta editörlerimiz tarafından derin kurgusu ve toplumsal eleştirileri nedeniyle haftanın kitabı seçilmiştir.
+                    {{$recommendedBook->description}}
                 </p>
 
                 <!-- Etkileşim Butonları -->
                 <div class="d-flex flex-wrap gap-3">
-                    <button class="btn btn-warning btn-lg fw-bold px-4" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                    <button class="btn btn-warning btn-lg  px-4" data-bs-toggle="modal" data-bs-target="#reviewModal">
                         <i class="bi bi-star me-2"></i>Değerlendir & Yorum Yap
                     </button>
-                    <button class="btn btn-outline-light btn-lg px-4">
-                        <i class="bi bi-bookmark-plus me-2"></i>Okuyacaklarıma Ekle
-                    </button>
+                    @if($status)
+                    <form action="{{ route('removeFromList', $recommendedBook->book->id) }}" method="post">
+                        @csrf
+
+                        <button type="submit" class="btn btn-warning btn-lg px-4 ">
+                            <i class="bi bi-check-circle me-2"></i>
+                            Listende
+                        </button>
+                    </form>
+                    @else
+                    <form action="{{ route('book-status', $recommendedBook->book->id) }}" method="post">
+                        @csrf
+
+                        <input type="hidden" name="status" value="want-to-read">
+
+                        <button type="submit" class="btn btn-outline-light btn-lg px-4">
+                            <i class="bi bi-bookmark-plus me-2"></i>
+                            Okuyacaklarıma Ekle
+                        </button>
+                    </form>
+                    @endif
                 </div>
             </div>
         </div>

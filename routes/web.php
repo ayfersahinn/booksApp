@@ -3,7 +3,9 @@
 use App\Http\Controllers\Web\BookController;
 use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\CommunityController;
+use App\Http\Controllers\Web\EditorRecommendationController;
 use App\Http\Controllers\Web\ProfileController;
+use App\Models\EditorRecommendation;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [BookController::class, 'index'])->name('mainpage');
@@ -28,9 +30,7 @@ Route::delete('/topluluk/yorum/{id}', [CommunityController::class, 'deleteCommen
     ->middleware('auth')
     ->name('delete-comment');
 
-Route::get('/haftanin-kitabi', function () {
-    return view('web.weekly-book');
-})->name('weekly-book');
+Route::get('/haftanin-kitabi', [EditorRecommendationController::class, 'index'])->name('weekly-book');
 
 Route::get('/kayit-ol', function () {
     return view('web.auth.register');

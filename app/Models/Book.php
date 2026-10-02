@@ -27,4 +27,8 @@ class Book extends Model
             'has_spoiler'
         ])->withTimestamps();
     }
+    public function  editorRecommendation()
+    {
+        return $this->hasOne(EditorRecommendation::class);
+    }
 }
