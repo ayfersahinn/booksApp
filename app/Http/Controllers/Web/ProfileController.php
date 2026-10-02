@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\ReviewComment;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -23,7 +24,11 @@ class ProfileController extends Controller
                     ->orWhereNotNull('review');
             })
             ->get();
-        return view('web.profile', compact('favoriteBooks', 'listItems', 'reviews'));
+        $responses = ReviewComment::with([
+            'userBook.user',
+            'userBook.book'
+        ])->where('user_id', Auth::id())->latest()->get();
+        return view('web.profile', compact('favoriteBooks', 'listItems', 'reviews', 'responses'));
     }
     public function changePassword(Request $req)
     {

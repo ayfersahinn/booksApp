@@ -46,7 +46,7 @@
 
                 @foreach($reviews as $review)
                 <!-- Yorum Kartı  -->
-                <div class="card border-0 shadow-sm review-card p-3">
+                <div id="review-{{ $review->id }}" class="card border-0 shadow-sm review-card p-3">
                     <div class="d-flex gap-3">
                         <img src="https://via.placeholder.com/45" class="rounded-circle avatar" alt="Kullanıcı">
                         <div class="w-100">
@@ -194,9 +194,11 @@
                     <i class="bi bi-pencil-square display-5 mb-2 d-block"></i>
                     <h5 class="fw-bold">Bir Kitap İncele</h5>
                     <p class="small text-white-50">Okuduğun son kitabı değerlendir, düşüncelerini toplulukla paylaş.</p>
-                    <button class="btn btn-light btn-sm fw-bold w-100" data-bs-toggle="modal" data-bs-target="#reviewModal">
+
+                    <a href="{{ route('profile') }}#tab-reading" class="btn btn-light btn-sm fw-bold w-100">
                         İnceleme Ekle
-                    </button>
+                    </a>
+
                 </div>
             </div>
 

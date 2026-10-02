@@ -21,7 +21,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
-Route::get('/topluluk', [CommunityController::class, 'index'])->name('community');
+Route::get('/topluluk/{user_book_id?}', [CommunityController::class, 'index'])->name('community');
 Route::post('topluluk/{user_book_id}/yorum-ekle', [CommunityController::class, 'replyToReview'])->middleware('auth')->name('replyToReview');
 Route::post('topluluk/{user_book_id}/faydali', [CommunityController::class, 'toggleHelpful'])->middleware('auth')->name('toggleHelpful');
 Route::delete('/topluluk/yorum/{id}', [CommunityController::class, 'deleteComment'])

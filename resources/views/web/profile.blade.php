@@ -36,6 +36,17 @@
                         <i class="bi bi-chat-left-text me-2 fs-5"></i>
                         Kitap Yorumlarım
                     </button>
+                    <button class="nav-link text-start d-flex align-items-center mb-1"
+                        id="tab-replies-link"
+                        data-bs-toggle="pill"
+                        data-bs-target="#tab-replies"
+                        type="button"
+                        role="tab">
+
+                        <i class="bi bi-reply me-2 fs-5"></i>
+                        Yanıtlarım
+
+                    </button>
                     <hr class="my-2">
                     <form action="{{route('cikis')}}" method="POST">
                         @csrf
@@ -135,9 +146,11 @@
                                 <div class="card h-100 border shadow-sm">
                                     <img src="https://via.placeholder.com/150x200" class="card-img-top" alt="Kitap Kapak" style="height: 160px; object-fit: cover;">
                                     <div class="card-body p-3">
-                                        <h6 class="card-title fw-bold mb-1 text-truncate">{{$favoriteBook->title}}</h6>
+                                        <h6 class="card-title fw-bold mb-1 text-truncate">
+                                            {{$favoriteBook->title}}
+                                        </h6>
                                         <p class="card-text small text-muted mb-2">{{$favoriteBook->author}}</p>
-                                        <a href="{{route('book-detail',$favoriteBook->id)}}" class="btn btn-sm btn-outline-primary w-100">İncele</a>
+                                        <a href="{{route('book-detail',$favoriteBook->slug)}}" class="btn btn-sm btn-outline-primary w-100">İncele</a>
                                     </div>
                                 </div>
                             </div>
@@ -157,7 +170,10 @@
                             @foreach($listItems as $listItem)
                             <li class="list-group-item d-flex justify-content-between align-items-center py-3">
                                 <div>
-                                    <h6 class="mb-0 fw-bold">{{$listItem->title}}</h6>
+                                    <h6>
+                                        <a href="{{route('book-detail', $listItem->slug)}}" class="mb-0 fw-bold text-dark text-decoration-none"> {{$listItem->title}}</a>
+                                    </h6>
+
                                     <small class="text-muted">{{$listItem->author}}</small>
                                 </div>
                                 @if($listItem->pivot->status=='read')
@@ -235,10 +251,90 @@
 
                     </div>
                 </div>
+                <!-- 5. SEKME: Yanıtlarım -->
+                <!-- Yanıtlarım -->
+                <div class="tab-pane fade" id="tab-replies" role="tabpanel">
 
+                    <div class="mb-4">
+                        <h5 class="fw-bold mb-1">Yanıtlarım</h5>
+                        <p class="text-muted small mb-0">
+                            Toplulukta yaptığın yanıtları burada görebilirsin.
+                        </p>
+                    </div>
+
+                    <div class="d-flex flex-column gap-3">
+
+                        <!-- Yanıtlar -->
+                        @foreach($responses as $response)
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <small class="text-muted">
+                                            {{$response->userBook->user->name}}'nin incelemesine yanıt verdin
+                                        </small>
+                                        <h6 class="fw-bold mb-0 mt-1">
+                                            {{$response->userBook->book->title}}
+                                        </h6>
+                                    </div>
+                                    <small class="text-muted">
+                                        {{ $response->created_at->diffForHumans() }}
+                                    </small>
+                                </div>
+
+                                <!-- Orijinal yorum -->
+                                <div class="bg-light rounded p-3 mb-3">
+                                    <small class="text-muted d-block mb-1">
+                                        {{$response->userBook->user->name}}'nin yorumu
+                                    </small>
+
+                                    <p class="mb-0 small">
+                                        {{$response->userBook->review}}
+                                    </p>
+                                </div>
+
+                                <!-- Kullanıcının cevabı -->
+                                <div class="border-start border-primary border-3 ps-3">
+                                    <small class="text-muted d-block mb-1">Senin yorumun
+                                    </small>
+
+                                    <p class="mb-0">
+                                        {{$response->content}}
+
+                                    </p>
+                                </div>
+
+                                <div class="text-end mt-3">
+                                    <a href="{{route('community',$response->userBook->id)}}#review-{{ $response->userBook->id }}" class="btn btn-sm btn-outline-primary">
+                                        İncelemeye Git
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                        @endforeach
+
+
+                    </div>
+
+                </div>
             </div>
         </div>
 
     </div>
+
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const hash = window.location.hash;
+
+        if (hash) {
+            const tab = document.querySelector(`[data-bs-target="${hash}"]`);
+
+            if (tab) {
+                new bootstrap.Tab(tab).show();
+            }
+        }
+    });
+</script>
 @endsection

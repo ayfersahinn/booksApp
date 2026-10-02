@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CommunityController extends Controller
 {
-    public function index(Request $req)
+    public function index(Request $req, $user_book_id = null)
     {
 
         $sort = $req->input('sort');
@@ -30,7 +30,22 @@ class CommunityController extends Controller
         } else {
             $reviewQuery->latest();
         }
-        $reviews = $reviewQuery->paginate(3)
+        $selectedPage =  $req->input('page', 1);;
+
+        if ($user_book_id) {
+
+            $allReviews = $reviewQuery->clone()->get();
+
+            $position = $allReviews->search(function ($review) use ($user_book_id) {
+                return $review->id == $user_book_id;
+            });
+
+            if ($position !== false) {
+                $selectedPage = floor($position / 3) + 1;
+            }
+        }
+        $reviews = $reviewQuery
+            ->paginate(3, ['*'], 'page', $selectedPage)
             ->withQueryString();
         $reviewers = UserBook::with('user')
             ->whereNotNull('review')
@@ -39,7 +54,12 @@ class CommunityController extends Controller
             ->orderBy('review_count', 'desc')
             ->limit(3)
             ->get();
-        return view('web.community', compact('reviews', 'reviewers'));
+        $selectedReview = null;
+
+        if ($user_book_id) {
+            $selectedReview = UserBook::findOrFail($user_book_id);
+        }
+        return view('web.community', compact('reviews', 'reviewers', 'selectedReview', 'selectedPage'));
     }
     public function replyToReview(Request $req, $user_book_id)
     {
