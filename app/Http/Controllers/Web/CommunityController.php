@@ -32,7 +32,14 @@ class CommunityController extends Controller
         }
         $reviews = $reviewQuery->paginate(3)
             ->withQueryString();
-        return view('web.community', compact('reviews'));
+        $reviewers = UserBook::with('user')
+            ->whereNotNull('review')
+            ->groupBy('user_id')
+            ->selectRaw('user_id, COUNT(review) as review_count')
+            ->orderBy('review_count', 'desc')
+            ->limit(3)
+            ->get();
+        return view('web.community', compact('reviews', 'reviewers'));
     }
     public function replyToReview(Request $req, $user_book_id)
     {

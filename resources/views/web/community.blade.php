@@ -206,36 +206,18 @@
                     <i class="bi bi-trophy text-warning me-2"></i>Ayın Eleştirmenleri
                 </div>
                 <div class="list-group list-group-flush">
+                    @foreach($reviewers as $reviewer)
                     <div class="list-group-item d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center gap-2">
                             <img src="https://via.placeholder.com/35" class="rounded-circle" alt="User">
                             <div>
-                                <h6 class="mb-0 small fw-bold">Ayşe Yılmaz</h6>
-                                <small class="text-muted" style="font-size: 0.7rem;">42 İnceleme</small>
+                                <h6 class="mb-0 small fw-bold">{{$reviewer->user->name}}</h6>
+                                <small class="text-muted" style="font-size: 0.7rem;">{{$reviewer->review_count}} İnceleme</small>
                             </div>
                         </div>
-                        <span class="badge bg-warning-subtle text-warning fw-bold">#1</span>
+                        <span class="badge bg-warning-subtle text-warning fw-bold">#{{ $loop->iteration }}</span>
                     </div>
-                    <div class="list-group-item d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center gap-2">
-                            <img src="https://via.placeholder.com/35" class="rounded-circle" alt="User">
-                            <div>
-                                <h6 class="mb-0 small fw-bold">Can Tekin</h6>
-                                <small class="text-muted" style="font-size: 0.7rem;">35 İnceleme</small>
-                            </div>
-                        </div>
-                        <span class="badge bg-secondary-subtle text-secondary fw-bold">#2</span>
-                    </div>
-                    <div class="list-group-item d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center gap-2">
-                            <img src="https://via.placeholder.com/35" class="rounded-circle" alt="User">
-                            <div>
-                                <h6 class="mb-0 small fw-bold">Merve K.</h6>
-                                <small class="text-muted" style="font-size: 0.7rem;">28 İnceleme</small>
-                            </div>
-                        </div>
-                        <span class="badge bg-secondary-subtle text-secondary fw-bold">#3</span>
-                    </div>
+                    @endforeach
                 </div>
             </div>
 
