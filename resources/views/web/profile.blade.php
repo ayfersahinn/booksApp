@@ -1,6 +1,28 @@
 @extends('web.layouts.app')
 @section('content')
+<style>
+    .nav-tabs .nav-link {
+        color: #6c757d;
+    }
+
+    .nav-tabs .nav-link.active {
+        font-weight: 600;
+    }
+
+    .nav-tabs .nav-link.read.active {
+        color: #198754;
+    }
+
+    .nav-tabs .nav-link.reading.active {
+        color: #ffc107;
+    }
+
+    .nav-tabs .nav-link.want-to-read.active {
+        color: #0d6efd;
+    }
+</style>
 <div class="container py-5">
+
     <div class="row g-4">
 
         <!-- Sol Kolon: Profil Özet Kartı ve Yan Menü -->
@@ -163,32 +185,116 @@
                 </div>
 
                 <!-- 3. SEKME: Okuma Listesi -->
+                <!-- 3. SEKME: Okuma Listesi -->
+
                 <div class="tab-pane fade" id="tab-reading" role="tabpanel">
                     <div class="card shadow-sm content-card p-4 bg-white">
-                        <h4 class="fw-bold mb-4">Okuma Listem</h4>
-                        <ul class="list-group list-group-flush">
-                            @foreach($listItems as $listItem)
-                            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
-                                <div>
-                                    <h6>
-                                        <a href="{{route('book-detail', $listItem->slug)}}" class="mb-0 fw-bold text-dark text-decoration-none"> {{$listItem->title}}</a>
-                                    </h6>
 
-                                    <small class="text-muted">{{$listItem->author}}</small>
-                                </div>
-                                @if($listItem->pivot->status=='read')
-                                <span class="badge bg-success  rounded-pill">Okudum</span>
-                                @elseif($listItem->pivot->status=='reading')
-                                <span class="badge bg-warning text-dark rounded-pill">Okuyorum</span>
-                                @elseif($listItem->pivot->status=='want-to-read')
-                                <span class="badge bg-primary  rounded-pill">Okuyacağım</span>
-                                @endif
 
+                        <h4 class="fw-bold mb-3">Okuma Listem</h4>
+
+                        <!-- Okuma durumu filtreleri -->
+                        <ul class="nav nav-tabs mb-3">
+                            <li class="nav-item">
+                                <a class="nav-link read active" href="#read" data-bs-toggle="tab">
+                                    Okudum
+                                </a>
                             </li>
-                            @endforeach
+
+                            <li class="nav-item">
+                                <a class="nav-link reading" href="#reading" data-bs-toggle="tab">
+                                    Okuyorum
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link want-to-read" href="#want-to-read" data-bs-toggle="tab">
+                                    Okuyacağım
+                                </a>
+                            </li>
                         </ul>
+
+                        <!-- Okuma durumlarının içerikleri -->
+                        <div class="tab-content">
+
+                            <!-- Okudum -->
+                            <div class="tab-pane fade show active" id="read">
+                                <ul class="list-group list-group-flush">
+                                    @foreach($listItems->where('pivot.status', 'read') as $listItem)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                        <div>
+                                            <h6>
+                                                <a href="{{ route('book-detail', $listItem->slug) }}"
+                                                    class="mb-0 fw-bold text-dark text-decoration-none">
+                                                    {{ $listItem->title }}
+                                                </a>
+                                            </h6>
+
+                                            <small class="text-muted">{{ $listItem->author }}</small>
+                                        </div>
+
+                                        <span class="badge bg-success rounded-pill">
+                                            Okudum
+                                        </span>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+
+                            <!-- Okuyorum -->
+                            <div class="tab-pane fade" id="reading">
+                                <ul class="list-group list-group-flush">
+                                    @foreach($listItems->where('pivot.status', 'reading') as $listItem)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                        <div>
+                                            <h6>
+                                                <a href="{{ route('book-detail', $listItem->slug) }}"
+                                                    class="mb-0 fw-bold text-dark text-decoration-none">
+                                                    {{ $listItem->title }}
+                                                </a>
+                                            </h6>
+
+                                            <small class="text-muted">{{ $listItem->author }}</small>
+                                        </div>
+
+                                        <span class="badge bg-warning text-dark rounded-pill">
+                                            Okuyorum
+                                        </span>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+
+                            <!-- Okuyacağım -->
+                            <div class="tab-pane fade" id="want-to-read">
+                                <ul class="list-group list-group-flush">
+                                    @foreach($listItems->where('pivot.status', 'want-to-read') as $listItem)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                        <div>
+                                            <h6>
+                                                <a href="{{ route('book-detail', $listItem->slug) }}"
+                                                    class="mb-0 fw-bold text-dark text-decoration-none">
+                                                    {{ $listItem->title }}
+                                                </a>
+                                            </h6>
+
+                                            <small class="text-muted">{{ $listItem->author }}</small>
+                                        </div>
+
+                                        <span class="badge bg-primary rounded-pill">
+                                            Okuyacağım
+                                        </span>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+
+                        </div>
                     </div>
+
+
                 </div>
+
                 <!-- 4. SEKME: Yorumlar -->
                 <div class="tab-pane fade" id="tab-reviews" role="tabpanel">
                     <div class="card shadow-sm content-card p-4 bg-white">
