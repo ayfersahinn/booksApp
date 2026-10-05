@@ -148,7 +148,9 @@ class BookController extends Controller
                 ? round(($count / $totalRatings) * 100)
                 : 0;
         }
-        return view('web.book-detail', compact('book', 'userBook', 'isFavorite', 'status', 'userReview', 'ratingPercentages', 'avgRatings'));
+        $reviewCount = $book->users()->wherePivotNotNull('review')->count();
+        $statusCount = $book->users()->wherePivotNotNull('status')->count();
+        return view('web.book-detail', compact('book', 'userBook', 'isFavorite', 'status', 'userReview', 'ratingPercentages', 'avgRatings', 'reviewCount', 'statusCount'));
     }
     public function toggleFavorite($id)
     {

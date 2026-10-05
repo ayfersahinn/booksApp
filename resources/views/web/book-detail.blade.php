@@ -134,9 +134,9 @@
 
                     </div>
                     <span class="text-muted">|</span>
-                    <span class="text-muted"><i class="bi bi-chat-text me-1"></i> 128 Değerlendirme</span>
+                    <span class="text-muted"><i class="bi bi-chat-text me-1"></i> {{$reviewCount}} Değerlendirme</span>
                     <span class="text-muted">|</span>
-                    <span class="text-muted"><i class="bi bi-bookmark me-1"></i> 450 Okuma Listesinde</span>
+                    <span class="text-muted"><i class="bi bi-bookmark me-1"></i> {{$statusCount}} Okuma Listesinde</span>
                 </div>
 
                 <!-- Yayın / Metadatas -->
