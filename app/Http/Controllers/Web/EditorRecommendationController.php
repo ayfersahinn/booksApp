@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Models\Book;
 use App\Models\EditorRecommendation;
 use App\Models\UserBook;
 use Illuminate\Http\Request;
@@ -36,6 +37,7 @@ class EditorRecommendationController
                 ->wherePivotNotNull('review')
                 ->first();
         }
-        return view('web.weekly-book', compact('recommendedBook', 'reviewCount', 'averageRating', 'status', 'userReview'));
+        $similarBooks = Book::with(['category', 'users'])->where('category_id', $recommendedBook->book->category_id)->where('id', '!=', $recommendedBook->book_id)->limit(4)->get();
+        return view('web.weekly-book', compact('recommendedBook', 'reviewCount', 'averageRating', 'status', 'userReview', 'similarBooks'));
     }
 }

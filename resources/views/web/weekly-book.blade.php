@@ -104,7 +104,49 @@
             </div>
         </div>
     </div>
-
+    <!-- Değerlendirme Modalı -->
+    <div class="modal fade" id="reviewModal{{ $recommendedBook->book->id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">"Mirasın İzinde" Kitabını Değerlendir</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{route('add-review', $recommendedBook->book->id)}}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Puanınız</label>
+                            <select class="form-select" name="rating">
+                                <option value="5">⭐⭐⭐⭐⭐ (5/5) - Mükemmel</option>
+                                <option value="4">⭐⭐⭐⭐ (4/5) - Çok İyi</option>
+                                <option value="3">⭐⭐⭐ (3/5) - Orta</option>
+                                <option value="2">⭐⭐ (2/5) - Zayıf</option>
+                                <option value="1">⭐ (1/5) - Kötü</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Yorumunuz</label>
+                            <textarea name="review" class="form-control" rows="4" placeholder="Kitap hakkındaki düşüncelerinizi yazın..."></textarea>
+                            <div class="form-check mb-3">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="has_spoiler"
+                                    id="has_spoiler" />
+                                <label
+                                    class="form-check-label small"
+                                    for="has_spoiler">
+                                    Yorumum spoiler içeriyor.
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-warning fw-bold w-100">Gönder</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Benzer / Önerilen Kitaplar Bölümü -->
     <section class="mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
@@ -118,196 +160,157 @@
         <!-- Benzer Kitaplar Grid -->
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
 
-            <!-- Kart 1 -->
+            @foreach($similarBooks as $similarBook)
             <div class="col">
-                <div class="card border-0 shadow-sm book-card">
+                <div class="card border-0 shadow-sm book-card h-100">
                     <div class="position-relative text-center p-3 bg-light">
-                        <img src="https://via.placeholder.com/180x240" class="book-cover shadow-sm" alt="Kitap Kapak">
-                        <button class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm" title="Listeme Kaydet">
-                            <i class="bi bi-bookmark-plus text-primary fs-6"></i>
-                        </button>
+                        <img src="https://via.placeholder.com/180x260" class="book-cover shadow-sm" alt="Kitap Kapak" />
+                        <form action="{{route('book-favorite', $similarBook->id)}}" method="post">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm position-relative z-2" title="Listeme Kaydet">
+                                @if ($similarBook->users->where('id', Auth::id())->first()?->pivot->is_favorite)
+                                <i class="bi bi-heart-fill text-danger fs-6"></i>
+                                @else
+                                <i class="bi bi-heart text-primary fs-6"></i>
+                                @endif
+                            </button>
+                        </form>
                     </div>
-                    <div class="card-body d-flex flex-column">
-                        <span class="badge bg-primary-subtle text-primary category-badge w-auto mb-2 align-self-start">Bilim Kurgu</span>
-                        <h5 class="card-title h6 fw-bold mb-1 text-truncate">Karanlık Madde</h5>
-                        <p class="card-subtitle text-muted small mb-2">Yazar: Mehmet Kaya</p>
 
+                    <div class="card-body d-flex flex-column">
+                        <span class="badge bg-primary-subtle text-primary category-badge w-auto mb-2 align-self-start">{{$similarBook->category->name}}</span>
+                        <h5 class="card-title h6 fw-bold mb-1 text-truncate">
+                            {{$similarBook->title}}
+                        </h5>
+                        <p class="card-subtitle text-muted small mb-2">
+                            Yazar: {{$similarBook->author}}
+                        </p>
+
+                        <!-- Rating -->
                         <div class="d-flex align-items-center mb-2">
-                            <div class="rating-stars me-2 small">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star"></i>
+                            @php
+                            $ratings = $similarBook->users
+                            ->pluck('pivot.rating')
+                            ->filter();
+
+                            $averageRating = $ratings->avg() ?? 0;
+                            $fullStars = floor($averageRating);
+                            $hasHalfStar = ($averageRating - $fullStars) >= 0.5;
+                            @endphp
+                            <div class="rating-stars me-2 fs-5">
+                                @for ($i = 1; $i <= $fullStars; $i++)
+                                    <i class="bi bi-star-fill"></i>
+                                    @endfor
+
+                                    @if ($hasHalfStar)
+                                    <i class="bi bi-star-half"></i>
+                                    @endif
                             </div>
-                            <small class="text-muted fw-bold">4.2 (110)</small>
+
+                            <span class="fw-bold fs-5">
+                                {{ number_format($averageRating ?? 0, 1) }}
+                            </span>
                         </div>
 
                         <p class="card-text small text-secondary flex-grow-1">
-                            Paralel evrenler arasında sıkışıp kalan bir bilim insanının eve dönüş mücadelesi...
+                            {{$similarBook->description}}
                         </p>
+                        @php
+                        $userBook = Auth::check()
+                        ? $similarBook->users->firstWhere('id', Auth::id())
+                        : null;
+                        @endphp
+                        <div class="pt-2 border-top d-flex gap-2">
+                            @if(!$userBook || ($userBook->pivot->rating === null && $userBook->pivot->review === null))
+                            <button class="btn btn-outline-primary btn-sm w-100 position-relative z-2" type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#reviewModal{{ $similarBook->id }}">
+                                <i class="bi bi-chat-left-text me-1"></i>
+                                Yorum Yap
+                            </button>
+                            @endif
 
-                        <div class="pt-2 border-top">
-                            <a href="#" class="btn btn-outline-primary btn-sm w-100">İncele</a>
+                            <a href="{{route('book-detail', $similarBook->slug)}}" class="btn btn-primary btn-sm w-100 stretched-link">
+                                İncele
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Kart 2 -->
-            <div class="col">
-                <div class="card border-0 shadow-sm book-card">
-                    <div class="position-relative text-center p-3 bg-light">
-                        <img src="https://via.placeholder.com/180x240" class="book-cover shadow-sm" alt="Kitap Kapak">
-                        <button class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm" title="Listeme Kaydet">
-                            <i class="bi bi-bookmark-plus text-primary fs-6"></i>
-                        </button>
-                    </div>
-                    <div class="card-body d-flex flex-column">
-                        <span class="badge bg-primary-subtle text-primary category-badge w-auto mb-2 align-self-start">Bilim Kurgu</span>
-                        <h5 class="card-title h6 fw-bold mb-1 text-truncate">Yapay Zeka Çağı</h5>
-                        <p class="card-subtitle text-muted small mb-2">Yazar: Selin Demir</p>
-
-                        <div class="d-flex align-items-center mb-2">
-                            <div class="rating-stars me-2 small">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                            </div>
-                            <small class="text-muted fw-bold">4.7 (205)</small>
+            <!-- Değerlendirme / Yorum Yapma Modalı -->
+            <div
+                class="modal fade"
+                id="reviewModal{{ $similarBook->id }}"
+                tabindex="-1"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                Kitabı Değerlendir ve Yorum Yap
+                            </h5>
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Kapat"></button>
                         </div>
+                        <div class="modal-body">
+                            <form action="{{route('add-review', $similarBook->id)}}" method="POST">
+                                @csrf
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Puanınız</label>
+                                    <select class="form-select" name="rating">
+                                        <option value="5">
+                                            ⭐⭐⭐⭐⭐ (5/5) - Mükemmel
+                                        </option>
+                                        <option value="4">
+                                            ⭐⭐⭐⭐ (4/5) - Çok İyi
+                                        </option>
+                                        <option value="3">
+                                            ⭐⭐⭐ (3/5) - Orta
+                                        </option>
+                                        <option value="2">
+                                            ⭐⭐ (2/5) - Zayıf
+                                        </option>
+                                        <option value="1">⭐ (1/5) - Kötü</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Değerlendirme Notunuz</label>
+                                    <textarea
+                                        class="form-control"
+                                        rows="4"
+                                        name="review"
+                                        placeholder="Kitap hakkında ne düşünüyorsunuz? Spoiler vermemeye özen gösteriniz..."></textarea>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="has_spoiler"
+                                        id="has_spoiler" />
+                                    <label
+                                        class="form-check-label small"
+                                        for="has_spoiler">
+                                        Yorumum spoiler içeriyor.
+                                    </label>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    Değerlendirmeyi Gönder
+                                </button>
+                            </form>
 
-                        <p class="card-text small text-secondary flex-grow-1">
-                            Otonom sistemlerin yönettiği bir şehirde insan olmanın anlamını sorgulayan bir distopya.
-                        </p>
-
-                        <div class="pt-2 border-top">
-                            <a href="#" class="btn btn-outline-primary btn-sm w-100">İncele</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Kart 3 -->
-            <div class="col">
-                <div class="card border-0 shadow-sm book-card">
-                    <div class="position-relative text-center p-3 bg-light">
-                        <img src="https://via.placeholder.com/180x240" class="book-cover shadow-sm" alt="Kitap Kapak">
-                        <button class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm" title="Listeme Kaydet">
-                            <i class="bi bi-bookmark-plus text-primary fs-6"></i>
-                        </button>
-                    </div>
-                    <div class="card-body d-flex flex-column">
-                        <span class="badge bg-secondary-subtle text-secondary category-badge w-auto mb-2 align-self-start">Felsefe</span>
-                        <h5 class="card-title h6 fw-bold mb-1 text-truncate">Zaman Mimarisi</h5>
-                        <p class="card-subtitle text-muted small mb-2">Yazar: Can Arslan</p>
-
-                        <div class="d-flex align-items-center mb-2">
-                            <div class="rating-stars me-2 small">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-half"></i>
-                                <i class="bi bi-star"></i>
-                            </div>
-                            <small class="text-muted fw-bold">3.9 (64)</small>
-                        </div>
-
-                        <p class="card-text small text-secondary flex-grow-1">
-                            Algılanan zaman ile gerçeklik arasındaki farkı felsefi açıdan inceleyen sürükleyici bir deneme.
-                        </p>
-
-                        <div class="pt-2 border-top">
-                            <a href="#" class="btn btn-outline-primary btn-sm w-100">İncele</a>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Kart 4 -->
-            <div class="col">
-                <div class="card border-0 shadow-sm book-card">
-                    <div class="position-relative text-center p-3 bg-light">
-                        <img src="https://via.placeholder.com/180x240" class="book-cover shadow-sm" alt="Kitap Kapak">
-                        <button class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm" title="Listeme Kaydet">
-                            <i class="bi bi-bookmark-plus text-primary fs-6"></i>
-                        </button>
-                    </div>
-                    <div class="card-body d-flex flex-column">
-                        <span class="badge bg-primary-subtle text-primary category-badge w-auto mb-2 align-self-start">Bilim Kurgu</span>
-                        <h5 class="card-title h6 fw-bold mb-1 text-truncate">Kayıp Galaksi</h5>
-                        <p class="card-subtitle text-muted small mb-2">Yazar: Deniz Eren</p>
-
-                        <div class="d-flex align-items-center mb-2">
-                            <div class="rating-stars me-2 small">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star"></i>
-                            </div>
-                            <small class="text-muted fw-bold">4.4 (150)</small>
-                        </div>
-
-                        <p class="card-text small text-secondary flex-grow-1">
-                            Derin uzay keşiflerinde bulunan gizemli bir sinyalin peşinden giden mürettebatın öyküsü.
-                        </p>
-
-                        <div class="pt-2 border-top">
-                            <a href="#" class="btn btn-outline-primary btn-sm w-100">İncele</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endforeach
 
         </div>
     </section>
 
 </main>
 
-<!-- Değerlendirme Modalı -->
-<div class="modal fade" id="reviewModal{{ $recommendedBook->book->id }}" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">"Mirasın İzinde" Kitabını Değerlendir</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
-            </div>
-            <div class="modal-body">
-                <form action="{{route('add-review', $recommendedBook->book->id)}}" method="POST">
-                    @csrf
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Puanınız</label>
-                        <select class="form-select" name="rating">
-                            <option value="5">⭐⭐⭐⭐⭐ (5/5) - Mükemmel</option>
-                            <option value="4">⭐⭐⭐⭐ (4/5) - Çok İyi</option>
-                            <option value="3">⭐⭐⭐ (3/5) - Orta</option>
-                            <option value="2">⭐⭐ (2/5) - Zayıf</option>
-                            <option value="1">⭐ (1/5) - Kötü</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Yorumunuz</label>
-                        <textarea name="review" class="form-control" rows="4" placeholder="Kitap hakkındaki düşüncelerinizi yazın..."></textarea>
-                        <div class="form-check mb-3">
-                            <input
-                                class="form-check-input"
-                                type="checkbox"
-                                name="has_spoiler"
-                                id="has_spoiler" />
-                            <label
-                                class="form-check-label small"
-                                for="has_spoiler">
-                                Yorumum spoiler içeriyor.
-                            </label>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-warning fw-bold w-100">Gönder</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+
 @endsection
