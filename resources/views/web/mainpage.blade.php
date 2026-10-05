@@ -356,7 +356,7 @@
                              <span class="fw-bold">{{ $review->name }}</span>
 
                              <small class="text-muted d-block mb-2">
-                                 {{ \Carbon\Carbon::parse($review->created_at)->diffForHumans() }}
+                                 {{ \Carbon\Carbon::parse($review->review_updated_at)->diffForHumans() }}
                              </small>
                          </div>
                          <div class="rating-stars small">

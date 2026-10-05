@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class UserBook extends Model
 {
 
-protected $fillable = [''];
+    protected $fillable = [''];
+    protected $casts = [
+        'review_updated_at' => 'datetime',
+    ];
     public function user()
     {
         return $this->belongsTo(User::class);

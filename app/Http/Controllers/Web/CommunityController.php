@@ -28,7 +28,7 @@ class CommunityController extends Controller
         } elseif ($sort === 'popular') {
             $reviewQuery->orderByDesc('helpfuls_count');
         } else {
-            $reviewQuery->latest('updated_at');
+            $reviewQuery->latest('review_updated_at');
         }
         $selectedPage =  $req->input('page', 1);;
 

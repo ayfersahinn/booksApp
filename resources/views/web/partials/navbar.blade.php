@@ -14,13 +14,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{route('mainpage')}}">Ana Sayfa</a>
+                    <a class="nav-link accordion {{Route::is('mainpage') ? 'active':''}} " href="{{route('mainpage')}}">Ana Sayfa</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('community')}}">Topluluk</a>
+                    <a class="nav-link  {{Route::is('community') ? 'active':''}}" href="{{route('community')}}">Topluluk</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('weekly-book')}}">Haftanın Kitabı</a>
+                    <a class="nav-link  {{Route::is('weekly-book') ? 'active':''}}" href="{{route('weekly-book')}}">Haftanın Kitabı</a>
                 </li>
 
             </ul>

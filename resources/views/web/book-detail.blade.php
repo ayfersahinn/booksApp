@@ -250,7 +250,9 @@
                             </div>
 
                             <small class="text-muted d-block mb-2">
-                                {{ $review->pivot->updated_at->diffForHumans() }} inceledi
+                                {{ $review->pivot->review_updated_at
+        ? \Carbon\Carbon::parse($review->pivot->review_updated_at)->diffForHumans()
+        : '' }} inceledi
                             </small>
 
                             <p class="text-secondary small mb-2">

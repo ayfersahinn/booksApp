@@ -24,7 +24,8 @@ class Book extends Model
             'is_favorite',
             'rating',
             'review',
-            'has_spoiler'
+            'has_spoiler',
+            'review_updated_at'
         ])->withTimestamps();
     }
     public function  editorRecommendation()

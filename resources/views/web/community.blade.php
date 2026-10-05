@@ -54,7 +54,7 @@
                                 <div>
                                     <h6 class="fw-bold mb-0">{{$review->user->name}} </h6>
                                     <small class="text-muted d-block mb-2">
-                                        {{ \Carbon\Carbon::parse($review->updated_at)->diffForHumans() }}
+                                        {{ $review->review_updated_at?->diffForHumans() }}
                                     </small>
                                 </div>
                                 <div class="rating-stars small">

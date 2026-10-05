@@ -28,7 +28,7 @@ class BookController extends Controller
             ->join('users', 'users.id', '=', 'user_books.user_id')
             ->join('books', 'books.id', '=', 'user_books.book_id')
             ->whereNotNull('user_books.review')
-            ->latest('user_books.created_at')
+            ->latest('user_books.review_updated_at')
             ->limit(2)
             ->get([
                 'users.name',
@@ -36,7 +36,7 @@ class BookController extends Controller
                 'books.slug',
                 'user_books.review',
                 'user_books.rating',
-                'user_books.created_at',
+                'user_books.review_updated_at',
             ]);
         $query = $req->input('category');
         $search = $req->input('q');
@@ -216,13 +216,15 @@ class BookController extends Controller
                 [
                     'review' => $req->input('review'),
                     'rating' => $req->input('rating'),
-                    'has_spoiler' => $req->boolean('has_spoiler')
+                    'has_spoiler' => $req->boolean('has_spoiler'),
+                    'review_updated_at' => now(),
                 ]
             );
         } else {
             $data = [
                 'rating' => $req->input('rating'),
-                'has_spoiler' => $req->boolean('has_spoiler')
+                'has_spoiler' => $req->boolean('has_spoiler'),
+                'review_updated_at' => now(),
             ];
 
             if ($req->filled('review')) {
@@ -256,6 +258,7 @@ class BookController extends Controller
                 'rating' => $validated['rating'],
                 'review' => $validated['review'],
                 'has_spoiler' => $req->boolean('has_spoiler'),
+                'review_updated_at' => now(),
             ]
         );
 
@@ -267,7 +270,8 @@ class BookController extends Controller
         $user->books()->updateExistingPivot($id, [
             'rating' => null,
             'review' => null,
-            'has_spoiler' => false
+            'has_spoiler' => false,
+            'review_updated_at' => null
         ]);
         return back();
     }

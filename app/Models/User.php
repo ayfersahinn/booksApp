@@ -56,7 +56,8 @@ class User extends Authenticatable
             'is_favorite',
             'rating',
             'review',
-            'has_spoiler'
+            'has_spoiler',
+            'review_updated_at'
         ])->withTimestamps();
     }
     public function comments()
