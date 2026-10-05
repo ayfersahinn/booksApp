@@ -46,3 +46,10 @@ Route::post('/cikis-yap', [AuthController::class, 'logout'])->name('cikis');
 Route::get('/profil', [ProfileController::class, 'index'])->middleware('auth')->name('profile');
 Route::post('/sifre-degistir', [ProfileController::class, 'changePassword'])->middleware('auth')->name('change-password');
 Route::post('/profil-guncelle', [ProfileController::class, 'updateProfile'])->middleware('auth')->name('update-profile');
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+
+    Route::get('/dashboard', function () {
+        return view('panel.dashboard');
+    })->name('admin.dashboard');
+});
