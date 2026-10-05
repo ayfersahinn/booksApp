@@ -111,21 +111,7 @@ class BookController extends Controller
         $categories = Category::all();
         return view('web.mainpage', compact('query', 'books', 'categories'));
     }
-    public function filters($books)
-    {
-        foreach ($books as $book) {
-            $reviewCount = $book->users->whereNotNull('pivot.review')->count();
-            $ratingCount = $book->users->whereNotNull('pivot.rating')->count();
-            $book->popularity = $reviewCount + $ratingCount;
-            $ratings = $book->users->whereNotNull('pivot.rating')->pluck('pivot.rating');
-            $book->average_rating = $ratings->avg() ?? 0;
-        }
 
-        return [
-            'popularBooks' => $books->sortByDesc('popularity'),
-            'highPointBooks' => $books->sortByDesc('average_rating')
-        ];
-    }
     public function show($slug)
     {
         $book = Book::with(['category', 'publisher', 'users'])->where('slug', $slug)->firstOrFail();

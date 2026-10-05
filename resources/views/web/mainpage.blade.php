@@ -70,7 +70,7 @@
                      </a>
                      @foreach($categories as $category)
                      <a
-                         href="{{route('mainpage', ['category'=>$category->slug])}}"
+                         href="{{ request()->fullUrlWithQuery(['category' => $category->slug]) }}"
                          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                          {{$category->name}}
                          <span class="badge bg-secondary rounded-pill">{{$category->books_count}}</span>
@@ -83,6 +83,9 @@
                      <i class="bi bi-grid me-2"></i>Yayınevi
                  </div>
                  <form method="GET" action="{{ route('mainpage') }}">
+                     @if(request('category'))
+                     <input type="hidden" name="category" value="{{ request('category') }}">
+                     @endif
                      <div class="list-group list-group-flush">
 
                          @foreach($publishers as $publisher)
