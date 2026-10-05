@@ -73,7 +73,7 @@
                     <button class="btn btn-warning btn-lg  px-4"
                         type="button"
                         data-bs-toggle="modal"
-                        data-bs-target="#reviewModal{{ $book->id }}">
+                        data-bs-target="#reviewModal{{ $recommendedBook->book->id }}">
                         <i class="bi bi-chat-left-text me-1"></i>
                         Yorum Yap
                     </button>
@@ -268,7 +268,7 @@
 </main>
 
 <!-- Değerlendirme Modalı -->
-<div class="modal fade" id="reviewModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="reviewModal{{ $recommendedBook->book->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

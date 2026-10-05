@@ -226,7 +226,7 @@
                                     </div>
 
                                     <small class="text-muted d-block mb-2">
-                                        {{ $review->pivot->created_at->diffForHumans() }} inceledi
+                                        {{ $review->pivot->updated_at->diffForHumans() }} inceledi
                                     </small>
 
                                     <p class="text-secondary small mb-2">
@@ -278,7 +278,7 @@
                                         </h6>
                                     </div>
                                     <small class="text-muted">
-                                        {{ $response->created_at->diffForHumans() }}
+                                        {{ $response->updated_at->diffForHumans() }}
                                     </small>
                                 </div>
 
