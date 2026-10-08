@@ -1,4 +1,4 @@
-@extends('panel.layouts.main')
+@extends('admin.layouts.main')
 @section('content')
 
 <!-- 1. İstatistik Kartları -->
