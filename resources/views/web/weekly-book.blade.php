@@ -23,7 +23,10 @@
 
             <!-- Kitap Kapak Görseli -->
             <div class="col-md-4 text-center">
-                <img src="https://via.placeholder.com/240x350" class="hero-book-cover img-fluid" alt="Haftanın Kitabı">
+                <!-- <img src="https://via.placeholder.com/240x350" alt="Haftanın Kitabı"> -->
+                <img src="{{ asset('storage/' . $recommendedBook->book->cover_image) }}"
+                    class="hero-book-cover img-fluid"
+                    alt="{{ $recommendedBook->book->title }}">
             </div>
 
             <!-- Kitap Detayları & Açıklama -->
@@ -158,13 +161,16 @@
         </div>
 
         <!-- Benzer Kitaplar Grid -->
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4">
 
             @foreach($similarBooks as $similarBook)
             <div class="col">
                 <div class="card border-0 shadow-sm book-card h-100">
                     <div class="position-relative text-center p-3 bg-light">
-                        <img src="https://via.placeholder.com/180x260" class="book-cover shadow-sm" alt="Kitap Kapak" />
+                        <!-- <img src="https://via.placeholder.com/180x260" class="book-cover shadow-sm" alt="Kitap Kapak" /> -->
+                        <img src="{{ asset('storage/' . $similarBook->cover_image) }}"
+                            class="book-cover shadow-sm"
+                            alt="{{ $similarBook->title }}">
                         <form action="{{route('book-favorite', $similarBook->id)}}" method="post">
                             @csrf
                             <button type="submit" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm position-relative z-2" title="Listeme Kaydet">
@@ -212,7 +218,7 @@
                             </span>
                         </div>
 
-                        <p class="card-text small text-secondary flex-grow-1">
+                        <p class="card-text small text-secondary flex-grow-1 line-clamp-3">
                             {{$similarBook->description}}
                         </p>
                         @php
@@ -220,9 +226,9 @@
                         ? $similarBook->users->firstWhere('id', Auth::id())
                         : null;
                         @endphp
-                        <div class="pt-2 border-top d-flex gap-2">
+                        <div class="pt-2 border-top  gap-2">
                             @if(!$userBook || ($userBook->pivot->rating === null && $userBook->pivot->review === null))
-                            <button class="btn btn-outline-primary btn-sm w-100 position-relative z-2" type="button"
+                            <button class="btn btn-outline-primary mb-2 btn-sm w-100 position-relative z-2" type="button"
                                 data-bs-toggle="modal"
                                 data-bs-target="#reviewModal{{ $similarBook->id }}">
                                 <i class="bi bi-chat-left-text me-1"></i>

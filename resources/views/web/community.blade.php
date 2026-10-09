@@ -1,7 +1,14 @@
 @extends('web.layouts.app')
 @section('content')
 
-
+<style>
+    .book-cover-thumb {
+        width: 50px;
+        height: 75px;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+</style>
 <!-- Header Section -->
 <section class="bg-white border-bottom py-4 mb-4">
     <div class="container">
@@ -65,7 +72,9 @@
                             </div>
 
                             <div class="bg-light p-2 rounded d-flex align-items-center gap-3 my-2">
-                                <img src="https://via.placeholder.com/70x100" class="book-thumb shadow-sm" alt="Kitap">
+                                <img src="{{ asset('storage/' . $review->book->cover_image) }}"
+                                    class="book-cover-thumb shadow-sm"
+                                    alt="{{ $review->book->title }}">
                                 <div>
                                     <a href="{{route('book-detail' , $review->book->slug)}}" class="fw-bold text-dark text-decoration-none d-block">{{$review->book->title}}</a>
                                     <small class="text-muted d-block">Yazar: {{$review->book->author}}</small>

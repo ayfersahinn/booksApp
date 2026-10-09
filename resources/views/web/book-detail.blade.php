@@ -22,7 +22,9 @@
 
             <!-- Sol: Kapak Görseli ve Durum Butonları -->
             <div class="col-md-4 col-lg-3 text-center">
-                <img src="https://via.placeholder.com/260x380" class="main-book-cover mb-3" alt="Kitap Kapak">
+                <img src="{{ asset('storage/' . $book->cover_image) }}"
+                    class="main-book-cover mb-3"
+                    alt="{{ $book->title }}">
 
                 <!-- Okuma Durumu Ekleme Dropdown -->
                 <div class="d-grid gap-2">

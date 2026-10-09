@@ -1,6 +1,7 @@
  @extends('web.layouts.app')
  @section('content')
  <!-- Hero Section -->
+
  <section class="hero-section text-center">
      <div class="container">
          <h1 class="display-4 fw-bold mb-3">
@@ -183,13 +184,16 @@
                  <h3 class="h4 mb-0 fw-bold">Öne Çıkan Kitaplar</h3>
              </div>
 
-             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+             <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-4">
                  <!-- Kitap Kartı 1 -->
                  @foreach($books as $book)
                  <div class="col">
                      <div class="card border-0 shadow-sm book-card h-100">
                          <div class="position-relative text-center p-3 bg-light">
-                             <img src="https://via.placeholder.com/180x260" class="book-cover shadow-sm" alt="Kitap Kapak" />
+                             <img src="{{ asset('storage/' . $book->cover_image) }}"
+                                 class="book-cover shadow-sm"
+                                 alt="{{ $book->title }}">
+
                              <form action="{{route('book-favorite', $book->id)}}" method="post">
                                  @csrf
                                  <button type="submit" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm position-relative z-2" title="Listeme Kaydet">
@@ -237,7 +241,7 @@
                                  </span>
                              </div>
 
-                             <p class="card-text small text-secondary flex-grow-1">
+                             <p class="card-text small text-secondary flex-grow-1 line-clamp-3">
                                  {{$book->description}}
                              </p>
                              @php
@@ -245,9 +249,9 @@
                              ? $book->users->firstWhere('id', Auth::id())
                              : null;
                              @endphp
-                             <div class="pt-2 border-top d-flex gap-2">
+                             <div class="pt-2 border-top ">
                                  @if(!$userBook || ($userBook->pivot->rating === null && $userBook->pivot->review === null))
-                                 <button class="btn btn-outline-primary btn-sm w-100 position-relative z-2" type="button"
+                                 <button class="btn btn-outline-primary mb-2 btn-sm w-100 position-relative z-2" type="button"
                                      data-bs-toggle="modal"
                                      data-bs-target="#reviewModal{{ $book->id }}">
                                      <i class="bi bi-chat-left-text me-1"></i>

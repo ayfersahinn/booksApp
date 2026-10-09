@@ -162,11 +162,15 @@
                     <div class="card shadow-sm content-card p-4 bg-white">
                         <h4 class="fw-bold mb-4">Favori Kitaplarım</h4>
 
-                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
                             @foreach($favoriteBooks as $favoriteBook)
                             <div class="col">
                                 <div class="card h-100 border shadow-sm">
-                                    <img src="https://via.placeholder.com/150x200" class="card-img-top" alt="Kitap Kapak" style="height: 160px; object-fit: cover;">
+                                    <!-- <img src="https://via.placeholder.com/150x200" class="card-img-top" alt="Kitap Kapak" style="height: 160px; object-fit: cover;"> -->
+                                    <img src="{{ asset('storage/' . $favoriteBook->cover_image) }}"
+                                        class="book-cover shadow-sm"
+                                        style="height: 160px; width: 100%; object-fit: contain; background-color: #f8f9fa;"
+                                        alt="{{ $favoriteBook->title }}">
                                     <div class="card-body p-3">
                                         <h6 class="card-title fw-bold mb-1 text-truncate">
                                             {{$favoriteBook->title}}
@@ -184,7 +188,7 @@
                     </div>
                 </div>
 
-                <!-- 3. SEKME: Okuma Listesi -->
+
                 <!-- 3. SEKME: Okuma Listesi -->
 
                 <div class="tab-pane fade" id="tab-reading" role="tabpanel">
@@ -303,62 +307,58 @@
                         @foreach($reviews as $review)
                         <div class="card border-0 shadow-sm p-3 m-3">
                             <div class="d-flex gap-3">
-                                <img src="https://via.placeholder.com/45"
-                                    class="rounded-circle "
-                                    alt="book">
+
+                                <img src="{{ asset('storage/' . $review->cover_image) }}"
+                                    class="book-cover shadow-sm"
+                                    style="height: 200px; ;"
+                                    alt="{{ $review->title }}">
 
                                 <div class="w-100">
 
                                     <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <h6 class="fw-bold mb-0">
-                                            {{ $review->name }}
-                                        </h6>
+                                        <h6 class="fw-bold mb-0">{{ $review->name }}</h6>
 
-                                        <div class="d-flex align-items-center gap-2">
-
-                                            <div class="rating-stars small">
-                                                @for($i = 1; $i <= 5; $i++)
-                                                    @if($i <=$review->pivot->rating)
-                                                    <i class="bi bi-star-fill"></i>
-                                                    @else
-                                                    <i class="bi bi-star"></i>
-                                                    @endif
-                                                    @endfor
-                                            </div>
-
-
-
+                                        <div class="rating-stars small">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                @if($i <=$review->pivot->rating)
+                                                <i class="bi bi-star-fill"></i>
+                                                @else
+                                                <i class="bi bi-star"></i>
+                                                @endif
+                                                @endfor
                                         </div>
                                     </div>
 
                                     <small class="text-muted d-block mb-2">
                                         {{ $review->pivot->review_updated_at
-        ? \Carbon\Carbon::parse($review->pivot->review_updated_at)->diffForHumans()
-        : '' }} inceledi
+                            ? \Carbon\Carbon::parse($review->pivot->review_updated_at)->diffForHumans() . ' inceledi'
+                            : '' }}
                                     </small>
 
                                     <p class="text-secondary small mb-2">
                                         {{ $review->pivot->review }}
                                     </p>
+
                                     <div class="d-flex justify-content-between align-items-center">
                                         @if($review->pivot->has_spoiler)
-                                        <span class="badge bg-warning text-dark mb-2">
+                                        <span class="badge bg-warning text-dark">
                                             <i class="bi bi-exclamation-triangle me-1"></i>
                                             Spoiler içerir
                                         </span>
                                         @endif
-                                        <a href="{{route('book-detail',$review->slug)}}" class="btn btn-sm btn-primary ms-auto">Kitaba git</a>
 
+                                        <a href="{{ route('book-detail', $review->slug) }}"
+                                            class="btn btn-sm btn-primary ms-auto">Kitaba git</a>
                                     </div>
 
-
-                                </div>
-                            </div>
-                        </div>
+                                </div> {{-- w-100 --}}
+                            </div> {{-- d-flex gap-3 --}}
+                        </div> {{-- card --}}
                         @endforeach
 
-                    </div>
-                </div>
+                    </div> {{-- content-card --}}
+                </div> {{-- tab-pane --}}
+
                 <!-- 5. SEKME: Yanıtlarım -->
                 <!-- Yanıtlarım -->
                 <div class="tab-pane fade" id="tab-replies" role="tabpanel">
