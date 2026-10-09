@@ -36,4 +36,9 @@ class BaseController extends Controller
         $item = $this->model::findOrFail($id);
         return view("admin.{$this->page}.edit", ['item' => $item] + $this->extraData());
     }
+    public function destroy($id)
+    {
+        $this->model::findOrFail($id)->delete();
+        return back()->with('success', 'Silindi.');
+    }
 }

@@ -148,7 +148,8 @@
                             title="Düzenle">
                             <i class="bi bi-pencil"></i>
                         </a>
-                        <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteBookModal" title="Sil">
+                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteBookModal" data-action="{{ route('book-destroy', $book->id) }}"
+                            data-title="{{ $book->title }}" title="Sil">
                             <i class="bi bi-trash"></i>
                         </button>
                     </td>
@@ -308,15 +309,28 @@
             <div class="modal-body p-4 text-center">
                 <i class="bi bi-trash text-danger display-4 d-block mb-3"></i>
                 <p class="mb-1 fw-bold fs-5">Bu kitabı silmek istediğinize emin misiniz?</p>
+                <p class="fw-semibold text-danger" id="deleteBookTitle"></p>
                 <p class="text-muted small">Bu işlem geri alınamaz ve kitaba bağlı tüm pivot verileri (favoriler, listeler) etkilenebilir.</p>
             </div>
             <div class="modal-footer bg-light justify-content-center">
                 <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Vazgeç</button>
-                <form action="#" method="POST">
+                <form id="deleteBookForm" action="#" method="POST">
+                    @csrf
+                    @method('DELETE')
                     <button type="submit" class="btn btn-danger px-4">Evet, Sil</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+<script>
+    const deleteModal = document.getElementById('deleteBookModal');
+
+    deleteModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+
+        document.getElementById('deleteBookForm').action = button.getAttribute('data-action');
+        document.getElementById('deleteBookTitle').textContent = button.getAttribute('data-title');
+    });
+</script>
 @endsection

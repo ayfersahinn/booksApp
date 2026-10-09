@@ -66,4 +66,15 @@ class BookController extends BaseController
 
         return $this->updateItem($book, $data);
     }
+    public function destroy($id)
+    {
+        $book = Book::findOrFail($id);
+
+        if ($book->cover_image) {
+            Storage::disk('public')->delete($book->cover_image);
+        }
+
+        $book->delete();
+        return back()->with('success', 'Kitap silindi.');
+    }
 }

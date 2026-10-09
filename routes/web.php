@@ -61,5 +61,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         Route::post('', [AdminBookController::class, 'store'])->name('book-store');
         Route::get('/{id}/edit', [AdminBookController::class, 'edit'])->name('book-edit');
         Route::put('/{id}', [AdminBookController::class, 'update'])->name('book-update');
+        Route::delete('/{id}', [AdminBookController::class, 'destroy'])->name('book-destroy');
     });
 });
