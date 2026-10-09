@@ -6,6 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
 {
+    protected $fillable = [
+        'title',
+        'isbn',
+        'slug',
+        'author',
+        'pages',
+        'published_year',
+        'category_id',
+        'publisher_id',
+        'cover_image',
+        'description',
+    ];
     public function category()
     {
         return $this->belongsTo(Category::class);

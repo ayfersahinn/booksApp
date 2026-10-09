@@ -186,7 +186,8 @@
                     aria-label="Kapat"></button>
             </div>
 
-            <form action="#" method="POST" enctype="multipart/form-data">
+            <form action="{{route('book-store')}}" method="POST" enctype="multipart/form-data">
+                @csrf
                 <div class="modal-body p-4">
                     <div class="row g-3">
 
@@ -212,23 +213,30 @@
 
                         <div class="col-md-3">
                             <label class="form-label fw-semibold">Sayfa Sayısı</label>
-                            <input type="number" class="form-control"
-                                name="page_count" min="1"
+                            <input type="number"
+                                class="form-control"
+                                name="pages"
+                                min="1"
                                 placeholder="Örn: 328">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label fw-semibold">Yayın Tarihi</label>
-                            <input type="date" class="form-control"
-                                name="published_at">
+                            <label class="form-label fw-semibold">Yayın Yılı</label>
+                            <input type="number"
+                                class="form-control"
+                                name="published_year"
+                                min="1000"
+                                max="{{ date('Y') }}"
+                                placeholder="Örn: 1949">
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Kategori</label>
                             <select class="form-select" name="category_id" required>
                                 <option value="">Kategori Seçin</option>
-                                <option value="1">Roman</option>
-                                <option value="2">Bilim Kurgu</option>
+                                @foreach($categories as $category)
+                                <option value="{{$category->id}}">{{$category->name}}</option>
+                                @endforeach
                             </select>
                         </div>
 
@@ -236,8 +244,9 @@
                             <label class="form-label fw-semibold">Yayınevi</label>
                             <select class="form-select" name="publisher_id" required>
                                 <option value="">Yayınevi Seçin</option>
-                                <option value="1">Can Yayınları</option>
-                                <option value="2">YKY</option>
+                                @foreach($publishers as $publisher)
+                                <option value="{{$publisher->id}}">{{$publisher->name}}</option>
+                                @endforeach
                             </select>
                         </div>
 
@@ -269,6 +278,15 @@
 
         </div>
     </div>
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
 </div>
 
 

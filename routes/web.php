@@ -60,7 +60,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     Route::group(['prefix' => 'books'], function () {
         Route::get('', [AdminBookController::class, 'index'])->name('book-index');
-        //     Route::get('create', [BookController::class, 'create'])->name('book-add');
+        Route::post('', [AdminBookController::class, 'store'])->name('book-store');
         //     Route::post('create/{id}', [BookController::class, 'store'])->name('book-add-post');
 
 
