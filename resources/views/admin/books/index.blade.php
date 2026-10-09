@@ -162,16 +162,11 @@
 
     <!-- Sayfalama (Pagination) -->
     <div class="card-footer bg-white border-top p-3 d-flex justify-content-between align-items-center">
-        <small class="text-muted">Toplam 1,248 kitaptan 1 - 10 arası gösteriliyor</small>
-        <nav>
-            <ul class="pagination pagination-sm mb-0">
-                <li class="page-item disabled"><a class="page-link" href="#">Önceki</a></li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">Sonraki</a></li>
-            </ul>
-        </nav>
+        <small class="text-muted">
+            Toplam {{ $items->total() }} kitaptan
+            {{ $items->firstItem() ?? 0 }} - {{ $items->lastItem() ?? 0 }} arası gösteriliyor
+        </small>
+        {{ $items->links() }}
     </div>
 </div>
 

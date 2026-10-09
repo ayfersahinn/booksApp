@@ -86,7 +86,7 @@ class BookController extends Controller
         }
 
         $books = $booksQuery
-            ->paginate(9)
+            ->paginate(8)
             ->withQueryString();
         return view('web.mainpage', compact(['books', 'categories', 'search', 'publishers', 'lastReviews', 'bookCount', 'userCount', 'reviewCount']));
     }

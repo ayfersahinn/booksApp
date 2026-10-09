@@ -228,15 +228,15 @@
                                  @endphp
                                  <div class="rating-stars me-2 fs-5">
                                      @for ($i = 1; $i <= $fullStars; $i++)
-                                         <i class="bi bi-star-fill"></i>
+                                         <i class="bi bi-star-fill fs-6"></i>
                                          @endfor
 
                                          @if ($hasHalfStar)
-                                         <i class="bi bi-star-half"></i>
+                                         <i class="bi bi-star-half fs-6"></i>
                                          @endif
                                  </div>
 
-                                 <span class="fw-bold fs-5">
+                                 <span class="fw-bold fs-6">
                                      {{ number_format($averageRating ?? 0, 1) }}
                                  </span>
                              </div>
