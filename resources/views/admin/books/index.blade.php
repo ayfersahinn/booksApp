@@ -130,7 +130,9 @@
                 @foreach($items as $book)
                 <tr>
                     <td>
-                        <img src="https://via.placeholder.com/45x65?text=Kitap" class="book-cover-thumb shadow-sm" alt="Şeker Portakalı">
+                        <img src="{{ asset('storage/' . $book->cover_image) }}"
+                            class="book-cover-thumb shadow-sm"
+                            alt="{{ $book->title }}">
                     </td>
                     <td>
                         <div class="fw-bold text-dark">{{$book->title}}</div>
@@ -141,9 +143,11 @@
                     <td> {{$book->publisher->name}} </td>
                     <td><small class="text-muted">{{$book->created_at}}</small></td>
                     <td class="text-end">
-                        <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#editBookModal" title="Düzenle">
+                        <a href="{{ route('book-edit', $book->id) }}"
+                            class="btn btn-sm btn-outline-primary me-1"
+                            title="Düzenle">
                             <i class="bi bi-pencil"></i>
-                        </button>
+                        </a>
                         <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteBookModal" title="Sil">
                             <i class="bi bi-trash"></i>
                         </button>
@@ -290,109 +294,6 @@
 </div>
 
 
-
-<!-- 2. KİTAP DÜZENLE MODAL -->
-<div class="modal fade" id="editBookModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-
-            <div class="modal-header">
-                <h5 class="modal-title fw-bold">
-                    <i class="bi bi-pencil-square me-2 text-primary"></i>Kitap Düzenle
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                    aria-label="Kapat"></button>
-            </div>
-
-            <form action="#" method="POST" enctype="multipart/form-data">
-                <div class="modal-body p-4">
-                    <div class="row g-3">
-
-                        <div class="col-md-8">
-                            <label class="form-label fw-semibold">Kitap Adı</label>
-                            <input type="text" class="form-control"
-                                name="title"
-                                value="Şeker Portakalı" required>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold">ISBN</label>
-                            <input type="text" class="form-control"
-                                name="isbn"
-                                value="978-975-07-3860-9"
-                                maxlength="17">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Yazar</label>
-                            <input type="text" class="form-control"
-                                name="author"
-                                value="José Mauro de Vasconcelos"
-                                required>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label fw-semibold">Sayfa Sayısı</label>
-                            <input type="number" class="form-control"
-                                name="page_count"
-                                value="182"
-                                min="1">
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label fw-semibold">Yayın Tarihi</label>
-                            <input type="date" class="form-control"
-                                name="published_at"
-                                value="1968-01-01">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Kategori</label>
-                            <select class="form-select" name="category_id">
-                                <option value="1" selected>Roman</option>
-                                <option value="2">Bilim Kurgu</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Yayınevi</label>
-                            <select class="form-select" name="publisher_id">
-                                <option value="1" selected>Can Yayınları</option>
-                                <option value="2">YKY</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-12">
-                            <label class="form-label fw-semibold">
-                                Kapak Görselini Değiştir
-                            </label>
-                            <input type="file" class="form-control"
-                                name="cover_image" accept="image/*">
-                        </div>
-
-                        <div class="col-md-12">
-                            <label class="form-label fw-semibold">Açıklama / Özet</label>
-                            <textarea class="form-control" name="description"
-                                rows="3"
-                                placeholder="Kitap hakkında kısa açıklama..."></textarea>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-light"
-                        data-bs-dismiss="modal">İptal</button>
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-arrow-repeat me-1"></i> Güncelle
-                    </button>
-                </div>
-            </form>
-
-        </div>
-    </div>
-</div>
 
 
 

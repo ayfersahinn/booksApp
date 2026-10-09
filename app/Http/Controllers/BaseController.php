@@ -10,21 +10,30 @@ class BaseController extends Controller
 {
     protected $model;
     protected $page;
-    public function index(array $extraData = [])
+    protected function extraData(): array
     {
-
+        return [];
+    }
+    public function index()
+    {
         $items = $this->model::all();
-
-        return view(
-            "admin.{$this->page}",
-            compact('items') + $extraData
-        );
+        return view("admin.{$this->page}.index", ['items' => $items] + $this->extraData());
     }
 
-    public function save(array $data)
+    protected function saveItem(array $data)
     {
         $this->model::create($data);
 
-        return redirect()->back();
+        return back()->with('success', 'Kaydedildi.');
+    }
+    protected function updateItem($item, array $data)
+    {
+        $item->update($data);
+        return back()->with('success', 'Güncellendi.');
+    }
+    public function edit($id)
+    {
+        $item = $this->model::findOrFail($id);
+        return view("admin.{$this->page}.edit", ['item' => $item] + $this->extraData());
     }
 }

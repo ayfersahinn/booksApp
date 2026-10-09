@@ -53,16 +53,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
-    // Route::get('/kitap-listesi', function () {
-    //     return view('panel.books');
-    // })->name('book_list');
+
 
 
     Route::group(['prefix' => 'books'], function () {
-        Route::get('', [AdminBookController::class, 'index'])->name('book-index');
+        Route::get('/', [AdminBookController::class, 'index'])->name('book-index');
         Route::post('', [AdminBookController::class, 'store'])->name('book-store');
-        //     Route::post('create/{id}', [BookController::class, 'store'])->name('book-add-post');
-
-
+        Route::get('/{id}/edit', [AdminBookController::class, 'edit'])->name('book-edit');
+        Route::put('/{id}', [AdminBookController::class, 'update'])->name('book-update');
     });
 });
