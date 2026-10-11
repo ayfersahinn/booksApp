@@ -38,6 +38,24 @@ class BookController extends BaseController
             'description'    => 'nullable|string',
         ];
     }
+    public function index(Request $request)
+    {
+        $query = Book::query();
+        if ($request->filled('q')) {
+            $search = $request->q;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')->orWhere('author', 'like', '%' . $search . '%');
+            });
+        }
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+        if ($request->filled('publisher_id')) {
+            $query->where('publisher_id', $request->publisher_id);
+        }
+        $items = $query->latest()->paginate(10)->withQueryString();
+        return view('admin.books.index', ['items' => $items] + $this->extraData());
+    }
     public function store(Request $request)
     {
         $data = $request->validate($this->rules());

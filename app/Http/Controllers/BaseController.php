@@ -14,7 +14,7 @@ class BaseController extends Controller
     {
         return [];
     }
-    public function index()
+    public function index(Request $request)
     {
         $items = $this->model::latest()->paginate(10);
         return view("admin.{$this->page}.index", ['items' => $items] + $this->extraData());

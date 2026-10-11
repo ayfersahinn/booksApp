@@ -75,27 +75,28 @@
     <div class="row g-3 align-items-center justify-content-between">
         <!-- Arama ve Filtreler -->
         <div class="col-12 col-md-8">
-            <form class="row g-2">
+            <form action="{{route('book-index')}}" method="GET" class="row g-2">
                 <div class="col-12 col-sm-5">
                     <div class="input-group">
                         <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
-                        <input type="text" class="form-control bg-light border-start-0" placeholder="Kitap adı, ISBN veya Yazar...">
+                        <input type="text" value="{{request('q')}}" name="q" class="form-control bg-light border-start-0" placeholder="Kitap adı, Yazar...">
+                        <button type="submit" class="btn btn-primary">Ara</button>
                     </div>
                 </div>
                 <div class="col-6 col-sm-3">
-                    <select class="form-select bg-light">
+                    <select name="category_id" class="form-select bg-light" onchange="this.form.submit()">
                         <option value="">Tüm Kategoriler</option>
-                        <option value="1">Roman</option>
-                        <option value="2">Bilim Kurgu</option>
-                        <option value="3">Tarih</option>
+                        @foreach($categories as $category)
+                        <option value="{{$category->id}}" {{request('category_id')==$category->id ? 'selected':'' }}>{{$category->name}}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-6 col-sm-3">
-                    <select class="form-select bg-light">
+                    <select name="publisher_id" class="form-select bg-light" onchange="this.form.submit()">
                         <option value="">Tüm Yayınevleri</option>
-                        <option value="1">Can Yayınları</option>
-                        <option value="2">İş Bankası Yayınları</option>
-                        <option value="3">YKY</option>
+                        @foreach($publishers as $publisher)
+                        <option value="{{$publisher->id}}" {{ request('publisher_id') == $publisher->id ? 'selected' : '' }}>{{$publisher->name}}</option>
+                        @endforeach
                     </select>
                 </div>
             </form>
