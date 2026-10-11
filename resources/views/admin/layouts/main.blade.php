@@ -201,7 +201,35 @@
 
             <!-- DASHBOARD İÇERİK -->
             <main class="p-4">
+                <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100;">
 
+                    @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show shadow auto-dismiss" role="alert">
+                        <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+                    </div>
+                    @endif
+
+                    @if(session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show shadow auto-dismiss" role="alert">
+                        <i class="bi bi-exclamation-triangle me-2"></i>{{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+                    </div>
+                    @endif
+
+                    @if($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show shadow" role="alert">
+                        <strong>Lütfen hataları düzeltin:</strong>
+                        <ul class="mb-0 mt-1">
+                            @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+                    </div>
+                    @endif
+
+                </div>
                 @yield('content')
             </main>
         </div>

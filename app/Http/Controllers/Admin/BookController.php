@@ -9,7 +9,7 @@ use App\Models\Publisher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
+use Illuminate\Validation\Rule;
 
 class BookController extends BaseController
 {
@@ -24,11 +24,11 @@ class BookController extends BaseController
         ];
     }
 
-    private function rules(): array
+    private function rules(?int $ignoreId = null): array
     {
         return [
             'title'          => 'required|string|max:255',
-            'isbn'           => 'nullable|string|max:17',
+            'isbn'           => ['nullable', 'string', 'max:17', Rule::unique('books', 'isbn')->ignore($ignoreId)],
             'author'         => 'required|string|max:255',
             'pages'          => 'nullable|integer|min:1',
             'published_year' => 'nullable|integer|min:1000|max:' . date('Y'),
@@ -36,6 +36,50 @@ class BookController extends BaseController
             'publisher_id'   => 'required|exists:publishers,id',
             'cover_image'    => 'nullable|image|max:2048',
             'description'    => 'nullable|string',
+        ];
+    }
+    private function messages(): array
+    {
+        return [
+            // Kitap adı
+            'title.required' => 'Kitap adı zorunludur.',
+            'title.string'   => 'Kitap adı metin olmalıdır.',
+            'title.max'      => 'Kitap adı en fazla 255 karakter olabilir.',
+
+            // ISBN
+            'isbn.string' => 'ISBN metin olmalıdır.',
+            'isbn.max'    => 'ISBN en fazla 17 karakter olabilir.',
+            'isbn.unique' => 'Bu ISBN başka bir kitapta zaten kayıtlı.',
+
+            // Yazar
+            'author.required' => 'Yazar adı zorunludur.',
+            'author.string'   => 'Yazar adı metin olmalıdır.',
+            'author.max'      => 'Yazar adı en fazla 255 karakter olabilir.',
+
+            // Sayfa sayısı
+            'pages.integer' => 'Sayfa sayısı tam sayı olmalıdır.',
+            'pages.min'     => 'Sayfa sayısı en az 1 olmalıdır.',
+
+            // Yayın yılı
+            'published_year.integer' => 'Yayın yılı tam sayı olmalıdır.',
+            'published_year.min'     => 'Yayın yılı en az 1000 olmalıdır.',
+            'published_year.max'     => 'Yayın yılı ' . date('Y') . ' değerinden büyük olamaz.',
+
+            // Kategori
+            'category_id.required' => 'Lütfen bir kategori seçin.',
+            'category_id.exists'   => 'Seçilen kategori bulunamadı.',
+
+            // Yayınevi
+            'publisher_id.required' => 'Lütfen bir yayınevi seçin.',
+            'publisher_id.exists'   => 'Seçilen yayınevi bulunamadı.',
+
+            // Kapak görseli
+            'cover_image.image'  => 'Kapak dosyası bir resim olmalıdır (jpg, png, gif, webp...).',
+            'cover_image.max'    => 'Kapak görseli en fazla 2 MB olabilir.',
+            'cover_image.uploaded' => 'Kapak görseli yüklenemedi. Dosya çok büyük olabilir.',
+
+            // Açıklama
+            'description.string' => 'Açıklama metin olmalıdır.',
         ];
     }
     public function index(Request $request)
@@ -58,7 +102,7 @@ class BookController extends BaseController
     }
     public function store(Request $request)
     {
-        $data = $request->validate($this->rules());
+        $data = $request->validate($this->rules(), $this->messages());
         $data['slug'] = Str::slug($data['title']);
 
         if ($request->hasFile('cover_image')) {
@@ -72,7 +116,7 @@ class BookController extends BaseController
     {
         $book = Book::findOrFail($id);
 
-        $data = $request->validate($this->rules());
+        $data = $request->validate($this->rules($book->id), $this->messages());
         $data['slug'] = Str::slug($data['title']);
 
         if ($request->hasFile('cover_image')) {
