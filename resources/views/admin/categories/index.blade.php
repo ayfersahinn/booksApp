@@ -52,8 +52,8 @@
                     </td>
                     <td><small class="text-muted">{{$category->created_at}}</small></td>
                     <td class="text-end">
-                        <!-- Güncelleme ayrı sayfada -->
-                        <a href="#" class="btn btn-sm btn-outline-primary me-1" title="Düzenle">
+
+                        <a href="{{route('category-edit', $category->id)}}" class="btn btn-sm btn-outline-primary me-1" title="Düzenle">
                             <i class="bi bi-pencil"></i>
                         </a>
                         <button type="button" class="btn btn-sm btn-outline-danger"
@@ -77,7 +77,7 @@
     <!-- Sayfalama -->
     <div class="card-footer bg-white border-top p-3 d-flex justify-content-between align-items-center">
         <small class="text-muted">
-            Toplam {{ $items->total() }} kitaptan
+            Toplam {{ $items->total() }} kategoriden
             {{ $items->firstItem() ?? 0 }} - {{ $items->lastItem() ?? 0 }} arası gösteriliyor
         </small>
         {{ $items->links() }}

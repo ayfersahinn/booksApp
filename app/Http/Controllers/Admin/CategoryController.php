@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use App\Http\Controllers\BaseController;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends BaseController
 {
@@ -37,6 +38,23 @@ class CategoryController extends BaseController
         );
         $data['slug'] = Str::slug($data['name']);
         return $this->saveItem($data);
+    }
+    public function update(Request $request, $id)
+    {
+        $category = Category::findOrFail($id);
+        $data = $request->validate(
+            [
+                'name' => ['required', 'string', 'max:255', Rule::unique('categories', 'name')->ignore($category->id)],
+            ],
+            [
+                'name.required' => 'Kategori adı zorunludur.',
+                'name.string'   => 'Kategori adı metin olmalıdır.',
+                'name.max'      => 'Kategori adı en fazla 255 karakter olabilir.',
+                'name.unique'   => 'Bu kategori zaten kayıtlı.',
+            ]
+        );
+        $data['slug'] = Str::slug($data['name']);
+        return $this->updateItem($category, $data);
     }
     public function destroy($id)
     {

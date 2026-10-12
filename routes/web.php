@@ -71,5 +71,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         Route::get('/', [AdminCategoryController::class, 'index'])->name('category-index');
         Route::post('', [AdminCategoryController::class, 'store'])->name('category-store');
         Route::delete('/{id}', [AdminCategoryController::class, 'destroy'])->name(('category-destroy'));
+        Route::put('/{id}', [AdminCategoryController::class, 'update'])->name('category-update');
+        Route::get('/{id}/edit', [AdminCategoryController::class, 'edit'])->name('category-edit');
     });
 });
