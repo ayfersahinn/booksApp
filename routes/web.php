@@ -61,5 +61,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     });
     Route::group(['prefix' => 'users'], function () {
         Route::get('/', [AdminUserController::class, 'index'])->name('user-index');
+        Route::patch('/{id}/toggle-active', [AdminUserController::class, 'toggleActive'])->name('user-toggle-active');
+        Route::patch('/{id}/toggle-admin', [AdminUserController::class, 'toggleAdmin'])->name('user-toggle-admin');
+        Route::delete('/{id}', [AdminUserController::class, 'destroy'])->name('user-destroy');
+        Route::post('/logout', [AdminUserController::class, 'logout'])->name('user-logout');
     });
 });

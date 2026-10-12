@@ -1,7 +1,17 @@
 @extends('admin.layouts.main')
 @section('content')
 
+<style>
+    .btn-badge {
+        cursor: pointer;
+        border: 0;
+        padding: 0.4em 0.65em;
+    }
 
+    .btn-badge:hover {
+        opacity: 0.8;
+    }
+</style>
 <!-- Üst alan: Arama ve filtre -->
 <div class="card border-0 shadow-sm p-3 bg-white mb-4">
     <form action="{{route('user-index')}}" method="GET" class="row g-2 align-items-center">
@@ -35,6 +45,7 @@
                     <th>E-posta</th>
                     <th class="text-center">Yorum</th>
                     <th>Kayıt Tarihi</th>
+                    <th>Email Doğrulama</th>
                     <th>Durum</th>
                     <th class="text-end" style="width: 140px;">İşlemler</th>
                 </tr>
@@ -52,14 +63,32 @@
                     </td>
                     <td><small class="text-muted">{{$user->created_at}}</small></td>
                     <td>
-
-                        <span class="badge bg-success-subtle text-success border">Aktif</span>
+                        @if($user->email_verified_at==true)
+                        <span class="badge bg-success-subtle text-success border">Doğrulanmış</span>
+                        @else
                         <span class="badge bg-warning-subtle text-warning border">Doğrulanmamış</span>
+                        @endif
+                    </td>
+                    <td>
+                        <form action="{{ route('user-toggle-active', $user->id) }}" method="POST" onsubmit="return confirm('Bu kullanıcının durumunu değiştirmek istiyor musun?')">
+                            @csrf
+                            @method('PATCH')
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                    {{ $user->is_active ? 'checked' : '' }}
+                                    onchange="this.form.submit()">
+                                <label class="form-check-label small">
+                                    {{ $user->is_active ? 'Aktif' : 'Pasif' }}
+                                </label>
+                            </div>
+                        </form>
                     </td>
                     <td class="text-end">
                         @if(Auth::id()!=$user->id)
 
-                        <form action="#" method="POST" class="d-inline">
+                        <form action="{{route('user-toggle-admin', $user->id)}}" method="POST" class="d-inline">
+                            @csrf
+                            @method('PATCH')
                             @if($user->is_admin)
                             <button type="submit" class="btn btn-sm btn-outline-warning me-1" title="Admin yetkisini kaldır">
                                 <i class="bi bi-shield-minus"></i>
@@ -74,13 +103,17 @@
                         <!-- Sil -->
                         <button type="button" class="btn btn-sm btn-outline-danger"
                             data-bs-toggle="modal" data-bs-target="#deleteUserModal"
-                            data-action="#"
-                            data-title="Ahmet Yılmaz" title="Sil">
+                            data-action="{{route('user-destroy',$user->id)}}"
+                            data-title="{{$user->name}}" title="Sil">
                             <i class="bi bi-trash"></i>
                         </button>
                         @else
+                        @if($user->is_super_admin)
+                        <span class="badge bg-primary-subtle text-primary border">Süper Admin</span>
+                        @else
                         <span class="badge bg-primary-subtle text-primary border">Admin</span>
                         <small class="text-muted">Sen</small>
+                        @endif
                         @endif
                     </td>
                 </tr>
@@ -95,10 +128,15 @@
     </div>
 
     <!-- Sayfalama -->
+    <!-- Sayfalama (Pagination) -->
     <div class="card-footer bg-white border-top p-3 d-flex justify-content-between align-items-center">
-        <small class="text-muted">Toplam 50 kullanıcıdan 1 - 15 arası gösteriliyor</small>
-        <!-- Sayfa linkleri buraya gelecek -->
+        <small class="text-muted">
+            Toplam {{ $items->total() }} kullanıcıdan
+            {{ $items->firstItem() ?? 0 }} - {{ $items->lastItem() ?? 0 }} arası gösteriliyor
+        </small>
+        {{ $items->links() }}
     </div>
+
 </div>
 
 <!-- Kullanıcı silme onay modalı -->
@@ -118,11 +156,14 @@
             <div class="modal-footer bg-light justify-content-center">
                 <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Vazgeç</button>
                 <form id="deleteUserForm" action="#" method="POST">
+                    @csrf
+                    @method('DELETE')
                     <button type="submit" class="btn btn-danger px-4">Evet, Sil</button>
                 </form>
             </div>
         </div>
     </div>
+
 </div>
 
 <script>

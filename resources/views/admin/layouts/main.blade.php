@@ -212,7 +212,7 @@
                             <i class="bi bi-reply-all"></i> Yanıtlar
                         </a>
                     </li>
-                    <li class="nav-item mt-3">
+                    <li class="nav-item ">
                         <a href="#" class="nav-link">
                             <i class="bi bi-gear"></i> Ayarlar
                         </a>
@@ -220,12 +220,6 @@
                 </ul>
             </div>
 
-            <!-- Sidebar Alt Alanı (Çıkış Yap / Profil Özeti) -->
-            <div class="border-top pt-3">
-                <a href="#" class="d-flex align-items-center text-decoration-none text-danger fw-semibold px-2">
-                    <i class="bi bi-box-arrow-right me-2 fs-5"></i> Çıkış Yap
-                </a>
-            </div>
         </aside>
 
         <!-- MAIN CONTENT AREA -->
@@ -257,7 +251,14 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i> Çıkış Yap</a></li>
+                            <li>
+                                <form action="{{route('user-logout')}}" method="post">
+                                    @csrf
+                                    <button class="dropdown-item text-danger">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Çıkış Yap
+                                    </button>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
