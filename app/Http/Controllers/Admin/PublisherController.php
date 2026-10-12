@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use App\Http\Controllers\BaseController;
 use App\Models\Publisher;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PublisherController extends BaseController
 {
@@ -38,6 +39,23 @@ class PublisherController extends BaseController
         );
         $data['slug'] = Str::slug($data['name']);
         return $this->saveItem($data);
+    }
+    public function update(Request $request, $id)
+    {
+        $publisher = Publisher::findOrFail($id);
+        $data = $request->validate(
+            [
+                'name' => ['required', 'string', 'max:255', Rule::unique('publishers', 'name')->ignore($publisher->id)],
+            ],
+            [
+                'name.required' => 'Yayınevi adı zorunludur.',
+                'name.string'   => 'Yayınevi adı metin olmalıdır.',
+                'name.max'      => 'Yayınevi adı en fazla 255 karakter olabilir.',
+                'name.unique'   => 'Bu yayınevi zaten kayıtlı.',
+            ]
+        );
+        $data['slug'] = Str::slug($data['name']);
+        return $this->updateItem($publisher, $data);
     }
     public function destroy($id)
     {

@@ -53,7 +53,7 @@
                     <td><small class="text-muted">{{$publisher->created_at}}</small></td>
                     <td class="text-end">
 
-                        <a href="" class="btn btn-sm btn-outline-primary me-1" title="Düzenle">
+                        <a href="{{route('publisher-edit',$publisher->id)}}" class="btn btn-sm btn-outline-primary me-1" title="Düzenle">
                             <i class="bi bi-pencil"></i>
                         </a>
                         <button type="button" class="btn btn-sm btn-outline-danger"

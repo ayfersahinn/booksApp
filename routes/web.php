@@ -79,5 +79,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         Route::get('/', [AdminPublisherController::class, 'index'])->name('publisher-index');
         Route::post('', [AdminPublisherController::class, 'store'])->name('publisher-store');
         Route::delete('/{id}', [AdminPublisherController::class, 'destroy'])->name(('publisher-destroy'));
+        Route::put('/{id}', [AdminPublisherController::class, 'update'])->name('publisher-update');
+        Route::get('/{id}/edit', [AdminPublisherController::class, 'edit'])->name('publisher-edit');
     });
 });
