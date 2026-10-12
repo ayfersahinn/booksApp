@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BookController as AdminBookController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Web\BookController;
 use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\CommunityController;
@@ -11,6 +12,19 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [BookController::class, 'index'])->name('mainpage');
 Route::get('/kitaplar/{slug}', [BookController::class, 'show'])->name('book-detail');
+Route::get('/topluluk/{user_book_id?}', [CommunityController::class, 'index'])->name('community');
+Route::get('/haftanin-kitabi', [EditorRecommendationController::class, 'index'])->name('weekly-book');
+Route::get('/kayit-ol', function () {
+    return view('web.auth.register');
+})->name('register');
+Route::post('/kayit-ol', [AuthController::class, 'register']);
+
+Route::get('/giris-yap', function () {
+    return view('web.auth.login');
+})->name('login');
+Route::post('giris-yap', [AuthController::class, 'login']);
+Route::post('/cikis-yap', [AuthController::class, 'logout'])->name('cikis');
+
 
 Route::group(['middleware' => 'auth'], function () {
     Route::post('/kitap/{id}/favori', [BookController::class, 'toggleFavorite'])->name('book-favorite');
@@ -30,22 +44,6 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 
-
-Route::get('/topluluk/{user_book_id?}', [CommunityController::class, 'index'])->name('community');
-Route::get('/haftanin-kitabi', [EditorRecommendationController::class, 'index'])->name('weekly-book');
-
-Route::get('/kayit-ol', function () {
-    return view('web.auth.register');
-})->name('register');
-Route::post('/kayit-ol', [AuthController::class, 'register']);
-
-Route::get('/giris-yap', function () {
-    return view('web.auth.login');
-})->name('login');
-Route::post('giris-yap', [AuthController::class, 'login']);
-Route::post('/cikis-yap', [AuthController::class, 'logout'])->name('cikis');
-
-
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', function () {
         return view('admin.dashboard');
@@ -54,13 +52,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
 
-
-
     Route::group(['prefix' => 'books'], function () {
         Route::get('/', [AdminBookController::class, 'index'])->name('book-index');
         Route::post('', [AdminBookController::class, 'store'])->name('book-store');
         Route::get('/{id}/edit', [AdminBookController::class, 'edit'])->name('book-edit');
         Route::put('/{id}', [AdminBookController::class, 'update'])->name('book-update');
         Route::delete('/{id}', [AdminBookController::class, 'destroy'])->name('book-destroy');
+    });
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('/', [AdminUserController::class, 'index'])->name('user-index');
     });
 });

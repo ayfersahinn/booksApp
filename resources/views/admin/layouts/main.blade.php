@@ -91,7 +91,71 @@
             height: 38px;
             object-fit: cover;
         }
+
+
+
+        /* Sidebar Stilleri */
+        #sidebar {
+            min-width: 260px;
+            max-width: 260px;
+            min-height: 100vh;
+            background-color: #ffffff;
+            border-right: 1px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+
+        #sidebar .sidebar-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        #sidebar ul.nav-pills .nav-link {
+            color: #64748b;
+            font-weight: 500;
+            padding: 0.65rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        #sidebar ul.nav-pills .nav-link:hover {
+            color: #0d6efd;
+            background-color: #f1f5f9;
+        }
+
+        #sidebar ul.nav-pills .nav-link.active {
+            color: #0d6efd;
+            background-color: #e0e7ff;
+            font-weight: 600;
+        }
+
+        #sidebar ul.nav-pills .nav-link i {
+            font-size: 1.1rem;
+            margin-right: 0.75rem;
+        }
+
+        .navbar-custom {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .avatar-img {
+            width: 38px;
+            height: 38px;
+            object-fit: cover;
+        }
+
+        .book-cover-thumb {
+            width: 45px;
+            height: 65px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        td {
+            font-size: 14px;
+        }
     </style>
+
 </head>
 
 <body>
@@ -119,7 +183,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{route('user-index')}}" class="nav-link">
                             <i class="bi bi-people"></i> Kullanıcılar
                         </a>
                     </li>
