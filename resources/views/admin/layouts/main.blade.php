@@ -172,48 +172,48 @@
 
                 <!-- Menü Linkleri -->
                 <ul class="nav nav-pills flex-column gap-1">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active">
+                    <li class="nav-item ">
+                        <a href="{{route('admin.dashboard')}}" class="nav-link {{request()->routeIs('admin.dashboard') ? 'active' : ''}}">
                             <i class="bi bi-speedometer2"></i> Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{route('book-index')}}" class="nav-link">
+                        <a href="{{route('book-index')}}" class="nav-link {{request()->routeIs('book-index') ? 'active' : ''}}">
                             <i class="bi bi-journal-bookmark"></i> Kitaplar
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{route('user-index')}}" class="nav-link">
+                        <a href="{{route('user-index')}}" class="nav-link {{request()->routeIs('user-index') ? 'active' : '' }}">
                             <i class="bi bi-people"></i> Kullanıcılar
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{route('category-index')}}" class="nav-link {{request()->routeIs('category-index') ? 'active' : ''}}">
                             <i class="bi bi-tags"></i> Kategoriler
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link {{request()->routeIs('publisher-index') ? 'active' : ''}}">
                             <i class="bi bi-building"></i> Yayınevleri
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link {{request()->routeIs('weekly-book-index') ? 'active' : ''}}">
                             <i class="bi bi-star"></i> Haftanın Kitabı
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link {{request()->routeIs('review-index') ? 'active' : ''}}">
                             <i class="bi bi-chat-left-text"></i> Yorumlar
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link {{request()->routeIs('answer-index') ? 'active' : ''}}">
                             <i class="bi bi-reply-all"></i> Yanıtlar
                         </a>
                     </li>
                     <li class="nav-item ">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link {{request()->routeIs('settings') ? 'active' : ''}}">
                             <i class="bi bi-gear"></i> Ayarlar
                         </a>
                     </li>

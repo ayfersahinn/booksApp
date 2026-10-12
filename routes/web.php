@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BookController as AdminBookController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Web\BookController;
 use App\Http\Controllers\Web\AuthController;
@@ -65,5 +66,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         Route::patch('/{id}/toggle-admin', [AdminUserController::class, 'toggleAdmin'])->name('user-toggle-admin');
         Route::delete('/{id}', [AdminUserController::class, 'destroy'])->name('user-destroy');
         Route::post('/logout', [AdminUserController::class, 'logout'])->name('user-logout');
+    });
+    Route::group(['prefix' => 'categories'], function () {
+        Route::get('/', [AdminCategoryController::class, 'index'])->name('category-index');
+        Route::post('', [AdminCategoryController::class, 'store'])->name('category-store');
+        Route::delete('/{id}', [AdminCategoryController::class, 'destroy'])->name(('category-destroy'));
     });
 });
