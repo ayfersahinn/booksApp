@@ -193,7 +193,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link {{request()->routeIs('publisher-index') ? 'active' : ''}}">
+                        <a href="{{route('publisher-index')}}" class="nav-link {{request()->routeIs('publisher-index') ? 'active' : ''}}">
                             <i class="bi bi-building"></i> Yayınevleri
                         </a>
                     </li>

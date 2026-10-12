@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\PublisherController as AdminPublisherController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Web\BookController;
 use App\Http\Controllers\Web\AuthController;
@@ -73,5 +74,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         Route::delete('/{id}', [AdminCategoryController::class, 'destroy'])->name(('category-destroy'));
         Route::put('/{id}', [AdminCategoryController::class, 'update'])->name('category-update');
         Route::get('/{id}/edit', [AdminCategoryController::class, 'edit'])->name('category-edit');
+    });
+    Route::group(['prefix' => 'publishers'], function () {
+        Route::get('/', [AdminPublisherController::class, 'index'])->name('publisher-index');
+        Route::post('', [AdminPublisherController::class, 'store'])->name('publisher-store');
+        Route::delete('/{id}', [AdminPublisherController::class, 'destroy'])->name(('publisher-destroy'));
     });
 });
