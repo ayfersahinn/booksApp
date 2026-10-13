@@ -64,7 +64,7 @@
                         @endif
                     </td>
                     <td class="text-end">
-                        <a href="#" class="btn btn-sm btn-outline-primary me-1" title="Düzenle">
+                        <a href="{{route('weekly-book-edit', $item->id)}}" class="btn btn-sm btn-outline-primary me-1" title="Düzenle">
                             <i class="bi bi-pencil"></i>
                         </a>
                         <button type="button" class="btn btn-sm btn-outline-danger"

@@ -87,5 +87,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         Route::get('/', [AdminWeeklyBookController::class, 'index'])->name('weekly-book-index');
         Route::post('', [AdminWeeklyBookController::class, 'store'])->name('weekly-book-store');
         Route::delete('/{id}', [AdminWeeklyBookController::class, 'destroy'])->name(('weekly-book-destroy'));
+        Route::get('/{id}/edit', [AdminWeeklyBookController::class, 'edit'])->name('weekly-book-edit');
+        Route::put('/{id}', [AdminWeeklyBookController::class, 'update'])->name('weekly-book-update');
     });
 });

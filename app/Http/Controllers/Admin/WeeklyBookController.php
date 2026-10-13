@@ -56,6 +56,34 @@ class WeeklyBookController extends BaseController
         ]);
         return $this->saveItem($data);
     }
+    public function update(Request $request, $id)
+    {
+        $reccomendationBook = EditorRecommendation::findOrFail($id);
+        $data = $request->validate([
+            'book_id'     => 'required|exists:books,id',
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'start_date'  => 'required|date',
+            'end_date'    => 'required|date|after_or_equal:start_date',
+        ], [
+            'book_id.required' => 'Lütfen bir kitap seçin.',
+            'book_id.exists'   => 'Seçilen kitap bulunamadı.',
+
+            'title.required' => 'Başlık zorunludur.',
+            'title.string'   => 'Başlık metin olmalıdır.',
+            'title.max'      => 'Başlık en fazla 255 karakter olabilir.',
+
+            'description.string' => 'Açıklama metin olmalıdır.',
+
+            'start_date.required' => 'Başlangıç tarihi zorunludur.',
+            'start_date.date'     => 'Başlangıç tarihi geçerli bir tarih olmalıdır.',
+
+            'end_date.required'       => 'Bitiş tarihi zorunludur.',
+            'end_date.date'           => 'Bitiş tarihi geçerli bir tarih olmalıdır.',
+            'end_date.after_or_equal' => 'Bitiş tarihi, başlangıç tarihinden önce olamaz.',
+        ]);
+        return $this->updateItem($reccomendationBook, $data);
+    }
     public function destroy($id)
     {
         $reccomendationBook = EditorRecommendation::findOrFail($id);
