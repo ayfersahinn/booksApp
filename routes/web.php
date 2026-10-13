@@ -93,5 +93,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     });
     Route::group(['prefix' => 'reviews'], function () {
         Route::get('/', [AdminReviewController::class, 'index'])->name('review-index');
+        Route::delete('/{id}', [AdminReviewController::class, 'destroy'])->name('review-destroy');
     });
 });

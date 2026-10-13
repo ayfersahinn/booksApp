@@ -105,8 +105,8 @@
                     <td class="text-end">
                         <button type="button" class="btn btn-sm btn-outline-danger"
                             data-bs-toggle="modal" data-bs-target="#deleteReviewModal"
-                            data-action=""
-                            data-title="" title="Yorumu sil">
+                            data-action="{{route('review-destroy', $item->id)}}"
+                            data-title="{{$item->user?->name}} - {{ $item->book?->title }}" title="Yorumu sil">
                             <i class="bi bi-trash"></i>
                         </button>
                     </td>
@@ -174,6 +174,8 @@
             <div class="modal-footer bg-light justify-content-center">
                 <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Vazgeç</button>
                 <form id="deleteReviewForm" action="#" method="POST">
+                    @csrf
+                    @method('DELETE')
                     <button type="submit" class="btn btn-danger px-4">Evet, Sil</button>
                 </form>
             </div>

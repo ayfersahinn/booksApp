@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
+use App\Models\User;
 use App\Models\UserBook;
 use Illuminate\Http\Request;
 
@@ -37,5 +38,17 @@ class ReviewController extends BaseController
         }
         $items = $query->latest('review_updated_at')->paginate(10)->withQueryString();
         return view('admin.reviews.index', ['items' => $items] + $this->extraData());
+    }
+    public function destroy($id)
+    {
+        $userBook = UserBook::findOrFail($id);
+        $userBook->helpfuls()->delete();
+        $userBook->comments()->delete();
+        $userBook->review = null;
+        $userBook->has_spoiler = false;
+        $userBook->review_updated_at = null;
+        $userBook->save();
+
+        return back()->with('success', 'Yorum silindi.');
     }
 }
