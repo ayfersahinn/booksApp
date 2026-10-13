@@ -69,8 +69,8 @@
                         </a>
                         <button type="button" class="btn btn-sm btn-outline-danger"
                             data-bs-toggle="modal" data-bs-target="#deleteRecommendationModal"
-                            data-action=""
-                            data-title="Bu Haftanın Kitabı" title="Sil">
+                            data-action="{{route('weekly-book-destroy', $item->id)}}"
+                            data-title="{{$item->title}}" title="Sil">
                             <i class="bi bi-trash"></i>
                         </button>
                     </td>
@@ -111,7 +111,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
             </div>
 
-            <form action="#" method="POST">
+            <form action="{{route('weekly-book-store')}}" method="POST">
+                @csrf
                 <div class="modal-body p-4">
                     <div class="row g-3">
 
@@ -119,8 +120,11 @@
                             <label class="form-label fw-semibold">Kitap</label>
                             <select class="form-select" name="book_id" required>
                                 <option value="">Kitap Seçin</option>
-                                <!-- Kitaplar döngüyle gelecek -->
-                                <option value="1">1984 - George Orwell</option>
+                                @foreach($books as $book)
+                                <option value="{{ $book->id }}" {{ old('book_id') == $book->id ? 'selected' : '' }}>
+                                    {{ $book->title }} - {{ $book->author }}
+                                </option>
+                                @endforeach
                             </select>
                         </div>
 
@@ -179,6 +183,8 @@
             <div class="modal-footer bg-light justify-content-center">
                 <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Vazgeç</button>
                 <form id="deleteRecommendationForm" action="#" method="POST">
+                    @csrf
+                    @method('DELETE')
                     <button type="submit" class="btn btn-danger px-4">Evet, Sil</button>
                 </form>
             </div>
