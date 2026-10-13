@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\PublisherController as AdminPublisherController;
+use App\Http\Controllers\Admin\ReviewCommentController as AdminReviewCommentController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\WeeklyBookController as AdminWeeklyBookController;
@@ -94,5 +95,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::group(['prefix' => 'reviews'], function () {
         Route::get('/', [AdminReviewController::class, 'index'])->name('review-index');
         Route::delete('/{id}', [AdminReviewController::class, 'destroy'])->name('review-destroy');
+    });
+    Route::group(['prefix' => 'review-comments'], function () {
+        Route::get('/', [AdminReviewCommentController::class, 'index'])->name('review-comment-index');
+        Route::delete('/{id}', [AdminReviewCommentController::class, 'destroy'])->name('review-comment-destroy');
     });
 });

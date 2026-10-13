@@ -208,7 +208,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link {{request()->routeIs('answer-index') ? 'active' : ''}}">
+                        <a href="{{route('review-comment-index')}}" class="nav-link {{request()->routeIs('answer-index') ? 'active' : ''}}">
                             <i class="bi bi-reply-all"></i> Yanıtlar
                         </a>
                     </li>
