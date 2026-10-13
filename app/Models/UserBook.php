@@ -7,9 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class UserBook extends Model
 {
 
-    protected $fillable = [''];
+    protected $fillable = [
+        'review',
+        'has_spoiler',
+        'review_updated_at',
+    ];
     protected $casts = [
         'review_updated_at' => 'datetime',
+        'is_favorite'       => 'boolean',
+        'has_spoiler'       => 'boolean',
     ];
     public function user()
     {

@@ -203,7 +203,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link {{request()->routeIs('review-index') ? 'active' : ''}}">
+                        <a href="{{route('review-index')}}" class="nav-link {{request()->routeIs('review-index') ? 'active' : ''}}">
                             <i class="bi bi-chat-left-text"></i> Yorumlar
                         </a>
                     </li>
