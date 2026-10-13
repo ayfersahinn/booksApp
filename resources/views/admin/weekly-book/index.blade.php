@@ -16,7 +16,11 @@
                 </div>
             </form>
         </div>
-
+        <div class="col-12 col-md-2">
+            <a href="{{ route('weekly-book-index') }}" class="btn btn-outline-secondary w-100">
+                <i class="bi bi-x-circle me-1"></i> Filtreleri Temizle
+            </a>
+        </div>
         <div class="col-12 col-md-4 text-md-end">
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRecommendationModal">
                 <i class="bi bi-plus-lg me-1"></i> Yeni Seçki Ekle

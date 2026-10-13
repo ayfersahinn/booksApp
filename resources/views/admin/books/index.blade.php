@@ -6,39 +6,52 @@
 <div class="card border-0 shadow-sm p-3 bg-white mb-4">
     <div class="row g-3 align-items-center justify-content-between">
         <!-- Arama ve Filtreler -->
-        <div class="col-12 col-md-8">
-            <form action="{{route('book-index')}}" method="GET" class="row g-2">
-                <div class="col-12 col-sm-5">
-                    <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
-                        <input type="text" value="{{request('q')}}" name="q" class="form-control bg-light border-start-0" placeholder="Kitap adı, Yazar...">
-                        <button type="submit" class="btn btn-primary">Ara</button>
-                    </div>
-                </div>
-                <div class="col-6 col-sm-3">
-                    <select name="category_id" class="form-select bg-light" onchange="this.form.submit()">
-                        <option value="">Tüm Kategoriler</option>
-                        @foreach($categories as $category)
-                        <option value="{{$category->id}}" {{request('category_id')==$category->id ? 'selected':'' }}>{{$category->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-6 col-sm-3">
-                    <select name="publisher_id" class="form-select bg-light" onchange="this.form.submit()">
-                        <option value="">Tüm Yayınevleri</option>
-                        @foreach($publishers as $publisher)
-                        <option value="{{$publisher->id}}" {{ request('publisher_id') == $publisher->id ? 'selected' : '' }}>{{$publisher->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </form>
-        </div>
+        <div class="row g-3 align-items-center justify-content-between">
 
-        <!-- Yeni Kitap Ekle Butonu -->
-        <div class="col-12 col-md-4 text-md-end">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBookModal">
-                <i class="bi bi-plus-lg me-1"></i> Yeni Kitap Ekle
-            </button>
+            <!-- Arama ve filtreler -->
+            <div class="col-12 col-lg-9">
+                <form action="{{ route('book-index') }}" method="GET" class="row g-2 align-items-center">
+                    <div class="col-12 col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                            <input type="text" value="{{ request('q') }}" name="q" class="form-control bg-light border-start-0" placeholder="Kitap adı, Yazar...">
+                            <button type="submit" class="btn btn-primary">Ara</button>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-3">
+                        <select name="category_id" class="form-select bg-light" onchange="this.form.submit()">
+                            <option value="">Tüm Kategoriler</option>
+                            @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-6 col-md-3">
+                        <select name="publisher_id" class="form-select bg-light" onchange="this.form.submit()">
+                            <option value="">Tüm Yayınevleri</option>
+                            @foreach($publishers as $publisher)
+                            <option value="{{ $publisher->id }}" {{ request('publisher_id') == $publisher->id ? 'selected' : '' }}>{{ $publisher->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-2">
+                        <a href="{{ route('book-index') }}" class="btn btn-outline-secondary w-100" title="Filtreleri temizle">
+                            <i class="bi bi-x-circle me-1"></i> Temizle
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Yeni kitap ekle -->
+            <div class="col-12 col-lg-3 text-lg-end">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBookModal">
+                    <i class="bi bi-plus-lg me-1"></i> Yeni Kitap Ekle
+                </button>
+            </div>
+
         </div>
     </div>
 </div>

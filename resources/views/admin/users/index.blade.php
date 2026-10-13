@@ -30,7 +30,11 @@
                 <option value="user" {{request('role') == 'user' ? 'selected' : ''}}>Üye</option>
             </select>
         </div>
-
+        <div class="col-12 col-md-2">
+            <a href="{{ route('user-index') }}" class="btn btn-outline-secondary w-100">
+                <i class="bi bi-x-circle me-1"></i> Filtreleri Temizle
+            </a>
+        </div>
 
     </form>
 </div>

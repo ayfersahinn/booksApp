@@ -207,9 +207,6 @@ class BookController extends Controller
         $user = Auth::user();
         $book = Book::findOrFail($id);
         $userBook = $user->books()->where('books.id', $book->id)->first();
-        if (!Auth::user()->is_active) {
-            return back()->with('error', 'Hesabınız pasif olduğu için yorum yazamazsınız.');
-        }
         if ($req->boolean('has_spoiler') && !$req->filled('review')) {
             return back()->withErrors([
                 'review' => 'Spoiler işaretlemek için yorum yazmalısınız.'
