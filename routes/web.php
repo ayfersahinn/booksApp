@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\PublisherController as AdminPublisherController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\WeeklyBookController as AdminWeeklyBookController;
 use App\Http\Controllers\Web\BookController;
 use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\CommunityController;
@@ -81,5 +82,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         Route::delete('/{id}', [AdminPublisherController::class, 'destroy'])->name(('publisher-destroy'));
         Route::put('/{id}', [AdminPublisherController::class, 'update'])->name('publisher-update');
         Route::get('/{id}/edit', [AdminPublisherController::class, 'edit'])->name('publisher-edit');
+    });
+    Route::group(['prefix' => 'weekly-book'], function () {
+        Route::get('/', [AdminWeeklyBookController::class, 'index'])->name('weekly-book-index');
     });
 });

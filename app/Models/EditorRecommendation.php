@@ -21,4 +21,10 @@ class EditorRecommendation extends Model
     {
         return $this->belongsTo(Book::class);
     }
+
+    public function scopeActive($query)
+    {
+        return $query->whereDate('start_date', '<=', today())
+            ->whereDate('end_date', '>=', today());
+    }
 }

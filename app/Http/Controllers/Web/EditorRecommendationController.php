@@ -8,15 +8,26 @@ use App\Models\UserBook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class EditorRecommendationController
+class EditorRecommendationController extends Controller
 {
     public function index()
     {
-        $recommendedBook = EditorRecommendation::with(['book.category', 'book.publisher', 'book.users'])->first();
+        $with = ['book.category', 'book.publisher', 'book.users'];
+
+        $recommendedBook = EditorRecommendation::with($with)->active()->first()
+            ?? EditorRecommendation::with($with)
+            ->whereDate('end_date', '<', today())
+            ->latest('end_date')
+            ->first();
+        if (!$recommendedBook) {
+            return redirect()->route('mainpage');
+        }
         $reviewCount = UserBook::where('book_id', $recommendedBook->book_id)
-            ->whereNotNull('review')
+            ->whereNotNull('review')->where('review', '!=', '')
             ->count();
-        $averageRating = $recommendedBook->book->users->avg('pivot.rating') ?? 0;
+        $averageRating = UserBook::where('book_id', $recommendedBook->book_id)
+            ->whereNotNull('rating')
+            ->avg('rating') ?? 0;
         $user = Auth::user();
 
         $status = null;

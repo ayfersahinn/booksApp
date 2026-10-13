@@ -198,7 +198,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link {{request()->routeIs('weekly-book-index') ? 'active' : ''}}">
+                        <a href="{{route('weekly-book-index')}}" class="nav-link {{request()->routeIs('weekly-book-index') ? 'active' : ''}}">
                             <i class="bi bi-star"></i> Haftanın Kitabı
                         </a>
                     </li>
