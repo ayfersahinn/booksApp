@@ -175,9 +175,14 @@
 
         <!-- Sol: Yorum Formu ve Yorum Listesi -->
         <div class="col-lg-8">
-            @auth
             <!-- Yorum Ekleme Formu -->
-            @if(!$userBook || ($userBook->pivot->rating === null && $userBook->pivot->review === null))
+            @auth
+            @if(!Auth::user()->is_active)
+            <div class="alert alert-danger mb-4">
+                <i class="bi bi-slash-circle me-2"></i>
+                Hesabınız pasif durumda olduğu için yorum yazamazsınız.
+            </div>
+            @elseif(!$userBook || ($userBook->pivot->rating === null && $userBook->pivot->review === null))
             <div class="card border-0 shadow-sm p-4 mb-4">
                 <h5 class="fw-bold mb-3"><i class="bi bi-pencil-square text-primary me-2"></i>Bu Kitabı Değerlendir</h5>
                 <form action="{{route('add-review', $book->id)}}" method="POST">
