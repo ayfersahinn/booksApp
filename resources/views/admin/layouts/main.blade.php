@@ -173,7 +173,7 @@
                 <!-- Menü Linkleri -->
                 <ul class="nav nav-pills flex-column gap-1">
                     <li class="nav-item ">
-                        <a href="{{route('admin.dashboard')}}" class="nav-link {{request()->routeIs('admin.dashboard') ? 'active' : ''}}">
+                        <a href="{{route('dashboard-index')}}" class="nav-link {{request()->routeIs('admin.dashboard') ? 'active' : ''}}">
                             <i class="bi bi-speedometer2"></i> Dashboard
                         </a>
                     </li>

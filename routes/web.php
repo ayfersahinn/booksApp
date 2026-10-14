@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PublisherController as AdminPublisherController;
 use App\Http\Controllers\Admin\ReviewCommentController as AdminReviewCommentController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
@@ -50,9 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/', function () {
-        return view('admin.dashboard');
-    });
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard-index');
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
