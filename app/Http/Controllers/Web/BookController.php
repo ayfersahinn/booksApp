@@ -18,26 +18,16 @@ class BookController extends Controller
         $bookCount = Book::count();
 
         $reviewCount = DB::table('user_books')
-            ->whereNotNull('review')
+            ->whereNotNull('review')->where('review', '!=', '')
             ->count();
 
         $userCount = User::count();
         $categories = Category::withCount('books')->get();
         $publishers = Publisher::withCount('books')->get();
-        $lastReviews = DB::table('user_books')
-            ->join('users', 'users.id', '=', 'user_books.user_id')
-            ->join('books', 'books.id', '=', 'user_books.book_id')
-            ->whereNotNull('user_books.review')
-            ->latest('user_books.review_updated_at')
+        $lastReviews = UserBook::with(['user:id,name', 'book:id,title,slug'])->whereNotNull('user_books.review')->where('user_books.review', '!=', '')
+            ->latest('review_updated_at')
             ->limit(2)
-            ->get([
-                'users.name',
-                'books.title',
-                'books.slug',
-                'user_books.review',
-                'user_books.rating',
-                'user_books.review_updated_at',
-            ]);
+            ->get();
         $query = $req->input('category');
         $search = $req->input('q');
         $publisherQueries = $req->input('publishers', []);
@@ -48,7 +38,7 @@ class BookController extends Controller
             'users'
         ])->withCount([
             'users as review_count' => function ($q) {
-                $q->whereNotNull('user_books.review');
+                $q->whereNotNull('user_books.review')->where('review', '!=', '');
             },
             'users as rating_count' => function ($q) {
                 $q->whereNotNull('user_books.rating');
@@ -59,6 +49,7 @@ class BookController extends Controller
             $booksQuery->where(function ($q) use ($search) {
                 $q->where('title', 'like', '%' . $search . '%')
                     ->orWhere('author', 'like', '%' . $search . '%')
+                    ->orWhere('isbn', 'like', '%' . $search . '%')
                     ->orWhereHas('category', function ($cat) use ($search) {
                         $cat->where('name', 'like', '%' . $search . '%');
                     })
@@ -78,39 +69,22 @@ class BookController extends Controller
             });
         }
         if ($sort === 'popular') {
-            $booksQuery->orderByRaw('(review_count + rating_count) DESC');
+            $booksQuery->orderByRaw('(review_count + rating_count) DESC')->latest('id');
         } elseif ($sort === 'rating') {
-            $booksQuery->orderByDesc('average_rating');
-        } elseif ($sort === 'last') {
+            $booksQuery->orderByDesc('average_rating')->latest('id');
+        } else {
             $booksQuery->latest();
         }
 
         $books = $booksQuery
             ->paginate(8)
             ->withQueryString();
+        if ($req->ajax()) {
+            return view('web.partials.book-list', compact('books'))->render();
+        }
         return view('web.mainpage', compact(['books', 'categories', 'search', 'publishers', 'lastReviews', 'bookCount', 'userCount', 'reviewCount']));
     }
-    public function search(Request $req)
-    {
-        $query = $req->input('q');
-        if ($query == '') {
-            $books = Book::with(['category', 'publisher'])->get();
-        } else {
 
-            $books = Book::with(['category', 'publisher'])
-                ->where('title', 'like', '%' . $query . '%')
-                ->orWhere('author', 'like', '%' . $query . '%')
-                ->orWhereHas('category', function ($cat) use ($query) {
-                    $cat->where('name', 'like', '%' . $query . '%');
-                })
-                ->orWhereHas('publisher', function ($pub) use ($query) {
-                    $pub->where('name', 'like', '%' . $query . '%');
-                })
-                ->get();
-        }
-        $categories = Category::all();
-        return view('web.mainpage', compact('query', 'books', 'categories'));
-    }
 
     public function show($slug)
     {
