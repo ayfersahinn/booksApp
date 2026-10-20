@@ -59,6 +59,9 @@ class CommunityController extends Controller
         if ($user_book_id) {
             $selectedReview = UserBook::findOrFail($user_book_id);
         }
+        if ($req->ajax()) {
+            return view('web.partials.community-reviews', compact('reviews'));
+        }
         return view('web.community', compact('reviews', 'reviewers', 'selectedReview', 'selectedPage'));
     }
     public function replyToReview(Request $req, $user_book_id)
@@ -66,21 +69,36 @@ class CommunityController extends Controller
         $content = $req->validate([
             'content' => 'required|string|max:500'
         ]);
-        $user = Auth::id();
-        $userBook = UserBook::find($user_book_id);
-        if ($userBook) {
-            ReviewComment::create([
-                'user_id' => $user,
-                'user_book_id' => $user_book_id,
-                'content' => $content['content']
+
+        $userBook = UserBook::findOrFail($user_book_id);
+
+        ReviewComment::create([
+            'user_id' => Auth::id(),
+            'user_book_id' => $user_book_id,
+            'content' => $content['content']
+        ]);
+
+        if ($req->ajax()) {
+            return response()->json([
+                'success' => true
             ]);
         }
+
         return back();
     }
     public function deleteComment($id)
     {
         $comment = ReviewComment::findOrFail($id);
+        if ($comment->user_id !== Auth::id()) {
+            abort(403);
+        }
         $comment->delete();
+
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true
+            ]);
+        }
         return back();
     }
     public function toggleHelpful($user_book_id)

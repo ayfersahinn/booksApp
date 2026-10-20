@@ -19,8 +19,8 @@
             </div>
             <!-- Arama ve Sıralama -->
             <div class="d-flex gap-2">
-                <form action="{{ route('community') }}">
-                    <select name="sort" class="form-select form-select-sm" style="width: 180px;" onchange="this.form.submit()">
+                <form id="communitySortForm" action="{{ route('community') }}">
+                    <select name="sort" class="form-select form-select-sm" style="width: 180px;">
                         <option value="latest" {{ request('sort') === 'latest' ? 'selected' : '' }}>
                             En Yeniler
                         </option>
@@ -51,147 +51,11 @@
         <section class="col-lg-8">
             <div class="d-flex flex-column gap-3">
 
-                @foreach($reviews as $review)
-                <!-- Yorum Kartı  -->
-                <div id="review-{{ $review->id }}" class="card border-0 shadow-sm review-card p-3">
-                    <div class="d-flex gap-3">
-                        <img src="https://via.placeholder.com/45" class="rounded-circle avatar" alt="Kullanıcı">
-                        <div class="w-100">
-                            <div class="d-flex justify-content-between align-items-start mb-1">
-                                <div>
-                                    <h6 class="fw-bold mb-0">{{$review->user->name}} </h6>
-                                    <small class="text-muted d-block mb-2">
-                                        {{ $review->review_updated_at?->diffForHumans() }}
-                                    </small>
-                                </div>
-                                <div class="rating-stars small">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        <i class="bi {{ $i <= $review->rating ? 'bi-star-fill' : 'bi-star' }}"></i>
-                                        @endfor
-                                </div>
-                            </div>
-
-                            <div class="bg-light p-2 rounded d-flex align-items-center gap-3 my-2">
-                                <img src="{{ asset('storage/' . $review->book->cover_image) }}"
-                                    class="book-cover-thumb shadow-sm"
-                                    alt="{{ $review->book->title }}">
-                                <div>
-                                    <a href="{{route('book-detail' , [$review->book->slug, $review->book->isbn])}}" class="fw-bold text-dark text-decoration-none d-block">{{$review->book->title}}</a>
-                                    <small class="text-muted d-block">Yazar: {{$review->book->author}}</small>
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle mt-1">{{$review->book->category->name}}</span>
-                                </div>
-                            </div>
-
-                            <!-- Spoiler Uyarısı -->
-                            @if($review->has_spoiler)
-                            <div class="alert alert-warning py-2 px-3 small d-flex align-items-center gap-2 mb-2">
-                                <i class="bi bi-exclamation-triangle-fill"></i>
-                                <span>Bu yorum <strong>spoiler</strong> içermektedir.</span>
-                            </div>
-                            @endif
-
-                            <p class="card-text  mb-3">
-                                {{$review->review}}
-                            </p>
-
-                            <div class="d-flex align-items-center justify-content-between pt-2 border-top">
-                                <div class="d-flex gap-2">
-                                    @if($review->user_id != Auth::id())
-
-                                    @php
-                                    $isHelpful = $review->helpfuls->contains('user_id', Auth::id());
-                                    @endphp
-
-                                    <form action="{{ route('toggleHelpful', $review->id) }}" method="post">
-                                        @csrf
-
-                                        <button type="submit"
-                                            class="btn btn-sm {{ $isHelpful ? 'btn-success' : 'btn-outline-secondary' }}">
-                                            <i class="bi bi-hand-thumbs-up me-1"></i>
-                                            Faydalı {{ $review->helpfuls->count() }}
-                                        </button>
-                                    </form>
-
-                                    @endif
-                                    <button type="submit" class="btn btn-sm btn-outline-secondary reply-toggle">
-                                        <i class="bi bi-chat me-1"></i> Yanıtla {{$review->comments->count()}}
-                                    </button>
-                                </div>
-                                <button class="btn btn-sm text-muted p-0" title="Bildir">
-                                    <i class="bi bi-flag"></i>
-                                </button>
-                            </div>
-                            {{-- Yanıt Alanı --}}
-                            <div class="reply-form mt-3 pt-3 border-top d-none">
-                                @if($review->comments->count() > 0)
-
-                                <div class="comments-list d-none mt-3">
-
-                                    @foreach($review->comments as $comment)
-
-                                    <div class="border-top pt-2 mb-2">
-                                        <strong>{{ $comment->user->name }}</strong>
-                                        <div class="d-flex justify-content-between">
-                                            <p class="mb-0 text-secondary">
-                                                {{ $comment->content }}
-                                            </p>
-                                            @if($comment->user_id==Auth::id())
-                                            <form action="{{route('delete-comment', $comment->id)}}" method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                    Sil
-                                                </button>
-                                            </form>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    @endforeach
-
-                                </div>
-
-                                @endif
-                                <form action="{{ route('replyToReview', $review->id) }}" method="POST">
-                                    @csrf
-                                    <div class="mb-2">
-                                        <textarea name="content" class="form-control" rows="3" placeholder="Yanıtınızı yazın..." required></textarea>
-                                    </div>
-                                    <div class="d-flex justify-content-end">
-                                        <button type="submit" class="btn btn-primary btn-sm "> <i class="bi bi-send me-1"></i> Yanıtla </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                @endforeach
+                @include('web.partials.community-reviews')
 
             </div>
-            <script>
-                document.querySelectorAll('.reply-toggle').forEach(button => {
-                    button.addEventListener('click', function() {
 
-                        const container = this.closest('.w-100');
 
-                        const replyForm = container.querySelector('.reply-form');
-                        const commentsList = container.querySelector('.comments-list');
-
-                        replyForm.classList.toggle('d-none');
-
-                        if (commentsList) {
-                            commentsList.classList.toggle('d-none');
-                        }
-                    });
-                });
-            </script>
-            <!-- Sayfalandırma (Pagination) -->
-            <nav class="mt-4">
-                <div class="mt-4">
-                    {{ $reviews->links() }}
-                </div>
-            </nav>
         </section>
 
         <!-- Sağ Taraf: Yan Panel (İstatistikler & Popüler Eleştirmenler) -->
@@ -235,6 +99,153 @@
         </aside>
     </div>
 </main>
+@push('scripts')
+<script>
+    function loadCommunityReviews(url, pushState = true) {
+        const $reviewList = $('#communityReviews');
+        if (!$reviewList.length) {
+            return;
+        }
+        $reviewList.css('opacity', '0.5');
 
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'html',
 
+            success: function(html) {
+                const $newReviewList = $(html).filter('#communityReviews');
+
+                if (!$newReviewList.length) {
+                    console.error('Sunucudan geçerli yorum listesi gelmedi.');
+                    $reviewList.css('opacity', '1');
+                    return;
+                }
+
+                // Hangi yorumun yanıt bölümü açık?
+                const openReview = $reviewList
+                    .find('.reply-section:not(.d-none)')
+                    .closest('.review-card')
+                    .attr('id');
+
+                $reviewList.replaceWith($newReviewList);
+
+                // Aynı yorumun yanıt bölümünü tekrar aç
+                if (openReview) {
+                    const $section = $('#' + openReview).find('.reply-section');
+
+                    $section.removeClass('d-none');
+                    $section.find('.comments-list').removeClass('d-none');
+                }
+
+                $('#communityReviews').css('opacity', '1');
+
+                if (pushState) {
+                    history.pushState(null, '', url);
+                }
+            },
+            error: function(error) {
+                console.error('Yorumlar yüklenemedi:', error.status);
+                $reviewList.css('opacity', '1');
+            }
+        })
+    }
+    $('#communitySortForm').on('change', 'select[name="sort"]', function() {
+        const form = $('#communitySortForm')[0];
+        const url = new URL(form.action, window.location.origin);
+        url.search = new URLSearchParams($(form).serialize()).toString();
+        loadCommunityReviews(url.href)
+    })
+
+    $(document).on('click', '#communityReviews .pagination a', function(e) {
+        e.preventDefault();
+        loadCommunityReviews(this.href);
+    });
+
+    $(window).on('popstate', function() {
+        const url = new URL(window.location.href);
+
+        $('#communitySortForm select[name="sort"]')
+            .val(url.searchParams.get('sort') || 'latest');
+        loadCommunityReviews(url.href, false);
+    });
+    $(document).on('submit', '.helpful-form', function(e) {
+        e.preventDefault();
+
+        const form = $(this);
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+
+            success: function() {
+                loadCommunityReviews(window.location.href, false);
+            },
+
+            error: function(error) {
+                console.error('İşlem başarısız:', error.status);
+            }
+        });
+    });
+    $(document).on('submit', '.reply-form-submit', function(e) {
+        e.preventDefault();
+
+        const form = $(this);
+        const button = form.find('button[type="submit"]');
+
+        button.prop('disabled', true);
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+
+            success: function(response) {
+                if (response.success) {
+                    loadCommunityReviews(window.location.href, false);
+                }
+            },
+
+            error: function(error) {
+                console.error('Yanıt gönderilemedi:', error.status);
+            },
+
+            complete: function() {
+                button.prop('disabled', false);
+            }
+        });
+    });
+    $(document).on('click', '.reply-toggle', function() {
+        const container = this.closest('.w-100');
+        const replySection = container.querySelector('.reply-section');
+        const commentsList = container.querySelector('.comments-list');
+
+        replySection.classList.toggle('d-none');
+
+        if (commentsList) {
+            commentsList.classList.toggle('d-none');
+        }
+    });
+    $(document).on('submit', '.delete-comment-form', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+
+            success: function(response) {
+                if (response.success) {
+                    loadCommunityReviews(window.location.href, false);
+                }
+            },
+
+            error: function(xhr) {
+                console.error('Silme hatası:', xhr.status, xhr.responseText);
+            }
+        });
+    });
+</script>
+@endpush
 @endsection
