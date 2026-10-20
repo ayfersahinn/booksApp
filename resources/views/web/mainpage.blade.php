@@ -129,7 +129,7 @@
                  </form>
              </div>
              <!-- Filtreleme Kartı -->
-             <form action="{{ route('mainpage') }}" method="get">
+             <form id="sortForm" action="{{ route('mainpage') }}" method="get">
                  {{-- Seçili kategori --}}
                  @if(request('category'))
                  <input
@@ -145,6 +145,9 @@
                      name="publishers[]"
                      value="{{ $publisher }}">
                  @endforeach
+                 @if(request('q'))
+                 <input type="hidden" name="q" value="{{ request('q') }}">
+                 @endif
                  <div class="card border-0 shadow-sm">
                      <div class="card-header bg-white fw-bold">
                          <i class="bi bi-sliders me-2"></i>Sıralama
@@ -157,7 +160,7 @@
                                  name="sort"
                                  value="popular"
                                  id="sort1"
-                                 onchange="this.form.submit()"
+
                                  {{ request('sort') === 'popular' ? 'checked' : '' }} />
                              <label class="form-check-label" for="sort1">En Popülerler</label>
                          </div>
@@ -167,7 +170,7 @@
                                  type="radio"
                                  name="sort"
                                  value="rating"
-                                 onchange="this.form.submit()"
+
                                  {{ request('sort') === 'rating' ? 'checked' : '' }}
                                  id="sort2" />
                              <label class="form-check-label" for="sort2">En Yüksek Puanlılar</label>
@@ -177,7 +180,7 @@
                                  class="form-check-input"
                                  type="radio"
                                  value="last"
-                                 onchange="this.form.submit()"
+
                                  name="sort"
                                  {{ request('sort') === 'last' ? 'checked' : '' }}
                                  id="sort3" />
@@ -323,10 +326,31 @@
          });
 
          url.search = params.toString();
-
          loadBooks(url.href);
      });
 
+     // Sıralama filtresi
+     $('#sortForm').on('change', 'input[name="sort"]', function() {
+         const url = new URL($('#sortForm').attr('action'), window.location.origin);
+         const params = new URLSearchParams($('#sortForm').serialize());
+         const currentParams = new URLSearchParams(window.location.search);
+
+         ['category', 'q', 'sort'].forEach(function(key) {
+             if (!params.has(key) && currentParams.has(key)) {
+                 params.set(key, currentParams.get(key));
+             }
+         });
+
+         if (!params.has('publishers[]')) {
+             currentParams.getAll('publishers[]').forEach(function(publisher) {
+                 params.append('publishers[]', publisher);
+             });
+         }
+
+         url.search = params.toString();
+
+         loadBooks(url.href);
+     });
      // Tarayıcının geri / ileri düğmeleri
      $(window).on('popstate', function() {
          loadBooks(window.location.href, false);
