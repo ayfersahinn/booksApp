@@ -22,8 +22,10 @@ class BookController extends Controller
             ->count();
 
         $userCount = User::count();
-        $categories = Category::withCount('books')->get();
-        $publishers = Publisher::withCount('books')->get();
+        $categories = Category::has('books')->withCount('books')->get();
+        $publishers = Publisher::has('books')
+            ->withCount('books')
+            ->get();
         $lastReviews = UserBook::with(['user:id,name', 'book:id,title,slug'])->whereNotNull('user_books.review')->where('user_books.review', '!=', '')
             ->latest('review_updated_at')
             ->limit(2)

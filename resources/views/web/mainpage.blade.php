@@ -64,8 +64,8 @@
                  </div>
                  <div class="list-group list-group-flush">
                      <a
-                         href="{{route('mainpage')}}"
-                         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active">
+                         href="{{route('mainpage')}}" data-category=""
+                         class=" category-filter list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ !request('category') ? 'active' : '' }}">
                          Tüm Kategoriler
                          <span
                              class="badge bg-light text-dark rounded-pill">{{$categories->count()}}</span>
@@ -73,7 +73,8 @@
                      @foreach($categories as $category)
                      <a
                          href="{{ request()->fullUrlWithQuery(['category' => $category->slug]) }}"
-                         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                         data-category="{{ $category->slug }}"
+                         class="category-filter list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ request('category') === $category->slug ? 'active' : '' }}">
                          {{$category->name}}
                          <span class="badge bg-secondary rounded-pill">{{$category->books_count}}</span>
                      </a>
@@ -84,9 +85,17 @@
                  <div class="card-header bg-white fw-bold">
                      <i class="bi bi-grid me-2"></i>Yayınevi
                  </div>
-                 <form method="GET" action="{{ route('mainpage') }}">
+                 <form id="publisherFilterForm" method="GET" action="{{ route('mainpage') }}">
                      @if(request('category'))
                      <input type="hidden" name="category" value="{{ request('category') }}">
+                     @endif
+
+                     @if(request('q'))
+                     <input type="hidden" name="q" value="{{ request('q') }}">
+                     @endif
+
+                     @if(request('sort'))
+                     <input type="hidden" name="sort" value="{{ request('sort') }}">
                      @endif
                      <div class="list-group list-group-flush">
 
@@ -98,7 +107,9 @@
                                      type="checkbox"
                                      name="publishers[]"
                                      value="{{ $publisher->slug }}"
-                                     class="form-check-input me-2">
+
+                                     class=" form-check-input me-2"
+                                     {{ in_array($publisher->slug, request('publishers', [])) ? 'checked' : '' }}>
 
                                  {{ $publisher->name }}
                              </div>
@@ -282,6 +293,38 @@
          e.preventDefault();
 
          loadBooks(this.href);
+     });
+     // Kategori filtresi
+     $(document).on('click', '.category-filter', function(e) {
+         e.preventDefault();
+
+         const selectedCategory = this.dataset.category;
+
+         $('.category-filter').removeClass('active');
+
+         $(this).addClass('active');
+
+         const url = new URL(this.href, window.location.origin);
+         loadBooks(url.href);
+     });
+     // Yayınevi filtresi
+     $('#publisherFilterForm').on('submit', function(e) {
+         e.preventDefault();
+
+         const url = new URL(this.action, window.location.origin);
+         const params = new URLSearchParams($(this).serialize());
+         const currentParams = new URLSearchParams(window.location.search);
+
+         // Formda bulunmayan mevcut filtreleri koru
+         ['category', 'q', 'sort'].forEach(function(key) {
+             if (!params.has(key) && currentParams.has(key)) {
+                 params.set(key, currentParams.get(key));
+             }
+         });
+
+         url.search = params.toString();
+
+         loadBooks(url.href);
      });
 
      // Tarayıcının geri / ileri düğmeleri
