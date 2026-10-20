@@ -176,7 +176,7 @@
                                             {{$favoriteBook->title}}
                                         </h6>
                                         <p class="card-text small text-muted mb-2">{{$favoriteBook->author}}</p>
-                                        <a href="{{route('book-detail',$favoriteBook->slug)}}" class="btn btn-sm btn-outline-primary w-100">İncele</a>
+                                        <a href="{{route('book-detail',[$favoriteBook->slug, $favoriteBook->isbn])}}" class="btn btn-sm btn-outline-primary w-100">İncele</a>
                                     </div>
                                 </div>
                             </div>
@@ -228,7 +228,7 @@
                                     <li class="list-group-item d-flex justify-content-between align-items-center py-3">
                                         <div>
                                             <h6>
-                                                <a href="{{ route('book-detail', $listItem->slug) }}"
+                                                <a href="{{ route('book-detail', [$listItem->slug,$listItem->isbn]) }}"
                                                     class="mb-0 fw-bold text-dark text-decoration-none">
                                                     {{ $listItem->title }}
                                                 </a>
@@ -252,7 +252,7 @@
                                     <li class="list-group-item d-flex justify-content-between align-items-center py-3">
                                         <div>
                                             <h6>
-                                                <a href="{{ route('book-detail', $listItem->slug) }}"
+                                                <a href="{{ route('book-detail', [$listItem->slug,$listItem->isbn]) }}"
                                                     class="mb-0 fw-bold text-dark text-decoration-none">
                                                     {{ $listItem->title }}
                                                 </a>
@@ -276,7 +276,7 @@
                                     <li class="list-group-item d-flex justify-content-between align-items-center py-3">
                                         <div>
                                             <h6>
-                                                <a href="{{ route('book-detail', $listItem->slug) }}"
+                                                <a href="{{ route('book-detail', [$listItem->slug,$listItem->isbn]) }}"
                                                     class="mb-0 fw-bold text-dark text-decoration-none">
                                                     {{ $listItem->title }}
                                                 </a>
@@ -347,7 +347,7 @@
                                         </span>
                                         @endif
 
-                                        <a href="{{ route('book-detail', $review->slug) }}"
+                                        <a href="{{ route('book-detail', [$review->slug,$review->isbn]) }}"
                                             class="btn btn-sm btn-primary ms-auto">Kitaba git</a>
                                     </div>
 

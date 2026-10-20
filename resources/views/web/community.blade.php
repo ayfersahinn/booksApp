@@ -76,7 +76,7 @@
                                     class="book-cover-thumb shadow-sm"
                                     alt="{{ $review->book->title }}">
                                 <div>
-                                    <a href="{{route('book-detail' , $review->book->slug)}}" class="fw-bold text-dark text-decoration-none d-block">{{$review->book->title}}</a>
+                                    <a href="{{route('book-detail' , [$review->book->slug, $review->book->isbn])}}" class="fw-bold text-dark text-decoration-none d-block">{{$review->book->title}}</a>
                                     <small class="text-muted d-block">Yazar: {{$review->book->author}}</small>
                                     <span class="badge bg-success-subtle text-success border border-success-subtle mt-1">{{$review->book->category->name}}</span>
                                 </div>

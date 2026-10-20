@@ -228,7 +228,10 @@
                                  @endfor
                          </div>
                      </div>
-                     <p class="small text-muted mb-1"> <a href="{{ route('book-detail', $review->book?->slug) }}" class="text-decoration-none"> <strong>{{ $review->book?->title }}</strong> </a> kitabı için: </p>
+                     <p class="small text-muted mb-1"> <a href="{{ route('book-detail',  [
+    'slug' => $review->book->slug,
+    'isbn' => $review->book->isbn
+]) }}" class="text-decoration-none"> <strong>{{ $review->book?->title }}</strong> </a> kitabı için: </p>
                      <p class="mb-0 text-secondary review-preview">
                          {{$review->review}}
                      </p>
@@ -244,11 +247,9 @@
  <script>
      function loadBooks(url, pushState = true) {
          const $bookList = $('#bookList');
-
          if (!$bookList.length) {
              return;
          }
-
          $bookList.css('opacity', '0.5');
 
          $.ajax({
@@ -258,20 +259,17 @@
 
              success: function(html) {
                  const $newBookList = $(html).filter('#bookList');
-
                  if (!$newBookList.length) {
                      console.error('Sunucudan geçerli kitap listesi gelmedi.');
                      $bookList.css('opacity', '1');
                      return;
                  }
-
                  $bookList.replaceWith($newBookList);
 
                  if (pushState) {
                      history.pushState(null, '', url);
                  }
              },
-
              error: function(xhr) {
                  console.error('Kitaplar yüklenemedi:', xhr.status);
                  $bookList.css('opacity', '1');
@@ -282,38 +280,26 @@
      // Arama formu
      $('#searchForm').on('submit', function(e) {
          e.preventDefault();
-
          const url = new URL(this.action, window.location.origin);
          const params = new URLSearchParams($(this).serialize());
 
          url.search = params.toString();
-
          loadBooks(url.href);
      });
 
-     // Sayfalama bağlantıları
-     $(document).on('click', '#bookList .pagination a', function(e) {
-         e.preventDefault();
-
-         loadBooks(this.href);
-     });
      // Kategori filtresi
      $(document).on('click', '.category-filter', function(e) {
          e.preventDefault();
-
          const selectedCategory = this.dataset.category;
-
          $('.category-filter').removeClass('active');
 
          $(this).addClass('active');
-
          const url = new URL(this.href, window.location.origin);
          loadBooks(url.href);
      });
      // Yayınevi filtresi
      $('#publisherFilterForm').on('submit', function(e) {
          e.preventDefault();
-
          const url = new URL(this.action, window.location.origin);
          const params = new URLSearchParams($(this).serialize());
          const currentParams = new URLSearchParams(window.location.search);
@@ -346,10 +332,14 @@
                  params.append('publishers[]', publisher);
              });
          }
-
          url.search = params.toString();
-
          loadBooks(url.href);
+     });
+     // Sayfalama bağlantıları
+     $(document).on('click', '#bookList .pagination a', function(e) {
+         e.preventDefault();
+
+         loadBooks(this.href);
      });
      // Tarayıcının geri / ileri düğmeleri
      $(window).on('popstate', function() {

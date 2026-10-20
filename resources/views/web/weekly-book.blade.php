@@ -36,7 +36,7 @@
                     <span class="badge bg-success-subtle text-success border border-success-subtle">Haftanın En Çok Okunanı</span>
                 </div>
 
-                <h2 class="display-6 fw-bold mb-2"><a href="{{route('book-detail',$recommendedBook->book->slug)}}" class="text-decoration-none text-white">{{$recommendedBook->book->title}}</a></h2>
+                <h2 class="display-6 fw-bold mb-2"><a href="{{route('book-detail',[$recommendedBook->book->slug,$recommendedBook->book->isbn])}}" class="text-decoration-none text-white">{{$recommendedBook->book->title}}</a></h2>
                 <h3 class="h5 text-white-50 mb-3">Yazar: <strong>{{$recommendedBook->book->author}}</strong> | Yayınevi: <strong>{{$recommendedBook->book->publisher->name}}</strong></h3>
 
                 <!-- Derecelendirme & İstatistikler -->
@@ -236,7 +236,7 @@
                             </button>
                             @endif
 
-                            <a href="{{route('book-detail', $similarBook->slug)}}" class="btn btn-primary btn-sm w-100 stretched-link">
+                            <a href="{{route('book-detail', [$similarBook->slug,$similarBook->isbn])}}" class="btn btn-primary btn-sm w-100 stretched-link">
                                 İncele
                             </a>
                         </div>

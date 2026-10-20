@@ -26,7 +26,7 @@ class BookController extends Controller
         $publishers = Publisher::has('books')
             ->withCount('books')
             ->get();
-        $lastReviews = UserBook::with(['user:id,name', 'book:id,title,slug'])->whereNotNull('user_books.review')->where('user_books.review', '!=', '')
+        $lastReviews = UserBook::with(['user:id,name', 'book:id,title,slug,isbn'])->whereNotNull('user_books.review')->where('user_books.review', '!=', '')
             ->latest('review_updated_at')
             ->limit(2)
             ->get();
@@ -88,9 +88,9 @@ class BookController extends Controller
     }
 
 
-    public function show($slug)
+    public function show($slug, $isbn)
     {
-        $book = Book::with(['category', 'publisher', 'users'])->where('slug', $slug)->firstOrFail();
+        $book = Book::with(['category', 'publisher', 'users'])->where('isbn', $isbn)->firstOrFail();
         $user = Auth::user();
 
         $userBook = null;

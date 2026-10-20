@@ -74,7 +74,7 @@
                         </button>
                         @endif
 
-                        <a href="{{route('book-detail', $book->slug)}}" class="btn btn-primary btn-sm w-100 stretched-link">
+                        <a href="{{route('book-detail', [$book->slug, $book->isbn])}}" class="btn btn-primary btn-sm w-100 stretched-link">
                             İncele
                         </a>
                     </div>
