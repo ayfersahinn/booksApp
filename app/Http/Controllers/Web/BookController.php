@@ -150,6 +150,17 @@ class BookController extends Controller
                 $user->books()->updateExistingPivot($book->id, ['is_favorite' => true]);
             }
         }
+        if (request()->ajax()) {
+            $isFavorite = $user->books()
+                ->where('books.id', $book->id)
+                ->wherePivot('is_favorite', true)
+                ->exists();
+
+            return response()->json([
+                'success' => true,
+                'isFavorite' => $isFavorite
+            ]);
+        }
         return back();
     }
     public function bookStatus(Request $req, $id)

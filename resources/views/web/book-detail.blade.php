@@ -87,17 +87,18 @@
                             </li>
                         </ul>
                     </div>
-                    <form action="{{route('book-favorite', $book->id)}}" method="post">
+                    <form action="{{ route('book-favorite', $book->id) }}"
+                        method="POST"
+                        id="favoriteForm">
                         @csrf
-                        @if($isFavorite)
-                        <button type="submit" class="btn btn-danger btn-sm w-100">
-                            <i class="bi bi-heart-fill me-1"></i> Favorilerden Çıkar
+                        <button type="submit"
+                            id="favoriteButton"
+                            class="btn {{ $isFavorite ? 'btn-danger' : 'btn-outline-danger' }} btn-sm w-100">
+                            <i class="bi {{ $isFavorite ? 'bi-heart-fill' : 'bi-heart' }} me-1"></i>
+                            <span id="favoriteText">
+                                {{ $isFavorite ? 'Favorilerden Çıkar' : 'Favorilere Ekle' }}
+                            </span>
                         </button>
-                        @else
-                        <button type="submit" class="btn btn-outline-danger btn-sm w-100">
-                            <i class="bi bi-heart me-1"></i> Favorilere Ekle
-                        </button>
-                        @endif
                     </form>
                 </div>
             </div>
@@ -274,7 +275,7 @@
                                 @endif
 
                                 {{-- Sadece kendi yorumunda göster --}}
-                                @if(Auth::id() === $review->id)
+                                @if(Auth::id() === $review->pivot->user_id)
                                 <button
                                     type="button"
                                     class="btn btn-sm btn-outline-secondary ms-auto me-2"
@@ -282,63 +283,62 @@
                                     title="Yorumu Düzenle">
                                     <i class="bi bi-pencil"></i>
                                 </button>
-                                <form action="{{ route('delete-review', $book->id) }}"
-                                    method="POST"
-                                    class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
+                                {{-- Modalı açan buton --}}
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-danger"
+                                    title="Yorumu Sil"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#delete-review-{{ $review->id }}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
 
-                                    <button
-                                        type="button"
-                                        class="btn btn-sm btn-outline-danger"
-                                        title="Yorumu Sil"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#delete-review-{{ $review->id }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                    <div class="modal fade" id="delete-review-{{ $review->id }}" tabindex="-1">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
+                                {{-- Silme onay modalı --}}
+                                <div class="modal fade"
+                                    id="delete-review-{{ $review->id }}"
+                                    tabindex="-1"
+                                    aria-hidden="true">
 
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Yorumu Sil</h5>
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
 
-                                                    <button
-                                                        type="button"
-                                                        class="btn-close"
-                                                        data-bs-dismiss="modal">
-                                                    </button>
-                                                </div>
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Yorumu Sil</h5>
 
-                                                <div class="modal-body">
-                                                    Bu yorumu silmek istediğinize emin misiniz?
-                                                </div>
-
-                                                <div class="modal-footer">
-
-                                                    <button
-                                                        type="button"
-                                                        class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">
-                                                        İptal
-                                                    </button>
-
-                                                    <form action="{{ route('delete-review', $book->id) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-
-                                                        <button type="submit" class="btn btn-danger">
-                                                            Yorumu Sil
-                                                        </button>
-                                                    </form>
-
-                                                </div>
-
+                                                <button
+                                                    type="button"
+                                                    class="btn-close"
+                                                    data-bs-dismiss="modal">
+                                                </button>
                                             </div>
+
+                                            <div class="modal-body">
+                                                Bu yorumu silmek istediğinize emin misiniz?
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">
+                                                    İptal
+                                                </button>
+
+                                                {{-- Silme işlemini yapan tek form --}}
+                                                <form action="{{ route('delete-review', $book->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+
+                                                    <button type="submit" class="btn btn-danger">
+                                                        Yorumu Sil
+                                                    </button>
+                                                </form>
+                                            </div>
+
                                         </div>
                                     </div>
-                                </form>
+                                </div>
                                 @endif
                             </div>
                             {{-- DÜZENLEME FORMU --}}
@@ -444,4 +444,48 @@
 
     </div>
 </main>
+@push('scripts')
+<script>
+    $(document).on('submit', '#favoriteForm', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const button = $('#favoriteButton');
+
+        button.prop('disabled', true);
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                if (!response.success) return;
+                const isFavorite = response.isFavorite;
+                button
+                    .toggleClass('btn-danger', isFavorite)
+                    .toggleClass('btn-outline-danger', !isFavorite);
+
+                button.find('i')
+                    .toggleClass('bi-heart-fill', isFavorite)
+                    .toggleClass('bi-heart', !isFavorite);
+
+                $('#favoriteText').text(
+                    isFavorite ? 'Favorilerden Çıkar' : 'Favorilere Ekle'
+                );
+            },
+
+            error: function(error) {
+                if (error.status === 401) {
+                    window.location.href = "{{ route('login') }}";
+                    return;
+                }
+
+                console.error('Favori işlemi başarısız:', error.status);
+            },
+
+            complete: function() {
+                button.prop('disabled', false);
+            }
+        });
+    });
+</script>
+@endpush
 @endsection
