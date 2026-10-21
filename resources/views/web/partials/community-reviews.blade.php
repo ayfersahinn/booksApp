@@ -61,8 +61,11 @@
                          </form>
 
                          @endif
-                         <button type="submit" class="btn btn-sm btn-outline-secondary reply-toggle">
-                             <i class="bi bi-chat me-1"></i> Yanıtla {{$review->comments->count()}}
+                         <button type="button"
+                             class="btn btn-sm btn-outline-secondary reply-toggle"
+                             data-auth="{{ Auth::check() ? 'true' : 'false' }}">
+                             <i class="bi bi-chat me-1"></i>
+                             Yanıtla {{ $review->comments->count() }}
                          </button>
                      </div>
                      <button class="btn btn-sm text-muted p-0" title="Bildir">

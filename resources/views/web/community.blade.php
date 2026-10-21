@@ -184,6 +184,10 @@
             },
 
             error: function(error) {
+                if (error.status === 401) {
+                    window.location.href = "{{ route('login') }}";
+                    return;
+                }
                 console.error('İşlem başarısız:', error.status);
             }
         });
@@ -208,7 +212,13 @@
             },
 
             error: function(error) {
+                if (error.status === 401) {
+                    window.location.href = "{{ route('login') }}";
+                    return;
+                }
+
                 console.error('Yanıt gönderilemedi:', error.status);
+
             },
 
             complete: function() {
@@ -217,6 +227,12 @@
         });
     });
     $(document).on('click', '.reply-toggle', function() {
+
+        if ($(this).data('auth') === false) {
+            window.location.href = "{{ route('login') }}";
+            return;
+        }
+
         const container = this.closest('.w-100');
         const replySection = container.querySelector('.reply-section');
         const commentsList = container.querySelector('.comments-list');
