@@ -170,7 +170,7 @@
     </div>
 
     <!-- Değerlendirmeler & Yorumlar Bölümü -->
-    <div class="row g-4">
+    <div class="row g-4" id="bookReviews">
 
         <!-- Sol: Yorum Formu ve Yorum Listesi -->
         <div class="col-lg-8">
@@ -184,7 +184,7 @@
             @elseif(!$userBook || ($userBook->pivot->rating === null && $userBook->pivot->review === null))
             <div class="card border-0 shadow-sm p-4 mb-4">
                 <h5 class="fw-bold mb-3"><i class="bi bi-pencil-square text-primary me-2"></i>Bu Kitabı Değerlendir</h5>
-                <form action="{{route('add-review', $book->id)}}" method="POST">
+                <form action="{{route('add-review', $book->id)}}" method="POST" class="add-review-form">
                     @csrf
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
@@ -199,7 +199,7 @@
                         </div>
                         <div class="col-md-6 d-flex align-items-end">
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="has_spoiler" name="has_spoiler">
+                                <input class="form-check-input" type="checkbox" id="has_spoiler" name="has_spoiler" value="1">
                                 <label class="form-check-label small text-muted" for="has_spoiler">
                                     Yorumum spoiler içeriyor.
                                 </label>
@@ -249,9 +249,6 @@
                                             @endif
                                             @endfor
                                     </div>
-
-
-
                                 </div>
                             </div>
 
@@ -323,7 +320,7 @@
                                                 </button>
 
                                                 {{-- Silme işlemini yapan tek form --}}
-                                                <form action="{{ route('delete-review', $book->id) }}"
+                                                <form action="{{ route('delete-review', $book->id) }}" class="delete-review-form"
                                                     method="POST">
                                                     @csrf
                                                     @method('DELETE')
@@ -340,10 +337,10 @@
                                 @endif
                             </div>
                             {{-- DÜZENLEME FORMU --}}
-                            @if(Auth::id() === $review->id)
+                            @if(Auth::id() === $review->pivot->user_id)
                             <div id="edit-review-{{ $review->id }}" class="d-none mt-3 border-top pt-3">
 
-                                <form action="{{ route('update-review', $book->id) }}" method="POST">
+                                <form action="{{ route('update-review', $book->id) }}" method="POST" class="edit-review-form">
                                     @csrf
                                     @method('PUT')
 
@@ -569,6 +566,152 @@
                 }
 
                 console.error('Listeden çıkarma başarısız:', xhr.status);
+            }
+        });
+    });
+
+    function loadBookReviews(url) {
+        const $reviewSection = $('#bookReviews');
+
+        if (!$reviewSection.length) {
+            return;
+        }
+        $reviewSection.css('opacity', '0.5');
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'html',
+
+            success: function(html) {
+                const $newReviewSection = $(html).find('#bookReviews');
+
+                if (!$newReviewSection.length) {
+                    console.error('Yorum bölümü yüklenemedi.');
+                    $reviewSection.css('opacity', '1');
+                    return;
+                }
+
+                $reviewSection.replaceWith($newReviewSection);
+                $('#bookReviews').css('opacity', '1');
+            },
+
+            error: function(xhr) {
+                console.error('Yorumlar yüklenemedi:', xhr.status);
+                $reviewSection.css('opacity', '1');
+            }
+        });
+    }
+
+    function handleBookReviewError(xhr) {
+        if (xhr.status === 401) {
+            window.location.href = "{{ route('login') }}";
+            return;
+        }
+
+        if (xhr.status === 422) {
+            const response = xhr.responseJSON;
+            alert(response?.message || 'Lütfen form alanlarını kontrol edin.');
+            return;
+        }
+
+        console.error('Yorum işlemi başarısız:', xhr.status);
+    }
+
+    // Yorum ekle
+    $(document).on('submit', '.add-review-form', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const button = form.find('button[type="submit"]');
+        button.prop('disabled', true);
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            headers: {
+                'Accept': 'application/json'
+            },
+
+            success: function(response) {
+                if (response.success) {
+                    loadBookReviews(window.location.href);
+                }
+            },
+
+            error: function(xhr) {
+                handleBookReviewError(xhr);
+            },
+
+            complete: function() {
+                button.prop('disabled', false);
+            }
+        });
+    });
+
+
+    // Yorum güncelle
+    $(document).on('submit', '.edit-review-form', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const button = form.find('button[type="submit"]');
+        button.prop('disabled', true);
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            headers: {
+                'Accept': 'application/json'
+            },
+
+            success: function(response) {
+                if (response.success) {
+                    loadBookReviews(window.location.href);
+                }
+            },
+
+            error: function(xhr) {
+                handleBookReviewError(xhr);
+            },
+
+            complete: function() {
+                button.prop('disabled', false);
+            }
+        });
+    });
+
+
+    // Yorum sil
+    $(document).on('submit', '.delete-review-form', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const button = form.find('button[type="submit"]');
+        button.prop('disabled', true);
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            headers: {
+                'Accept': 'application/json'
+            },
+
+            success: function(response) {
+                if (response.success) {
+                    const modalElement = form.closest('.modal')[0];
+                    if (modalElement) {
+                        bootstrap.Modal.getOrCreateInstance(modalElement).hide();
+                    }
+                    loadBookReviews(window.location.href);
+                }
+            },
+
+            error: function(xhr) {
+                handleBookReviewError(xhr);
+            },
+
+            complete: function() {
+                button.prop('disabled', false);
             }
         });
     });

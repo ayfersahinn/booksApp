@@ -204,39 +204,54 @@ class BookController extends Controller
     {
         $user = Auth::user();
         $book = Book::findOrFail($id);
-        $userBook = $user->books()->where('books.id', $book->id)->first();
+
+        $validated = $req->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'review' => 'nullable|string',
+            'has_spoiler' => 'nullable|boolean',
+        ]);
+
         if ($req->boolean('has_spoiler') && !$req->filled('review')) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Spoiler işaretlemek için yorum yazmalısınız.'
+                ], 422);
+            }
+
             return back()->withErrors([
                 'review' => 'Spoiler işaretlemek için yorum yazmalısınız.'
             ]);
         }
-        if (!$userBook) {
-            $user->books()->attach(
-                $book->id,
-                [
-                    'review' => $req->input('review'),
-                    'rating' => $req->input('rating'),
-                    'has_spoiler' => $req->boolean('has_spoiler'),
-                    'review_updated_at' => now(),
-                ]
-            );
-        } else {
-            $data = [
-                'rating' => $req->input('rating'),
-                'has_spoiler' => $req->boolean('has_spoiler'),
-                'review_updated_at' => now(),
-            ];
 
-            if ($req->filled('review')) {
-                $data['review'] = $req->input('review');
-            }
+        $userBook = $user->books()
+            ->where('books.id', $book->id)
+            ->first();
 
-            $user->books()->updateExistingPivot(
-                $book->id,
-                $data
-            );
+        $data = [
+            'rating' => $validated['rating'],
+            'has_spoiler' => $req->boolean('has_spoiler'),
+            'review_updated_at' => now(),
+        ];
+
+        if ($req->filled('review')) {
+            $data['review'] = $validated['review'];
         }
-        return back();
+
+        if (!$userBook) {
+            $user->books()->attach($book->id, $data);
+        } else {
+            $user->books()->updateExistingPivot($book->id, $data);
+        }
+
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Yorumunuz kaydedildi.'
+            ]);
+        }
+
+        return back()->with('success', 'Yorumunuz kaydedildi.');
     }
     public function updateReview(Request $req, $id)
     {
@@ -262,6 +277,13 @@ class BookController extends Controller
             ]
         );
 
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Yorumunuz güncellendi.'
+            ]);
+        }
+
         return back()->with('success', 'Yorumunuz güncellendi.');
     }
     public function deleteReview($id)
@@ -273,6 +295,14 @@ class BookController extends Controller
             'has_spoiler' => false,
             'review_updated_at' => null
         ]);
-        return back();
+
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Yorumunuz silindi.'
+            ]);
+        }
+
+        return back()->with('success', 'Yorumunuz silindi.');
     }
 }
