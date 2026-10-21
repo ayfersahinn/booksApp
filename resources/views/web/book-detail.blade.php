@@ -29,7 +29,7 @@
                 <!-- Okuma Durumu Ekleme Dropdown -->
                 <div class="d-grid gap-2">
                     <div class="btn-group">
-                        <button class="btn btn-primary fw-bold" type="button">
+                        <button class="btn btn-primary fw-bold dropdown-toggle" type="button" data-bs-toggle="dropdown" id="bookStatusButton">
                             @if($status === 'read')
                             <i class="bi bi-check-circle me-1"></i> Okudum
                             @elseif($status === 'reading')
@@ -40,12 +40,10 @@
                             <i class="bi bi-bookmark-plus me-1"></i> Listeye Ekle
                             @endif
                         </button>
-                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="visually-hidden">Listeyi Değiştir</span>
-                        </button>
+
                         <ul class="dropdown-menu dropdown-menu-end w-100">
                             <li>
-                                <form action="{{route('book-status', $book->id)}}" method="post">
+                                <form action="{{route('book-status', $book->id)}}" method="post" class="book-status-form">
                                     @csrf
                                     <input type="hidden" name="status" value="read">
                                     <button type="submit" class="dropdown-item">
@@ -54,7 +52,7 @@
                                 </form>
                             </li>
                             <li>
-                                <form action="{{route('book-status', $book->id)}}" method="post">
+                                <form action="{{route('book-status', $book->id)}}" method="post" class="book-status-form">
                                     @csrf
 
                                     <input type="hidden" name="status" value="reading">
@@ -65,7 +63,7 @@
 
                             </li>
                             <li>
-                                <form action="{{route('book-status', $book->id)}}" method="post">
+                                <form action="{{route('book-status', $book->id)}}" method="post" class="book-status-form">
                                     @csrf
 
                                     <input type="hidden" name="status" value="want-to-read">
@@ -79,7 +77,7 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <form action="{{route('removeFromList',$book->id)}}" method="post">
+                                <form action="{{route('removeFromList',$book->id)}}" method="post" class="remove-from-list-form">
                                     @csrf
                                     <button type="submit" class="dropdown-item text-danger"><i class="bi bi-x-circle me-2"></i>Listeden Çıkar</button>
 
@@ -472,17 +470,105 @@
                 );
             },
 
-            error: function(error) {
-                if (error.status === 401) {
+            error: function(xhr) {
+                if (xhr.status === 401) {
                     window.location.href = "{{ route('login') }}";
                     return;
                 }
 
-                console.error('Favori işlemi başarısız:', error.status);
+                console.error('Favori işlemi başarısız:', xhr.status);
             },
 
             complete: function() {
                 button.prop('disabled', false);
+            }
+        });
+    });
+    $(document).on('submit', '.book-status-form', function(e) {
+        e.preventDefault();
+
+        const form = $(this);
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+
+            success: function(response) {
+                if (!response.success) return;
+
+                const statusButton = $('#bookStatusButton');
+                let icon = '';
+                let text = '';
+
+                if (response.status === 'read') {
+                    icon = 'bi-check-circle';
+                    text = 'Okudum';
+                } else if (response.status === 'reading') {
+                    icon = 'bi-clock';
+                    text = 'Okuyorum';
+                } else if (response.status === 'want-to-read') {
+                    icon = 'bi-bookmark-plus';
+                    text = 'Okuyacağım';
+                }
+
+                statusButton.html(
+                    `<i class="bi ${icon} me-1"></i> ${text}`
+                );
+
+                const dropdown = bootstrap.Dropdown.getInstance(
+                    statusButton[0]
+                );
+
+                if (dropdown) {
+                    dropdown.hide();
+                }
+            },
+
+            error: function(xhr) {
+                if (xhr.status === 401) {
+                    window.location.href = "{{ route('login') }}";
+                    return;
+                }
+
+                console.error(
+                    'Durum değiştirme başarısız:',
+                    xhr.status
+                );
+            }
+        });
+    });
+    $(document).on('submit', '.remove-from-list-form', function(e) {
+        e.preventDefault();
+
+        const form = $(this);
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+
+            success: function(response) {
+                if (!response.success) return;
+
+                $('#bookStatusButton').html(
+                    '<i class="bi bi-bookmark-plus me-1"></i> Listeye Ekle'
+                );
+                const dropdownButton = document.getElementById('bookStatusButton');
+                const dropdown = bootstrap.Dropdown.getInstance(dropdownButton);
+
+                if (dropdown) {
+                    dropdown.hide();
+                }
+            },
+
+            error: function(xhr) {
+                if (xhr.status === 401) {
+                    window.location.href = "{{ route('login') }}";
+                    return;
+                }
+
+                console.error('Listeden çıkarma başarısız:', xhr.status);
             }
         });
     });

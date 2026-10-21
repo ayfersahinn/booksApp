@@ -179,6 +179,12 @@ class BookController extends Controller
                 ['status' => $req->input('status')]
             );
         }
+        if ($req->ajax()) {
+            return response()->json([
+                'success' => true,
+                'status' => $req->input('status')
+            ]);
+        }
 
         return back();
     }
@@ -187,6 +193,11 @@ class BookController extends Controller
         $user = Auth::user();
         $book = Book::findOrFail($id);
         $user->books()->detach($book->id);
+        if (request()->ajax()) {
+            return response()->json([
+                'success' => true
+            ]);
+        }
         return back();
     }
     public function addReview(Request $req, $id)
