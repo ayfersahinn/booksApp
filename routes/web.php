@@ -17,6 +17,7 @@ use App\Models\EditorRecommendation;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [BookController::class, 'index'])->name('mainpage');
+Route::get('/kitap-listesi', [BookController::class, 'bookList'])->name('book-list');
 Route::get('/kitaplar/{slug}/{isbn}', [BookController::class, 'show'])->name('book-detail');
 Route::get('/topluluk/{user_book_id?}', [CommunityController::class, 'index'])->name('community');
 Route::get('/haftanin-kitabi', [EditorRecommendationController::class, 'index'])->name('weekly-book');

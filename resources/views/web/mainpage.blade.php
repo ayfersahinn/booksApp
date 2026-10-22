@@ -68,7 +68,7 @@
                          class=" category-filter list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ !request('category') ? 'active' : '' }}">
                          Tüm Kategoriler
                          <span
-                             class="badge bg-light text-dark rounded-pill">{{$categories->count()}}</span>
+                             class="badge bg-light text-dark rounded-pill">{{$bookCount}}</span>
                      </a>
                      @foreach($categories as $category)
                      <a
@@ -186,10 +186,15 @@
                                  id="sort3" />
                              <label class="form-check-label" for="sort3">Yeni Eklenenler</label>
                          </div>
+
                      </div>
                  </div>
-             </form>
 
+             </form>
+             <button type="button" id="clearFilters" class=" btn btn-primary w-100 mt-3">
+
+                 Tüm filtreleri temizle
+             </button>
          </aside>
 
          <!-- Sağ Taraf: Kitap Kartları Listesi -->
@@ -250,10 +255,17 @@
          if (!$bookList.length) {
              return;
          }
+         const pageUrl = new URL(url, window.location.origin);
+         const ajaxUrl = new URL(
+             "{{ route('book-list') }}",
+             window.location.origin
+         );
+         ajaxUrl.search = pageUrl.search;
+
          $bookList.css('opacity', '0.5');
 
          $.ajax({
-             url: url,
+             url: ajaxUrl.toString(),
              type: 'GET',
              dataType: 'html',
 
@@ -267,7 +279,7 @@
                  $bookList.replaceWith($newBookList);
 
                  if (pushState) {
-                     history.pushState(null, '', url);
+                     history.pushState(null, '', pageUrl.pathname + pageUrl.search);
                  }
              },
              error: function(xhr) {
@@ -290,28 +302,34 @@
      // Kategori filtresi
      $(document).on('click', '.category-filter', function(e) {
          e.preventDefault();
-         const selectedCategory = this.dataset.category;
-         $('.category-filter').removeClass('active');
 
+         const selectedCategory = this.dataset.category;
+         const url = new URL(window.location.href);
+
+         if (selectedCategory) {
+             url.searchParams.set('category', selectedCategory);
+         } else {
+             url.searchParams.delete('category');
+         }
+
+         $('.category-filter').removeClass('active');
          $(this).addClass('active');
-         const url = new URL(this.href, window.location.origin);
+
          loadBooks(url.href);
      });
-     // Yayınevi filtresi
+     //yayınevi filtresi
      $('#publisherFilterForm').on('submit', function(e) {
          e.preventDefault();
-         const url = new URL(this.action, window.location.origin);
-         const params = new URLSearchParams($(this).serialize());
-         const currentParams = new URLSearchParams(window.location.search);
 
-         // Formda bulunmayan mevcut filtreleri koru
-         ['category', 'q', 'sort'].forEach(function(key) {
-             if (!params.has(key) && currentParams.has(key)) {
-                 params.set(key, currentParams.get(key));
-             }
+         const url = new URL(window.location.href);
+         const formParams = new URLSearchParams($(this).serialize());
+
+         url.searchParams.delete('publishers[]');
+
+         formParams.getAll('publishers[]').forEach(function(publisher) {
+             url.searchParams.append('publishers[]', publisher);
          });
 
-         url.search = params.toString();
          loadBooks(url.href);
      });
 
@@ -333,6 +351,16 @@
              });
          }
          url.search = params.toString();
+         loadBooks(url.href);
+     });
+     //filtre temizleme
+     $('#clearFilters').on('click', function() {
+         $('#searchForm')[0]?.reset();
+         $('.category-filter').removeClass('active');
+         $('.category-filter[data-category=""]').addClass('active');
+         $('input[name="publishers[]"]').prop('checked', false);
+         $('input[name="sort"]').prop('checked', false);
+         const url = new URL(window.location.origin + '/');
          loadBooks(url.href);
      });
      // Sayfalama bağlantıları

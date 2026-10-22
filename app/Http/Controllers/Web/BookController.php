@@ -13,27 +13,13 @@ use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
-    public function index(Request $req)
+    private function getBooks(Request $req)
     {
-        $bookCount = Book::count();
-
-        $reviewCount = DB::table('user_books')
-            ->whereNotNull('review')->where('review', '!=', '')
-            ->count();
-
-        $userCount = User::count();
-        $categories = Category::has('books')->withCount('books')->get();
-        $publishers = Publisher::has('books')
-            ->withCount('books')
-            ->get();
-        $lastReviews = UserBook::with(['user:id,name', 'book:id,title,slug,isbn'])->whereNotNull('user_books.review')->where('user_books.review', '!=', '')
-            ->latest('review_updated_at')
-            ->limit(2)
-            ->get();
         $query = $req->input('category');
         $search = $req->input('q');
         $publisherQueries = $req->input('publishers', []);
         $sort = $req->input('sort');
+
         $booksQuery = Book::with([
             'category',
             'publisher',
@@ -45,8 +31,7 @@ class BookController extends Controller
             'users as rating_count' => function ($q) {
                 $q->whereNotNull('user_books.rating');
             }
-        ])
-            ->withAvg('users as average_rating', 'user_books.rating');
+        ])->withAvg('users as average_rating', 'user_books.rating');
         if ($search) {
             $booksQuery->where(function ($q) use ($search) {
                 $q->where('title', 'like', '%' . $search . '%')
@@ -78,18 +63,52 @@ class BookController extends Controller
             $booksQuery->latest();
         }
 
-        $books = $booksQuery
+        return $booksQuery
             ->paginate(8)
             ->withQueryString();
-        if ($req->ajax()) {
-            return view('web.partials.book-list', compact('books'))->render();
-        }
-        return view('web.mainpage', compact(['books', 'categories', 'search', 'publishers', 'lastReviews', 'bookCount', 'userCount', 'reviewCount']));
+    }
+    public function index(Request $req)
+    {
+        $data = [];
+        $bookCount = Book::count();
+        $userCount = User::count();
+        $categories = Category::has('books')->withCount('books')->get();
+        $publishers = Publisher::has('books')
+            ->withCount('books')
+            ->get();
+        $books = $this->getBooks($req);
+        $reviewCount = DB::table('user_books')
+            ->whereNotNull('review')->where('review', '!=', '')
+            ->count();
+
+        $lastReviews = UserBook::with(['user:id,name', 'book:id,title,slug,isbn'])->whereNotNull('user_books.review')->where('user_books.review', '!=', '')
+            ->latest('review_updated_at')
+            ->limit(2)
+            ->get();
+
+        $data = [
+            'books' => $books,
+            'categories' => $categories,
+            'search' => $req->input('q'),
+            'publishers' => $publishers,
+            'lastReviews' => $lastReviews,
+            'bookCount' => $bookCount,
+            'userCount' => $userCount,
+            'reviewCount' => $reviewCount
+        ];
+        return view('web.mainpage', $data);
+    }
+
+    public function bookList(Request $req)
+    {
+        $books = $this->getBooks($req);
+        return view('web.partials.book-list', compact('books'));
     }
 
 
     public function show($slug, $isbn)
     {
+        $data = [];
         $book = Book::with(['category', 'publisher', 'users'])->where('isbn', $isbn)->firstOrFail();
         $user = Auth::user();
 
@@ -126,7 +145,19 @@ class BookController extends Controller
         }
         $reviewCount = $book->users()->wherePivotNotNull('review')->count();
         $statusCount = $book->users()->wherePivotNotNull('status')->count();
-        return view('web.book-detail', compact('book', 'userBook', 'isFavorite', 'status', 'userReview', 'ratingPercentages', 'avgRatings', 'reviewCount', 'statusCount'));
+
+        $data = [
+            'book' => $book,
+            'userBook' => $userBook,
+            'isFavorite' => $isFavorite,
+            'status' => $status,
+            'userReview' => $userReview,
+            'ratingPercentages' => $ratingPercentages,
+            'avgRatings' => $avgRatings,
+            'reviewCount' => $reviewCount,
+            'statusCount' => $statusCount,
+        ];
+        return view('web.book-detail', $data);
     }
     public function toggleFavorite($id)
     {

@@ -1,7 +1,7 @@
 <nav
     class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
     <div class="container">
-        <a class="navbar-brand fw-bold text-primary" href="#">
+        <a class="navbar-brand fw-bold text-primary" href="{{route('mainpage')}}">
             <i class="bi bi-book-half me-2"></i>KitapDiyarı
         </a>
         <button
