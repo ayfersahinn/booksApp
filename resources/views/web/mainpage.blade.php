@@ -250,6 +250,14 @@
 
  @push('scripts')
  <script>
+     function resetFilterUI() {
+         $('.category-filter').removeClass('active');
+         $('.category-filter[data-category=""]').addClass('active');
+
+         $('input[name="publishers[]"]').prop('checked', false);
+         $('input[name="sort"]').prop('checked', false);
+     }
+
      function loadBooks(url, pushState = true) {
          const $bookList = $('#bookList');
          if (!$bookList.length) {
@@ -292,10 +300,14 @@
      // Arama formu
      $('#searchForm').on('submit', function(e) {
          e.preventDefault();
-         const url = new URL(this.action, window.location.origin);
-         const params = new URLSearchParams($(this).serialize());
 
+         const params = new URLSearchParams($(this).serialize());
+         const url = new URL('/', window.location.origin);
+
+         // Yalnızca arama parametrelerini aktar
          url.search = params.toString();
+
+         resetFilterUI();
          loadBooks(url.href);
      });
 
@@ -355,11 +367,8 @@
      });
      //filtre temizleme
      $('#clearFilters').on('click', function() {
-         $('#searchForm')[0]?.reset();
-         $('.category-filter').removeClass('active');
-         $('.category-filter[data-category=""]').addClass('active');
-         $('input[name="publishers[]"]').prop('checked', false);
-         $('input[name="sort"]').prop('checked', false);
+         $('#searchForm input[name="q"]').val('');
+         resetFilterUI();
          const url = new URL(window.location.origin + '/');
          loadBooks(url.href);
      });
