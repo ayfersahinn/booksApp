@@ -4,6 +4,7 @@
             <table class="table align-middle table-hover mb-0">
                 <thead class="table-light">
                     <tr>
+                        <th style="width: 50px;">#</th>
                         <th style="width: 70px;">Kapak</th>
                         <th>Kitap Adı</th>
                         <th>ISBN</th>
@@ -17,6 +18,8 @@
                     <!--kitaplar -->
                     @foreach($items as $book)
                     <tr>
+                        <td><small class="text-muted">{{ $items->firstItem() + $loop->index }}</small></td>
+
                         <td>
                             <img src="{{ asset('storage/' . $book->cover_image) }}"
                                 class="book-cover-thumb shadow-sm"

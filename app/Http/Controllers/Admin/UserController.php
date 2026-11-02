@@ -29,6 +29,9 @@ class UserController extends BaseController
             $query->where('is_admin', false);
         }
         $items = $query->latest()->paginate(10)->withQueryString();
+        if ($request->ajax()) {
+            return view('admin.users.user-list', compact('items'));
+        }
         return view('admin.users.index', ['items' => $items] + $this->extraData());
     }
     public function toggleActive($id)

@@ -225,7 +225,7 @@
         <div class="w-100">
             <!-- TOP NAVBAR -->
             <nav class="navbar navbar-expand navbar-custom px-4 py-2 justify-content-between">
-                <h5 class="fw-bold mb-0 text-dark">Dashboard</h5>
+                <h5 class="fw-bold mb-0 text-dark"></h5>
 
                 <!-- Sağ Üst Profil Menüsü -->
                 <div class="d-flex align-items-center gap-3">

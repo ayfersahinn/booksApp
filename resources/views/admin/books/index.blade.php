@@ -10,7 +10,7 @@
 
             <!-- Arama ve filtreler -->
             <div class="col-12 col-lg-9">
-                <form action="{{ route('book-index') }}" method="GET" id="adminBookFilter" data-target="#adminBookList" class="row g-2 align-items-center">
+                <form action="{{ route('book-index') }}" method="GET" data-ajax-filter id="bookFilter" data-target="#adminBookList" class="row g-2 align-items-center">
                     <div class="col-12 col-md-4">
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
@@ -39,7 +39,8 @@
 
                     <div class="col-12 col-md-2">
                         <button type="button"
-                            id="clearBookFilters"
+                            data-clear-filter
+                            data-form="#bookFilter"
                             class="btn btn-outline-secondary w-100">
                             <i class="bi bi-x-circle me-1"></i> Temizle
                         </button>
@@ -59,8 +60,9 @@
 </div>
 
 <!-- Kitaplar Tablosu -->
-
-@include('admin.books.partials.book-list')
+<div data-ajax-list>
+    @include('admin.books.partials.book-list')
+</div>
 
 
 
