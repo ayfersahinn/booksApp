@@ -67,7 +67,7 @@
                     </td>
                     <td>
                         @if($item->userBook?->book)
-                        <a href="{{ route('book-detail', $item->userBook->book->slug) }}" class="text-decoration-none text-dark fw-semibold">
+                        <a href="{{ route('book-detail', [$item->userBook->book->slug,$item->userBook->book->isbn]) }}" class="text-decoration-none text-dark fw-semibold">
                             {{ $item->userBook->book->title }}
                         </a>
                         @endif

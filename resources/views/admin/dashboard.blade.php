@@ -35,8 +35,8 @@
 <div class="d-flex flex-wrap gap-2 mb-4">
     <a href="{{ route('book-index', ['add' => 1]) }}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> Yeni Kitap</a>
     <a href="{{route('weekly-book-index')}}" class="btn btn-outline-primary"><i class="bi bi-star me-1"></i> Editörün Seçimi</a>
-    <a href="{{route('review-index')}}" class="btn btn-outline-secondary"><i class="bi bi-chat-left-text me-1"></i> Yorumlar</a>
-    <a href="{{route('user-index')}}" class="btn btn-outline-secondary"><i class="bi bi-people me-1"></i> Kullanıcılar</a>
+    <a href="{{route('review-index')}}" class="btn btn-outline-primary"><i class="bi bi-chat-left-text me-1"></i> Yorumlar</a>
+    <a href="{{route('user-index')}}" class="btn btn-outline-primary"><i class="bi bi-people me-1"></i> Kullanıcılar</a>
 </div>
 
 <!-- 2. İstatistik kartları -->

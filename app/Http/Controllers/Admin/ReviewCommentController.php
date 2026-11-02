@@ -15,7 +15,7 @@ class ReviewCommentController extends BaseController
         $query = ReviewComment::with([
             'user:id,name,email',
             'userBook.user:id,name',
-            'userBook.book:id,title,slug',
+            'userBook.book:id,title,slug,isbn',
         ]);
         if ($request->filled('q')) {
             $search = $request->q;

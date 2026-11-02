@@ -98,6 +98,9 @@ class BookController extends BaseController
             $query->where('publisher_id', $request->publisher_id);
         }
         $items = $query->latest()->paginate(10)->withQueryString();
+        if ($request->ajax()) {
+            return view('admin.books.partials.book-list', compact('items'));
+        }
         return view('admin.books.index', ['items' => $items] + $this->extraData());
     }
     public function store(Request $request)
