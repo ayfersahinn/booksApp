@@ -51,3 +51,35 @@ function loadAdminList(url, endpoint, selector) {
         },
     });
 }
+
+$(document).on("submit", "#adminBookFilter", function (e) {
+    e.preventDefault();
+
+    const $form = $(this);
+    const endpoint = $form.attr("action");
+    const selector = $form.data("target");
+
+    const params = $form.serialize();
+
+    const url = endpoint + (params ? "?" + params : "");
+
+    loadAdminList(url, endpoint, selector);
+
+    window.history.pushState(null, "", url);
+});
+
+$(document).on("change", "#adminBookFilter select", function () {
+    $("#adminBookFilter").trigger("submit");
+});
+
+$(document).on("click", "#clearBookFilters", function () {
+    const $form = $("#adminBookFilter");
+    $form[0].reset();
+
+    const endpoint = $form.attr("action");
+    const selector = $form.data("target");
+
+    loadAdminList(endpoint, endpoint, selector);
+
+    window.history.pushState(null, "", endpoint);
+});

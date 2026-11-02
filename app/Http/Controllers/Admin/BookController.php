@@ -84,7 +84,7 @@ class BookController extends BaseController
     }
     public function index(Request $request)
     {
-        $query = Book::query();
+        $query = Book::with(['category', 'publisher']);
         if ($request->filled('q')) {
             $search = $request->q;
             $query->where(function ($q) use ($search) {

@@ -10,7 +10,7 @@
 
             <!-- Arama ve filtreler -->
             <div class="col-12 col-lg-9">
-                <form action="{{ route('book-index') }}" method="GET" class="row g-2 align-items-center">
+                <form action="{{ route('book-index') }}" method="GET" id="adminBookFilter" data-target="#adminBookList" class="row g-2 align-items-center">
                     <div class="col-12 col-md-4">
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
@@ -20,7 +20,7 @@
                     </div>
 
                     <div class="col-6 col-md-3">
-                        <select name="category_id" class="form-select bg-light" onchange="this.form.submit()">
+                        <select name="category_id" class="form-select bg-light">
                             <option value="">Tüm Kategoriler</option>
                             @foreach($categories as $category)
                             <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
@@ -29,7 +29,7 @@
                     </div>
 
                     <div class="col-6 col-md-3">
-                        <select name="publisher_id" class="form-select bg-light" onchange="this.form.submit()">
+                        <select name="publisher_id" class="form-select bg-light">
                             <option value="">Tüm Yayınevleri</option>
                             @foreach($publishers as $publisher)
                             <option value="{{ $publisher->id }}" {{ request('publisher_id') == $publisher->id ? 'selected' : '' }}>{{ $publisher->name }}</option>
@@ -38,9 +38,11 @@
                     </div>
 
                     <div class="col-12 col-md-2">
-                        <a href="{{ route('book-index') }}" class="btn btn-outline-secondary w-100" title="Filtreleri temizle">
+                        <button type="button"
+                            id="clearBookFilters"
+                            class="btn btn-outline-secondary w-100">
                             <i class="bi bi-x-circle me-1"></i> Temizle
-                        </a>
+                        </button>
                     </div>
                 </form>
             </div>
