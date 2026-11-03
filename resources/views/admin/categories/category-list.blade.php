@@ -4,7 +4,7 @@
             <table class="table align-middle table-hover mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th style="width: 70px;">#</th>
+                        <th style="width: 50px;">#</th>
                         <th>Kategori Adı</th>
                         <th class="text-center">Kitap Sayısı</th>
                         <th>Ekleme Tarihi</th>

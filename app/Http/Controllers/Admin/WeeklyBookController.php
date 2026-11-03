@@ -27,6 +27,9 @@ class WeeklyBookController extends BaseController
             });
         }
         $items = $query->latest()->paginate(10)->withQueryString();
+        if ($request->ajax()) {
+            return view('admin.weekly-book.weekly-book-list', compact('items'));
+        }
         return view('admin.weekly-book.index', ['items' => $items] + $this->extraData());
     }
     public function store(Request $request)
