@@ -21,6 +21,9 @@ class CategoryController extends BaseController
             $query->where('name', 'like', '%' . $search . '%');
         }
         $items = $query->latest()->paginate(10)->withQueryString();
+        if ($request->ajax()) {
+            return view('admin.categories.category-list', compact('items'));
+        }
         return view('admin.categories.index', ['items' => $items] + $this->extraData());
     }
     public function store(Request $request)

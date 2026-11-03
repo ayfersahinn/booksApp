@@ -1,4 +1,4 @@
-<div id="adminUserList">
+<div id="adminUserList" data-ajax-list>
     <div class="card border-0 shadow-sm bg-white">
         <div class="table-responsive">
             <table class="table align-middle table-hover mb-0">
